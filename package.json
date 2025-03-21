@@ -1,0 +1,11 @@
+{
+  "name": "studycircle",
+  "version": "1.0.0",
+  "description": "Final Thesis Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Cri",
+  "license": "ISC"
+}
