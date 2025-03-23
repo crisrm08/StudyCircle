@@ -2,17 +2,26 @@ import { use, useState } from "react";
 import React from "react";
 import Subject from "./Subject";
 import Topic from "./Topic";
+import "../css/subjectselection.css";
 
 function SubjectSelection(params) {
     const [subject, setSubject] = useState("Cálculo");
+    const [topic, setTopic] = useState("");
 
     function changeSubject(subjct) {
-        console.log(subjct);
         setSubject(subjct);
     }
 
+    function changeTopic(tpc) {
+        setTopic(tpc);
+    }
+
+    console.log(subject);
+    console.log(topic);
+    
+    
     return(
-        <div className="subject-selection">
+        <div className="subject-selection-container">
             <h1>En qué asignatura necesitas ayuda?</h1>
 
             <div className="subjects-container">
@@ -25,76 +34,76 @@ function SubjectSelection(params) {
 
             {subject === "Cálculo" && 
                 <div className="topic-container">
-                    <Topic topicName="Límites y continuidad"/>
-                    <Topic topicName="Derivadas y su interpretación"/>
-                    <Topic topicName="Aplicaciones de las derivadas"/>
-                    <Topic topicName="Integrales definidas e indefinidas"/>
-                    <Topic topicName="Técnicas de integración"/>
-                    <Topic topicName="Teorema fundamental del cálculo"/>
-                    <Topic topicName="Series y secuencias"/>
-                    <Topic topicName="Ecuaciones diferenciales"/>
-                    <Topic topicName="Teoría de los límites infinitos"/>
-                    <Topic topicName="Cálculo multivariable"/>
+                    <Topic topicName="Límites y continuidad" onChange={changeTopic}/>
+                    <Topic topicName="Derivadas y su interpretación" onChange={changeTopic}/>
+                    <Topic topicName="Aplicaciones de las derivadas" onChange={changeTopic}/>
+                    <Topic topicName="Integrales definidas e indefinidas"onChange={changeTopic}/>
+                    <Topic topicName="Técnicas de integración" onChange={changeTopic}/>
+                    <Topic topicName="Teorema fundamental del cálculo " onChange={changeTopic}/>
+                    <Topic topicName="Series y secuencias" onChange={changeTopic}/>
+                    <Topic topicName="Ecuaciones diferenciales" onChange={changeTopic}/>
+                    <Topic topicName="Teoría de los límites infinitos" onChange={changeTopic}/>
+                    <Topic topicName="Cálculo multivariable" onChange={changeTopic}/>
                 </div>
             }
 
             {subject === "Física" && 
                 <div className="topic-container">
-                    <Topic topicName="Cinemática y movimiento"/>
-                    <Topic topicName="Leyes de Newton"/>
-                    <Topic topicName="Trabajo, energía y potencia"/>
-                    <Topic topicName="Leyes de la termodinámica"/>
-                    <Topic topicName="Fluidos y su dinámica"/>
-                    <Topic topicName="Electromagnetismo"/>
-                    <Topic topicName="Ondas y sonido"/>
-                    <Topic topicName="Óptica y luz"/>
-                    <Topic topicName="Física nuclear"/>
-                    <Topic topicName="Relatividad especial"/>
+                    <Topic topicName="Leyes de Newton" onChange={changeTopic}/>
+                    <Topic topicName="Trabajo, energía y potencia" onChange={changeTopic}/>
+                    <Topic topicName="Cinemática y movimiento" onChange={changeTopic}/>
+                    <Topic topicName="Leyes de la termodinámica" onChange={changeTopic}/>
+                    <Topic topicName="Fluidos y su dinámica" onChange={changeTopic}/>
+                    <Topic topicName="Electromagnetismo" onChange={changeTopic}/>
+                    <Topic topicName="Ondas y sonido" onChange={changeTopic}/>
+                    <Topic topicName="Óptica y luz" onChange={changeTopic}/>
+                    <Topic topicName="Física nuclear" onChange={changeTopic}/>
+                    <Topic topicName="Relatividad especial" onChange={changeTopic}/>
                 </div>
             }
 
             {subject === "Química" && 
                 <div className="topic-container">
-                    <Topic topicName="Estructura atómica y modelos atómicos"/>
-                    <Topic topicName="Enlaces químicos"/>
-                    <Topic topicName="Termodinámica química"/>
-                    <Topic topicName="Reacciones químicas y estequiometría"/>
-                    <Topic topicName="Ácidos y bases"/>
-                    <Topic topicName="Soluciones y concentraciones"/>
-                    <Topic topicName="Química orgánica"/>
-                    <Topic topicName="Química inorgánica"/>
-                    <Topic topicName="Cinética química"/>
-                    <Topic topicName="Equilibrio químico"/>
+                    <Topic topicName="Estructura atómica y modelos atómicos" onChange={changeTopic}/>
+                    <Topic topicName="Enlaces químicos" onChange={changeTopic}/>
+                    <Topic topicName="Termodinámica química" onChange={changeTopic}/>
+                    <Topic topicName="Reacciones químicas y estequiometría" onChange={changeTopic}/>
+                    <Topic topicName="Ácidos y bases" onChange={changeTopic}/>
+                    <Topic topicName="Soluciones y concentraciones" onChange={changeTopic}/>
+                    <Topic topicName="Química orgánica" onChange={changeTopic}/>
+                    <Topic topicName="Química inorgánica" onChange={changeTopic}/>
+                    <Topic topicName="Cinética química" onChange={changeTopic}/>
+                    <Topic topicName="Equilibrio químico" onChange={changeTopic}/>
                 </div>
             }
 
             {subject === "Programación" && 
                 <div className="topic-container">
-                    <Topic topicName="Programación Orientada a Objetos"/>
+                    <Topic topicName="Programación Orientada a Objetos" onChange={changeTopic}/>
                     <Topic topicName="Estructuras de datos"/>
-                    <Topic topicName="Algoritmos y complejidad computacional"/>
+                    <Topic topicName="Algoritmos y complejidad computacional" onChange={changeTopic}/>
                     <Topic topicName="Bases de datos"/>
-                    <Topic topicName="Programación web (HTML, CSS, JavaScript)"/>
-                    <Topic topicName="Desarrollo móvil"/>
-                    <Topic topicName="Patrones de diseño de software"/>
-                    <Topic topicName="Lenguajes de programación (Python, Java, C++)"/>
-                    <Topic topicName="Sistemas operativos y gestión de memoria"/>
-                    <Topic topicName="Pruebas y depuración de código"/>
+                    <Topic topicName="Programación web (HTML, CSS, JavaScript)" onChange={changeTopic}/>
+                    <Topic topicName="Desarrollo móvil" onChange={changeTopic}/>
+                    <Topic topicName="Patrones de diseño de software" onChange={changeTopic}/>
+                    <Topic topicName="Lenguajes de programación (Python, Java, C++)" onChange={changeTopic}/>
+                    <Topic topicName="Sistemas operativos y gestión de memoria" onChange={changeTopic}/>
+                    <Topic topicName="Pruebas y depuración de código" onChange={changeTopic}/>
                 </div>
             }
 
             {subject === "Álgebra" && 
                 <div className="topic-container">
-                    <Topic topicName="Álgebra lineal"/>
-                    <Topic topicName="Ecuaciones lineales y no lineales"/>
-                    <Topic topicName="Matrices y determinantes"/>
-                    <Topic topicName="Vectores y geometría analítica"/>
-                    <Topic topicName="Sistemas de ecuaciones"/>
-                    <Topic topicName="Polinomios y factorización"/>
-                    <Topic topicName="Teoría de grupos"/>
-                    <Topic topicName="Espacios vectoriales"/>
-                    <Topic topicName="Funciones y sus gráficas"/>
-                    <Topic topicName="Teoría de anillos y cuerpos"/>
+                    <Topic topicName="Álgebra lineal" onChange={changeTopic}/>
+                    <Topic topicName="Ecuaciones lineales y no lineales" onChange={changeTopic}/>
+                    <Topic topicName="Matrices y determinantes" onChange={changeTopic}/>
+                    <Topic topicName="Vectores y geometría analítica" onChange={changeTopic}/>
+                    <Topic topicName="Sistemas de ecuaciones" onChange={changeTopic}/>
+                    <Topic topicName="Polinomios y factorización" onChange={changeTopic}/>
+                    <Topic topicName="Teoría de grupos" onChange={changeTopic}/>
+                    <Topic topicName="Espacios vectoriales" onChange={changeTopic}/>
+                    <Topic topicName="Funciones y sus gráficas" onChange={changeTopic}/>
+                    <Topic topicName="Teoría de anillos y cuerpos" onChange={changeTopic}/>
                 </div>
             }    
             

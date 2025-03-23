@@ -1,0 +1,45 @@
+.time-selection-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 200px;
+    margin: 20px auto;
+  }
+  
+  .time-input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .time-input button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .time-input button:hover {
+    background-color: #45a049;
+  }
+  
+  .time-input input {
+    text-align: center;
+    width: 50px;
+    font-size: 20px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  p {
+    margin-top: 10px;
+    font-size: 16px;
+  }
+  

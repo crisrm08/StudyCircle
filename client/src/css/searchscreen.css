@@ -1,39 +1,7 @@
 .Search-Screen{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     gap: 50px;
     justify-content: center;
-}
-
-.subject-selection{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-}
-
-.subject-selection h1{
-    padding-bottom: 10px;
-}
-
-.subjects-container{
-    display:  flex;
-    flex-direction: row; 
-    gap: 35px;
-}
-
-.topic-container {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    flex-wrap: wrap;  
-    max-width: 85%;  
-    justify-content: center;
-}
-
-.topic-container .Topic {
-    flex: 1 1 200px; 
-    min-width: 200px; 
 }
