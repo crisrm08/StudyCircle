@@ -5,12 +5,25 @@
   }
   html {
     font-family: "Montserrat", sans-serif;
+    color: #333;
   }
   body {
     background: #eee;
     padding: 0 16px;
+    background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
   }
   
+  h1{
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    text-align: center;
+    font-style: normal;
+  }
+  
+  button:hover{
+    background-color: #1E56A0;
+  }
+   
   header {
     background-color: #163172;
     margin: auto -16px;
@@ -23,4 +36,5 @@
     color: #f5ba13;
     font-family: "McLaren", cursive;
     font-weight: 200;
+    text-align: start;
   }

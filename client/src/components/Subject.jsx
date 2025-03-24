@@ -8,7 +8,9 @@ function Subject(props) {
 
     return(
         <div>
-            <button onClick={handleClick}>{props.subjectName}</button>
+            <button className={props.selectedSubject === props.subjectName ? "active" : ""} onClick={handleClick}>
+                {props.subjectName}
+            </button>
         </div>
     )
 }

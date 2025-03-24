@@ -1,45 +1,64 @@
-.time-selection-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 200px;
-    margin: 20px auto;
-  }
-  
-  .time-input {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-  
-  .time-input button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .time-input button:hover {
-    background-color: #45a049;
-  }
-  
-  .time-input input {
-    text-align: center;
-    width: 50px;
-    font-size: 20px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  p {
-    margin-top: 10px;
-    font-size: 16px;
-  }
-  
+.time-selection-wrapper {
+  text-align: center;
+}
+
+.time-selection-box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.selector-card {
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 20px;
+  width: 240px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.selector-card label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.selector-card select,
+.selector-card input {
+  padding: 8px;
+  font-size: 16px;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.hour-picker {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.hour-picker button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.hour-picker button:hover {
+  background-color: #45a049;
+}
+
+.selector-card p {
+  margin-top: 10px;
+  font-size: 15px;
+  color: #333;
+}

@@ -8,7 +8,7 @@ function Topic(props) {
 
     return(
         <div>
-            <button onClick={handleClick}>{props.topicName}</button>
+            <button className={props.selectedTopic === props.topicName ? "active" : ""} onClick={handleClick}>{props.topicName}</button>
         </div>
     )
 }
