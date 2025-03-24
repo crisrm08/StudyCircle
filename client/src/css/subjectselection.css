@@ -1,0 +1,90 @@
+.subject-selection-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.subject-selection-container h1{
+    padding-bottom: 10px;
+}
+
+.subjects-container {
+    display: flex;
+    flex-wrap: wrap; 
+    flex-direction: row;
+    gap: 35px;
+}
+
+@media (max-width: 768px) {
+    .subjects-container {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .subjects-container {
+        flex-direction: column; 
+        gap: 15px;
+        align-items: center;
+    }
+}
+
+
+.subjects-container button{
+    background-color: #b6d2ea;
+    border: none;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 22px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.subjects-container button:hover {
+    background-color: #1E56A0;
+    color: #fff;
+}
+
+.subjects-container button.active {
+    background-color: #163172;
+    color: #f5ba13;
+}
+
+.topics-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;  
+    max-width: 85%;  
+    justify-content: center;
+}
+
+.topics-container button{
+    background-color: white;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 45px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.topics-container button:hover {
+    background-color: #1E56A0;
+    border: none;
+    color: #fff;
+}
+
+.topics-container button.active {
+    background-color: #163172;
+    color: #f5ba13;
+}
+
+.topics-container .Topic {
+    flex: 1 1 200px; 
+    min-width: 200px; 
+}

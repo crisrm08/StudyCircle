@@ -1,9 +1,9 @@
 import React from "react";
-import Header from './components/Header';
+import SearchScreen from "./components/SearchScreen";
 
 function App() {
     return(
-        <Header/>
+        <SearchScreen/>
     )
 }
 

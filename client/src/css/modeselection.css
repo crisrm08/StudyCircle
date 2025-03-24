@@ -1,0 +1,31 @@
+.mode-selection-container h1{
+    padding-bottom: 30px;
+}
+
+.mode-buttons-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 100px;
+}
+
+.mode-buttons-container button{
+    background-color: #b6d2ea;
+    border: none;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 22px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.mode-buttons-container button:hover{
+    background-color: #1E56A0;
+    color: #fff;
+}
+
+.mode-buttons-container button.active{
+    background-color: #163172;
+    color: #f5ba13;
+}
