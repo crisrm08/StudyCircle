@@ -35,6 +35,14 @@ function Modal({ tutor, onClose }) {
         <h2 className="modal-name">{name}</h2>
         <p className="modal-occupation">{occupation}</p>
 
+        {tutor.specialties?.length > 0 && (
+          <div className="modal-specialties">
+            {tutor.specialties.map((topic, index) => (
+              <span key={index} className="specialty-pill">{topic}</span>
+            ))}
+          </div>
+        )}
+
         <div className="modal-rating">
           {renderStars()} <span className="rating-number">({rating.toFixed(1)})</span>
         </div>
@@ -44,6 +52,8 @@ function Modal({ tutor, onClose }) {
         <p className="modal-price">
           <strong>Precio por hora:</strong> RD${pricePerHour}
         </p>
+
+        <button className="tutor-button">Solicitar tutoría</button>
       </div>
     </div>
   );

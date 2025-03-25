@@ -51,6 +51,24 @@
     color: #777;
     margin-bottom: 10px;
   }
+
+  .modal-specialties {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin: 15px 0;
+  }
+  
+  .specialty-pill {
+    background-color: #D6E4F0;
+    border: 1px solid #cce;
+    color: #163172;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+  }
   
   .modal-rating {
     display: flex;
@@ -62,7 +80,7 @@
   
   .star {
     font-size: 20px;
-    color: gold;
+    color: #f5ba13;
   }
   
   .star.empty {
@@ -83,7 +101,8 @@
   
   .modal-price {
     font-size: 16px;
+    margin-bottom: 15px;
     font-weight: bold;
-    color: #003366;
+    color: #163172;
   }
   
