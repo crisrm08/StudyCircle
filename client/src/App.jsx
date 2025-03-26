@@ -1,11 +1,14 @@
 import React from "react";
-import SearchScreen from "./components/SearchScreen";
 import ResultScreen from "./components/ResultScreen";
+import SearchScreen from "./components/SearchScreen";
+import { SubjectTopicProvider } from "./contexts/SubjectTopicContext";
 
 function App() {
-    return(
-        <ResultScreen/>
-    )
+  return (
+    <SubjectTopicProvider>
+      <ResultScreen />
+    </SubjectTopicProvider>
+  );
 }
 
 export default App;
