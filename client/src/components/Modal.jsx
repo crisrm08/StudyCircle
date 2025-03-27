@@ -1,8 +1,18 @@
-import React from "react";
+import React, {useState}from "react";
+import Request from "./Request";
 import "../css/modal.css";
 
 function Modal({ tutor, onClose }) {
   const { image, name, occupation, description, pricePerHour, rating } = tutor;
+  const [showRequestModal, setShowRequestModal] = useState(false);
+
+  function openRequestModal() {
+    setShowRequestModal(true);
+  }
+
+  function sendRequest(data) {
+    setShowRequestModal(false);
+  }
 
   const renderStars = () => {
     const filledStars = Math.floor(rating);
@@ -26,6 +36,9 @@ function Modal({ tutor, onClose }) {
   };
 
   return (
+    showRequestModal ? (
+      <Request onClose={() => setShowRequestModal(false)} onSend={sendRequest} />
+    ) : (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>✕</button>
@@ -53,10 +66,12 @@ function Modal({ tutor, onClose }) {
           <strong>Precio por hora:</strong> RD${pricePerHour}
         </p>
 
-        <button className="tutor-button">Solicitar tutoría</button>
+        <button className="tutor-button" onClick={openRequestModal}>Solicitar tutoría</button>
       </div>
     </div>
+    )
   );
+  
 }
 
 export default Modal;

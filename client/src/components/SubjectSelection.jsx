@@ -1,12 +1,11 @@
-import { use, useState } from "react";
-import React from "react";
+import React, { useContext } from "react";
 import Subject from "./Subject";
 import Topic from "./Topic";
+import { SubjectTopicContext } from "../contexts/SubjectTopicContext";
 import "../css/subjectselection.css";
 
-function SubjectSelection(params) {
-    const [subject, setSubject] = useState("🧮 Cálculo");
-    const [topic, setTopic] = useState("");
+function SubjectSelection() {
+    const { subject, setSubject, topic, setTopic } = useContext(SubjectTopicContext);
 
     function changeSubject(subjct) {
         setSubject(subjct);
@@ -109,7 +108,6 @@ function SubjectSelection(params) {
                     <Topic topicName="Otro" onChange={changeTopic} selectedTopic={topic}/>
                 </div>
             }    
-            
         </div>
     );
 }
