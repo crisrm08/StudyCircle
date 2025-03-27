@@ -6,9 +6,8 @@ export function ScreenProvider({ children }) {
   const [currentScreen, setCurrentScreen] = useState("Search");
 
   return (
-    <Screen.Provider value={{ currentScreen, setCurrentScreen }}>
+    <ScreenContext.Provider value={{ currentScreen, setCurrentScreen }}>
       {children}
-    </Screen.Provider>
-    //
+    </ScreenContext.Provider>
   );
 }
