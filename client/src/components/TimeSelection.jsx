@@ -1,28 +1,30 @@
-import React, { useState } from "react";
+import React, { useContext} from "react";
+import { TimeContext } from "../contexts/TimeContext";
 import "../css/timeselection.css";
 
 function TimeSelection() {
-  const [time, setTime] = useState(0); 
-  const [day, setDay] = useState("Lunes"); 
+  const {hour, setHour, day, setDay} = useContext(TimeContext); 
+ 
 
-  const handleTimeChange = (event) => {
-    let newTime = parseInt(event.target.value, 10);
-    if (newTime < 0) newTime = 0;
-    if (newTime > 23) newTime = 23;
-    setTime(newTime);
+  const handleHourChange = (event) => {
+    let newHour = parseInt(event.target.value, 10);
+    if (newHour < 0) newHour = 0;
+    if (newHour > 23) newHour = 23;
+    setHour(newHour);
   };
 
   const handleClick = (increment) => {
-    let newTime = time + increment;
-    if (newTime < 0) newTime = 23;
-    if (newTime > 23) newTime = 0;
-    setTime(newTime);
+    let newHour = hour + increment;
+    if (newHour < 0) newHour = 23;
+    if (newHour > 23) newHour = 0;
+    setHour(newHour);
   };
 
   const handleDayChange = (event) => {
     setDay(event.target.value);
   };
 
+  
   return (
     <div className="time-selection-wrapper">
       <h1>Selecciona un día y una hora</h1>
@@ -38,6 +40,7 @@ function TimeSelection() {
             <option value="Viernes">Viernes</option>
             <option value="Sábado">Sábado</option>
             <option value="Domingo">Domingo</option>
+            <option value="cualquiera">Cualquiera</option>
           </select>
           <p>Día seleccionado: <strong>{day}</strong></p>
         </div>
@@ -46,17 +49,16 @@ function TimeSelection() {
           <label>Hora deseada:</label>
           <div className="hour-picker">
             <button onClick={() => handleClick(-1)}>-</button>
-            <input 
-              type="number" 
-              value={time}
-              onChange={handleTimeChange}
-              min="0"
-              max="23"
-            />
+            {typeof hour === 'number' ? (
+              <input type="number" value={hour} onChange={handleHourChange} min="0" max="23"/>
+            ) : (
+              <input type="text" value={hour} onChange={handleHourChange}/>
+            )}
             <button onClick={() => handleClick(1)}>+</button>
           </div>
-          <p>Hora seleccionada: <strong>{time}:00</strong></p>
+          <p>Hora seleccionada: <strong>{hour}</strong></p>
         </div>
+
       </div>
     </div>
   );
