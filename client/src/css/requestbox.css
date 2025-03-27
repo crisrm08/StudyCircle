@@ -1,0 +1,103 @@
+.request-box {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-left: 6px solid #163172;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    transition: box-shadow 0.2s ease;
+    max-width: 700px;
+    margin-inline: auto;
+}
+  
+.request-box:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+  
+.request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+  
+.subject-topic {
+    font-weight: bold;
+    font-size: 17px;
+    color: #163172;
+}
+
+.request-mode {
+    background-color: #f0f4ff;
+    color: #163172;
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.request-details p {
+    margin: 6px 0;
+    color: #444;
+    font-size: 15px;
+}
+
+.request-message {
+    margin-top: 10px;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-left: 4px solid #ccc;
+    border-radius: 6px;
+    font-style: italic;
+}
+
+.request-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.btn-accept {
+    background-color: #1E56A0;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-accept:hover {
+    background-color: #163172;
+    color: #f5ba13;
+}
+
+.btn-decline {
+    background-color: #8e8e8e;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-decline:hover {
+    background-color: #D6E4F0;
+    color: #444;
+}
+
+.request-student-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.student-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+}

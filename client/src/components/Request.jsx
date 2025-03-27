@@ -1,14 +1,18 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
+import { ScreenContext } from "../contexts/ScreenContext";
 import { SubjectTopicContext } from "../contexts/SubjectTopicContext";
+import { MessageContext } from "../contexts/MessageContext";
 import "../css/request.css";
 
 function Request({ onClose, onSend }) {
   const { subject, topic } = useContext(SubjectTopicContext);
-  const [message, setMessage] = useState("");
+  const { message, setMessage } = useContext(MessageContext);
+  const { setCurrentScreen } = useContext(ScreenContext);
+
 
   function handleSubmit() {
     //onSend({ subject, topic, message });
-    setMessage("");
+    setCurrentScreen("Tutor")
   };
 
   return (

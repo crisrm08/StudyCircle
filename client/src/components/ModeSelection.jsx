@@ -1,9 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { ScreenContext } from "../contexts/ScreenContext";
+import { ModeContext } from "../contexts/ModeContext";
 import "../css/modeselection.css";
 
 function ModeSelection() {
-  const [mode, setMode] = useState("cualquiera");
+  const {mode, setMode} = useContext(ModeContext);
   const { setCurrentScreen } = useContext(ScreenContext);
 
   function changeMode(event) {

@@ -1,15 +1,12 @@
 import React from "react";
-import { ScreenProvider } from "./contexts/ScreenContext";
-import { SubjectTopicProvider } from "./contexts/SubjectTopicContext";
-import Screens from "./components/Screens"; 
+import AppProviders from "./AppProviders";
+import Screens from "./components/Screens";
 
 function App() {
   return (
-    <ScreenProvider>
-      <SubjectTopicProvider>
-        <Screens />
-      </SubjectTopicProvider>
-    </ScreenProvider>
+    <AppProviders>
+      <Screens />
+    </AppProviders>
   );
 }
 
