@@ -1,7 +1,7 @@
 import React from "react";
 import "../css/tutorprofilecard.css";
 
-function TutorProfileCard({ id, image, name, occupation, description, pricePerHour, rating, onExplore}) {
+function TutorProfileCard({ id, image, name, occupation, description, pricePerHour, rating, onExplore, specialties}) {
 
   function renderStars(){
     const filledStars = Math.floor(rating);
@@ -26,7 +26,7 @@ function TutorProfileCard({ id, image, name, occupation, description, pricePerHo
   };
 
   function handleClick() {
-    onExplore(id, image, name, occupation, description, pricePerHour, rating);
+    onExplore(id, image, name, occupation, description, pricePerHour, rating, specialties);
   }
 
   return (
@@ -42,7 +42,7 @@ function TutorProfileCard({ id, image, name, occupation, description, pricePerHo
         <p className="tutor-description">{description}</p>
       </div>
 
-      <button className="tutor-button">Solicitar tutoría</button>
+      <button className="tutor-button">Más información</button>
     </div>
   );
 }

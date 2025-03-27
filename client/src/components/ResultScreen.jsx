@@ -12,16 +12,16 @@ function ResultScreen() {
         occupation: '',
         description: '',
         pricePerHour: 0,
-        rating: 0
+        rating: 0,
+        specialties: []
     });
     const [tutorClicked, setTutorClicked] = useState(false);
 
-    function openModal(id, image, name, occupation, description, pricePerHour, rating) {
-        setTutor({ id, image, name, occupation, description, pricePerHour, rating });
+    function openModal(id, image, name, occupation, description, pricePerHour, rating, specialties) {
+        setTutor({ id, image, name, occupation, description, pricePerHour, rating, specialties });
         setTutorClicked(true);
     }
       
-
     return(
         <div>
             <Header/>
@@ -33,17 +33,30 @@ function ResultScreen() {
                     occupation="Profesor Intec"
                     description="Apasionado por la enseñanza de matemáticas y física. Vamos a resolver tus dudas juntos"
                     pricePerHour="1000"
-                    rating={4}
+                    rating={4.4}
+                    specialties={[
+                        "Cinemática y movimiento", 
+                        "Ondas y sonido", 
+                        "Física nuclear"
+                    ]}
                     onExplore={openModal}
                 />
+
                 <TutorProfileCard 
                     id="2"
                     image="https://randomuser.me/api/portraits/men/1.jpg"
                     name="Armando Paredes"
                     occupation="Estudiante de Ingeniería"
-                    description="Estudiante avanzado de la carrera de Matemáticas para la educación superior"
+                    description="Estudiante avanzado de la carrera de Física para la educación superior"
                     pricePerHour="500"
                     rating={5}
+                    specialties={[
+                        "Leyes de Newton", 
+                        "Cinemática y movimiento", 
+                        "Trabajo, energía y potencia",
+                        "Electromagnetismo",
+                        "Leyes de la termonidinámica"
+                    ]}
                     onExplore={openModal}
                 />
                 <TutorProfileCard 
@@ -51,9 +64,13 @@ function ResultScreen() {
                     image="https://randomuser.me/api/portraits/women/30.jpg"
                     name="Elsa Capunta"
                     occupation="Ingeniera Civil"
-                    description="Altos conocimientos de Derivadas e integrales para compartir contigo"
+                    description="Altos conocimientos de Cinemátca para compartir contigo"
                     pricePerHour="600"
                     rating={3.5}
+                    specialties={[
+                        "Cinemática y movimiento", 
+                        "Fluidos y su dinámica"
+                    ]}
                     onExplore={openModal}
                 />
                 <TutorProfileCard 
@@ -64,6 +81,12 @@ function ResultScreen() {
                     description="Apasionado por la enseñanza de matemáticas y física. Vamos a resolver tus dudas juntos"
                     pricePerHour="800"
                     rating={4.2}
+                    specialties={[
+                        "Cinemática y movimiento", 
+                        "Óptica y luz", 
+                        "Electromagnetismo",
+                        "Ondas y sonido"
+                    ]}
                     onExplore={openModal}
                 />
                 {tutorClicked && (<Modal tutor={tutor} onClose={() => setTutorClicked(false)}/>)}
