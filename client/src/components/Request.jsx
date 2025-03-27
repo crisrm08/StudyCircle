@@ -33,7 +33,7 @@ function Request({ onClose, onSend }) {
         </div>
 
         <div className="request-field">
-          <label>¿En qué necesitas ayuda?</label>
+          <label>En qué necesitas ayuda?</label>
           <textarea 
             placeholder="Describe tu problema o lo que no entiendes..."
             value={message}

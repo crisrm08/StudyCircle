@@ -1,14 +1,15 @@
-import React from "react";
-import { useState } from "react";
+import React, { useContext, useState } from "react";
+import { ScreenContext } from "../contexts/ScreenContext";
 import "../css/modeselection.css";
 
 function ModeSelection() {
-    const [mode, setMode] = useState("cualquiera");
+  const [mode, setMode] = useState("cualquiera");
+  const { setCurrentScreen } = useContext(ScreenContext);
 
-    function changeMode(event) {
-        setMode(event.target.name);
-    }
-
+  function changeMode(event) {
+    setMode(event.target.name);
+    setCurrentScreen("Results");
+  }
     return (
         <div className="mode-selection-container">
             <h1>Alguna modalidad preferida?</h1>
