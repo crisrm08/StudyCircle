@@ -4,20 +4,23 @@ import { SubjectTopicProvider } from "./contexts/SubjectTopicContext";
 import { TimeProvider } from "./contexts/TimeContext";
 import { ModeProvider } from "./contexts/ModeContext";
 import { MessageProvider } from "./contexts/MessageContext";
+import { UserProvider } from "./contexts/UserContext";
 
 function AppProviders({ children }) {
   return (
-    <ScreenProvider>
-      <SubjectTopicProvider>
-        <TimeProvider>
-          <ModeProvider>
-            <MessageProvider>
-              {children}
-            </MessageProvider>
-          </ModeProvider>
-        </TimeProvider>
-      </SubjectTopicProvider>
-    </ScreenProvider>
+    <UserProvider>
+      <ScreenProvider>
+        <SubjectTopicProvider>
+          <TimeProvider>
+            <ModeProvider>
+              <MessageProvider>
+                {children}
+              </MessageProvider>
+            </ModeProvider>
+          </TimeProvider>
+        </SubjectTopicProvider>
+      </ScreenProvider>
+    </UserProvider>
   );
 }
 
