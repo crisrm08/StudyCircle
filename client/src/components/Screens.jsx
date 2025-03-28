@@ -9,12 +9,12 @@ function Screens() {
   const { currentScreen } = useContext(ScreenContext);
 
   return (
-    /*<>
+    <>
     {currentScreen === "Search" && <SearchScreen />}
     {currentScreen === "Results" && <ResultScreen />}
     {currentScreen === "Tutor" && <TutorScreen />}
-    </>*/
-    <LoginScreen/>
+    {currentScreen === "Login" && <LoginScreen />}
+    </>
   );
 }
 
