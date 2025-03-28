@@ -1,0 +1,92 @@
+.login-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #163172;
+    min-height: 100vh;
+    margin: 0 -16px;
+    gap: 55px;
+    padding: 30px 20px;
+    position: relative;
+}
+
+.login-screen img {
+    position: absolute;
+    left: 150px;
+    top: 0;
+    height: 100%;
+    z-index: 0;
+}
+
+.login-screen h1 {
+    font-size: 75px;
+    color: #f5ba13;
+    font-family: "McLaren", cursive;
+    margin: 0;
+    z-index: 1;
+}
+
+.login-screen h2 {
+    color: #F6F6F6;
+    font-size: 30px;
+    text-align: center;
+    z-index: 1;
+    margin-top: -10px;
+}
+
+.inputs-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 25px;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 320px;
+    gap: 5px;
+    z-index: 1;
+}
+
+.input-container label {
+    color: #f5ba13;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.input-container input {
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #f6f6f6;
+    color: #333;
+    outline: none;
+}
+
+.input-container input:focus {
+    box-shadow: 0 0 0 2px #f5ba13aa;
+}
+
+.login-button {
+    background-color: #f5ba13;
+    color: #163172;
+    font-weight: bold;
+    border: none;
+    padding: 12px 0;
+    width: 100%;
+    max-width: 320px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+    z-index: 1;
+}
+
+.login-button:hover {
+    background-color: #e6aa10;
+}
