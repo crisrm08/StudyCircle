@@ -1,0 +1,29 @@
+.chat-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 15px;
+}
+
+.top-panel{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 1px solid black;
+    padding-bottom: 5px;
+}
+
+.input-message-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid black;
+    border-radius: 30px;
+    padding: 5px;
+    position: fixed;
+    width: 65%;
+    bottom: 15px;
+}

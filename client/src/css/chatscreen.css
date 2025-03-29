@@ -1,0 +1,10 @@
+.chat-screen{
+    margin: 0 -16px;
+}
+
+.chat-screen-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

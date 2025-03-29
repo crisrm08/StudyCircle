@@ -1,8 +1,14 @@
 import React from "react";
+import "../css/chatpreview.css";
 
-function ChatPreview() {
+function ChatPreview({name, lastMessage, image}) {
     return(
-        <div>
+        <div className="chat-preview">
+            <img className="profile-pic" src={image} alt="imagen perfil" />
+            <div className="info-container" >
+                <h2>{name}</h2>
+                <h3>{lastMessage}</h3>
+            </div>
             
         </div>
     )

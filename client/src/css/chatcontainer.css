@@ -1,0 +1,7 @@
+.chat-container{
+    width: 100%;
+    min-height: 100vh;
+    background-color:bisque ;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+}

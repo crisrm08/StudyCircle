@@ -1,0 +1,14 @@
+.chat-preview{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    gap: 10px;
+    margin-bottom: 10px;
+
+}
+
+.profile-pic{
+    width: 75px;
+    border-radius: 50%;
+}

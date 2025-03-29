@@ -4,6 +4,7 @@ import SearchScreen from "./SearchScreen";
 import ResultScreen from "./ResultScreen";
 import TutorScreen from "./TutorScreen";
 import LoginScreen from "./LoginScreen";
+import ChatScreen from "./ChatScreen";
 
 function Screens() {
   const { currentScreen } = useContext(ScreenContext);
@@ -14,6 +15,7 @@ function Screens() {
     {currentScreen === "Results" && <ResultScreen />}
     {currentScreen === "Tutor" && <TutorScreen />}
     {currentScreen === "Login" && <LoginScreen />}
+    {currentScreen === "Chat" && <ChatScreen />}
     </>
   );
 }
