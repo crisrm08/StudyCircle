@@ -1,0 +1,25 @@
+.chat-message {
+    max-width: 70%;
+    padding: 10px 14px;
+    margin: 8px 12px;
+    border-radius: 18px;
+    font-size: 15px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    display: inline-block;
+  }
+  
+  .own-message {
+    align-self: flex-end;
+    background-color: #f5ba13;
+    color: #163172;
+    border-bottom-right-radius: 0;
+  }
+  
+  .other-message {
+    align-self: flex-start;
+    background-color: #f0f0f0;
+    color: #333;
+    border-bottom-left-radius: 0;
+  }
+  

@@ -4,7 +4,7 @@ export const SubjectTopicContext = createContext();
 
 export function SubjectTopicProvider({ children }) {
   const [subject, setSubject] = useState("🧮 Cálculo");
-  const [topic, setTopic] = useState("");
+  const [topic, setTopic] = useState("Cinematica y movimiento");
 
   return (
     <SubjectTopicContext.Provider value={{ subject, setSubject, topic, setTopic }}>
