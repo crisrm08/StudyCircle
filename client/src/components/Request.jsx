@@ -7,7 +7,6 @@ function Request({ onClose, onSend }) {
   const { subject, topic } = useContext(SubjectTopicContext);
   const { message, setMessage } = useContext(MessageContext);
 
-
   function handleSubmit() {
     //onSend({ subject, topic, message });
   };

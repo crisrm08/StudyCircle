@@ -1,0 +1,19 @@
+.chat-container {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 0.8fr 2fr;
+    height: 100vh;
+    background-color: #fef9f4; 
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+@media screen and (max-width: 768px) {
+    .chat-container {
+        grid-template-columns: 1fr;
+    }
+
+    .chat-sidebar {
+        display: none;
+    }
+}

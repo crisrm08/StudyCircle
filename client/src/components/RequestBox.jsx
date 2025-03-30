@@ -3,6 +3,7 @@ import { SubjectTopicContext } from "../contexts/SubjectTopicContext";
 import { TimeContext } from "../contexts/TimeContext";
 import { ModeContext } from "../contexts/ModeContext";
 import { MessageContext } from "../contexts/MessageContext";
+import { ScreenContext } from "../contexts/ScreenContext";
 import "../css/requestbox.css";
 
 function RequestBox({ avatar }) {
@@ -10,12 +11,17 @@ function RequestBox({ avatar }) {
   const { hour, day } = useContext(TimeContext); 
   const { mode } = useContext(ModeContext);
   const { message } = useContext(MessageContext);
+  const { setCurrentScreen } = useContext(ScreenContext);
 
   const [rejected, setRejected] = useState(false);
 
   function handleDecline(){
     setRejected(true);
   };
+
+  function handleAccept() {
+    setCurrentScreen("Chat");
+  }
 
   if (rejected) return null;
 
@@ -41,10 +47,8 @@ function RequestBox({ avatar }) {
       </div>
 
       <div className="request-actions">
-        <button className="btn-accept">Aceptar</button>
-        <button className="btn-decline" onClick={handleDecline}>
-          Rechazar
-        </button>
+        <button className="btn-accept" onClick={handleAccept}>Aceptar</button>
+        <button className="btn-decline" onClick={handleDecline}> Rechazar </button>
       </div>
     </div>
   );

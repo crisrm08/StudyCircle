@@ -1,0 +1,17 @@
+.chat-screen {
+    height: 100vh;
+    margin:  0 -16px;
+    padding: 0;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    background-color: #fef9f4;
+  }
+  
+  .chat-screen-container {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    overflow: visible;
+  }
+  

@@ -1,0 +1,39 @@
+.chat-preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.chat-preview:hover {
+background-color: rgba(255, 255, 255, 0.15);
+}
+
+.profile-pic {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+}
+
+.info-container h2 {
+    margin: 0;
+    font-size: 16px;
+    color: #f6f6f6;
+    font-weight: 600;
+}
+
+.info-container h3 {
+    margin: 3px 0 0 0;
+    font-size: 14px;
+    color: #ddd;
+    font-weight: 400;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}

@@ -1,0 +1,91 @@
+.chat-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #fdebd0; 
+    position: relative;
+}
+
+.top-panel {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #ccc;
+    background-color: #fffaf0;
+}
+
+.left-side {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-pic {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #003366;
+}
+
+.left-side h2 {
+    margin: 0;
+    font-size: 17px;
+    color: #163172;
+}
+
+.subject-info {
+    font-size: 13px;
+    color: #555;
+    margin: 2px 0 0 0;
+}
+
+.messages-container {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input-message-container {
+    position: fixed;
+    display: flex;
+    width: -webkit-fill-available;
+    flex-direction: row;
+    bottom: 0;
+    padding: 10px 20px;
+    background-color: #fffaf0;
+    border-top: 1px solid #ccc;
+    z-index: 10;
+}
+
+
+.input-message-container input {
+    flex: 1;
+    padding: 10px 16px;
+    font-size: 15px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.send-button {
+    background-color: #f5ba13;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    margin-left: 10px;
+    color: #163172;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.send-button:hover {
+background-color: #e0a913;
+}

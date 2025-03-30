@@ -11,6 +11,7 @@
     background: #eee;
     padding: 0 16px;
     background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
+    overflow: hidden;
   }
   
   h1{
