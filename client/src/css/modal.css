@@ -12,7 +12,7 @@
   }
   
   .modal-content {
-    background-color: white;
+    background-color: #F6F6F6;
     padding: 30px;
     border-radius: 16px;
     width: 90%;
@@ -48,7 +48,7 @@
   
   .modal-occupation {
     font-size: 14px;
-    color: #777;
+    color: #888;
     margin-bottom: 10px;
   }
 
@@ -62,7 +62,7 @@
   
   .specialty-pill {
     background-color: #D6E4F0;
-    border: 1px solid #cce;
+    border: 1px solid #D6E4F0;
     color: #163172;
     padding: 6px 12px;
     border-radius: 20px;
@@ -89,7 +89,7 @@
   
   .rating-number {
     font-size: 14px;
-    color: #555;
+    color: #888;
   }
   
   .modal-description {

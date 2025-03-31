@@ -85,7 +85,7 @@
   
   .request-submit:hover:not(:disabled) {
     background-color: #163172;
-    color: #f5ba13;
+    color: #D6E4F0;
   }
   
   .request-submit:disabled {

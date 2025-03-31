@@ -45,12 +45,12 @@
 
 .subjects-container button:hover {
     background-color: #1E56A0;
-    color: #fff;
+    color: #F6F6F6;
 }
 
 .subjects-container button.active {
     background-color: #163172;
-    color: #f5ba13;
+    color: #D6E4F0;
 }
 
 .topics-container {
@@ -63,7 +63,7 @@
 }
 
 .topics-container button{
-    background-color: white;
+    background-color: #F6F6F6;
     color: #333;
     padding: 10px 15px;
     border-radius: 45px;
@@ -76,12 +76,12 @@
 .topics-container button:hover {
     background-color: #1E56A0;
     border: none;
-    color: #fff;
+    color: #F6F6F6;
 }
 
 .topics-container button.active {
     background-color: #163172;
-    color: #f5ba13;
+    color: #D6E4F0;
 }
 
 .topics-container .Topic {

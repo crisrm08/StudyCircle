@@ -1,5 +1,5 @@
 .tutor-card {
-    background-color: #fff;
+    background-color: #F6F6F6;
     border-radius: 16px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
     padding: 20px;
@@ -22,7 +22,7 @@
     height: 100px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #e0e0e0;
+    border: 3px solid #D6E4F0;
   }
   
   .tutor-name {
@@ -81,6 +81,6 @@
   
   .tutor-button:hover {
     background-color: #163172;
-    color: #f5ba13;
+    color: #D6E4F0;
   }
   

@@ -14,8 +14,8 @@
     justify-content: space-evenly;
     align-items: center;
     padding: 15px;
-    border-bottom: 1px solid #2a3e70;
-    background-color: #003366;
+    border-bottom: 1px solid #163172;
+    background-color: #163172;
 }
 
 .filter-button {
@@ -30,12 +30,12 @@
 }
 
 .filter-button:hover {
-    color: #f5ba13;
+    color: #1E56A0;
 }
 
 .filter-button.active {
-    border-bottom: 2px solid #f5ba13;
-    color: #f5ba13;
+    border-bottom: 2px solid #D6E4F0;
+    color: #D6E4F0;
 }
 
 .divider {

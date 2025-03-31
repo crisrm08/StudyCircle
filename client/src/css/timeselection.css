@@ -11,8 +11,8 @@
 }
 
 .selector-card {
-  background-color: #f8f9fa;
-  border: 1px solid #ccc;
+  background-color: #F6F6F6;
+  border: 1px solid #F6F6F6;
   border-radius: 12px;
   padding: 20px;
   width: 240px;
@@ -44,8 +44,8 @@
 }
 
 .hour-picker button {
-  background-color: #4CAF50;
-  color: white;
+  background-color: #163172;
+  color: #F6F6F6;
   border: none;
   padding: 6px 12px;
   font-size: 18px;
@@ -54,7 +54,7 @@
 }
 
 .hour-picker button:hover {
-  background-color: #45a049;
+  background-color: #1E56A0;
 }
 
 .selector-card p {

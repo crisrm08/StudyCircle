@@ -10,7 +10,7 @@
 }
 
 .mode-buttons-container button{
-    background-color: #b6d2ea;
+    background-color: #D6E4F0;
     border: none;
     color: #333;
     padding: 10px 15px;
@@ -22,10 +22,10 @@
 
 .mode-buttons-container button:hover{
     background-color: #1E56A0;
-    color: #fff;
+    color: #F6F6F6;
 }
 
 .mode-buttons-container button.active{
     background-color: #163172;
-    color: #f5ba13;
+    color: #D6E4F0;
 }

@@ -5,7 +5,7 @@
     overflow: visible;
     display: flex;
     flex-direction: column;
-    background-color: #fef9f4;
+    background-color: transparent;
   }
   
   .chat-screen-container {
