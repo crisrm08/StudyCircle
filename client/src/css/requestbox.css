@@ -1,6 +1,6 @@
 .request-box {
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: #F6F6F6;
+    border: 1px solid #F6F6F6;
     border-left: 6px solid #163172;
     border-radius: 10px;
     padding: 20px;
@@ -60,7 +60,7 @@
 
 .btn-accept {
     background-color: #1E56A0;
-    color: white;
+    color: #F6F6F6;
     border: none;
     padding: 8px 16px;
     border-radius: 8px;
@@ -70,12 +70,12 @@
 
 .btn-accept:hover {
     background-color: #163172;
-    color: #f5ba13;
+    color: #D6E4F0;
 }
 
 .btn-decline {
-    background-color: #8e8e8e;
-    color: white;
+    background-color: #888;
+    color: #F6F6F6;
     border: none;
     padding: 8px 16px;
     border-radius: 8px;
@@ -99,5 +99,5 @@
     height: 36px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #ccc;
+    border: 2px solid #D6E4F0;
 }

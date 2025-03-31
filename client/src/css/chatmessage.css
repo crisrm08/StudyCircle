@@ -11,15 +11,15 @@
   
   .own-message {
     align-self: flex-end;
-    background-color: #f5ba13;
-    color: #163172;
+    background-color: #D6E4F0;
+    color: #1E56A0;
     border-bottom-right-radius: 0;
   }
   
   .other-message {
     align-self: flex-start;
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: #163172;
+    color: #D6E4F0;
     border-bottom-left-radius: 0;
   }
   

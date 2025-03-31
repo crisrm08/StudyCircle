@@ -17,13 +17,13 @@ background-color: rgba(255, 255, 255, 0.15);
     height: 48px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #fff;
+    border: 2px solid #F6F6F6;
 }
 
 .info-container h2 {
     margin: 0;
     font-size: 16px;
-    color: #f6f6f6;
+    color: #F6F6F6;
     font-weight: 600;
 }
 
