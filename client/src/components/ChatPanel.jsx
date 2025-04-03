@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import ChatMessage from "./ChatMessage";
+import SessionControlBar from "./SessionControlBar";
 import { SubjectTopicContext } from "../contexts/SubjectTopicContext";
 import { ModeContext } from "../contexts/ModeContext";
 import { IoSend } from "react-icons/io5";
@@ -26,6 +27,8 @@ function ChatPanel({ image, name }) {
         <ChatMessage text="¡Con gusto! ¿Tienes alguna otra duda?" isOwn={true} />
         <ChatMessage text="Eso era todo" isOwn={false} />
       </div>
+
+      <SessionControlBar />
 
       <div className="input-message-container">
         <input type="text" placeholder="Escribe un mensaje..." />

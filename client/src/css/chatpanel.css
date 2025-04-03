@@ -43,6 +43,7 @@
 .messages-container {
     flex: 1;
     padding: 20px;
+    max-height: 400px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -86,5 +87,5 @@
 }
 
 .send-button:hover {
-background-color: #e0a913;
+background-color: #1E56A0;
 }
