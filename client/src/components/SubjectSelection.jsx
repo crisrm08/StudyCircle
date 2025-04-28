@@ -85,9 +85,9 @@ function SubjectSelection() {
                     <Topic topicName="Bases de datos" onChange={changeTopic} selectedTopic={topic}/>
                     <Topic topicName="Programación web (HTML, CSS, JavaScript)" onChange={changeTopic} selectedTopic={topic}/>
                     <Topic topicName="Desarrollo móvil" onChange={changeTopic} selectedTopic={topic}/>
-                    <Topic topicName="Patrones de diseño de software" onChange={changeTopic} selectedTopic={topic}/>
+                    {/*<Topic topicName="Patrones de diseño de software" onChange={changeTopic} selectedTopic={topic}/>*/}
                     <Topic topicName="Lenguajes de programación (Python, Java, C++)" onChange={changeTopic} selectedTopic={topic}/>
-                    <Topic topicName="Sistemas operativos y gestión de memoria" onChange={changeTopic} selectedTopic={topic}/>
+                    {/*<Topic topicName="Sistemas operativos y gestión de memoria" onChange={changeTopic} selectedTopic={topic}/>*/}
                     <Topic topicName="Pruebas y depuración de código" onChange={changeTopic} selectedTopic={topic}/>
                     <Topic topicName="Otro" onChange={changeTopic} selectedTopic={topic}/>
                 </div>

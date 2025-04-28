@@ -1,38 +1,91 @@
-.login-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #163172; 
-    min-height: 100vh;
-    margin: 0 -16px;
-    gap: 55px;
-    padding: 30px 20px;
-    position: relative;
+.LogSign{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+@media screen and (max-width: 768px) {
+    .LogSign {
+        grid-template-columns: 1fr;
+        overflow: scroll;
+    }
 }
 
-.login-screen img {
+.title{
     position: absolute;
-    left: 150px;
-    top: 0;
-    height: 100%;
-    z-index: 0;
-}
-
-.login-screen h1 {
-    font-size: 75px;
+    left: 30px;
+    top: 30px;
+    font-size: xx-large;
     color: #D6E4F0; 
     font-family: "McLaren", cursive;
     margin: 0;
     z-index: 1;
 }
 
-.login-screen h2 {
-    color: #888; 
-    font-size: 30px;
+.login-screen{
+    min-height: 100vh;
+    background-color: #163172; 
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #163172; 
+    gap: 15px;
+    position: relative;
+    top: 170px;
+}
+
+.login-form h2 {
+    color: #D6E4F0; 
+    font-size: xx-large;
     text-align: center;
     z-index: 1;
     margin-top: -10px;
+}
+
+.login-form h3{
+    color: #D6E4F0;
+}
+
+
+.login-form img {
+    margin-top: 10px;
+    width: 70px;
+    background-color: #D6E4F0;
+    border-radius: 50%;
+}
+
+.login-form p{
+    margin-top: 30px;
+}
+
+.separator2 {
+    display: flex;
+    align-items: center;
+    width: 60%;       
+    margin: 2em 0;     
+}
+
+.separator2::before,
+.separator2::after {
+    content: "";
+    flex: 1;                   
+    height: 3px;               
+    background-color: #D6E4F0;   
+}
+
+.separator2::before {
+    margin-right: 0.75em;
+}
+.separator2::after {
+    margin-left:  0.75em;
+}
+
+.separator2 span {
+    white-space: nowrap;  
+    color: #D6E4F0;
+    font-weight: bold;
 }
 
 .inputs-container {
@@ -47,7 +100,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 320px;
+    max-width: 420px;
     gap: 5px;
     z-index: 1;
 }
@@ -61,11 +114,15 @@
 .input-container input {
     padding: 10px;
     border: none;
-    border-radius: 8px;
+    border-radius: 20px;
     font-size: 14px;
-    background-color: #F6F6F6; 
+    background-color: #D6E4F0; 
     color: #1E56A0;
     outline: none;
+}
+
+.input-container input::placeholder{
+    color: #1E56A0;
 }
 
 .input-container input:focus {
@@ -73,14 +130,15 @@
 }
 
 .login-button {
-    background-color: #D6E4F0; 
-    color: #163172; 
+    background-color: #1E56A0; 
+    color: #D6E4F0; 
     font-weight: bold;
     border: none;
     padding: 12px 0;
+    margin-top: 50px;
     width: 100%;
-    max-width: 320px;
-    border-radius: 8px;
+    max-width: 150px;
+    border-radius: 20px;
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.2s ease, color 0.2s ease;
@@ -88,6 +146,84 @@
 }
 
 .login-button:hover {
-    background-color: #1E56A0;
+    background-color: #163172;
     color: #F6F6F6; 
+}
+
+.login-form p{
+    color: #D6E4F0;
+    text-decoration: underline;
+}
+
+.login-form p:hover{
+    color: #1E56A0;
+}
+
+.login-screen2{
+    background-color: #D6E4F0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-screen2 h1{
+    color: #163172;
+    font-weight: 600;
+    font-size: 2.5em;
+}
+
+.login-screen2 p{
+    color: #163172;
+    font-size: large;
+}
+
+.centered-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.centered-container button{
+    margin-top: 20px;
+    background-color: #163172;
+    color: #D6E4F0;
+    padding: 12.5px;
+    border-radius: 30px;
+    font-size: larger;
+    border: none;
+}
+
+.centered-container button:hover{
+    background-color: #1E56A0;
+}
+
+.separator {
+    display: flex;
+    align-items: center;
+    width: 70%;       
+    margin: 2.5em 0;     
+}
+
+.separator::before,
+.separator::after {
+    content: "";
+    flex: 1;                   
+    height: 3px;               
+    background-color: #163172;   
+}
+
+.separator::before {
+    margin-right: 0.75em;
+}
+.separator::after {
+    margin-left:  0.75em;
+}
+
+.separator span {
+    white-space: nowrap;  
+    color: #163172;
+    font-weight: bold;
 }
