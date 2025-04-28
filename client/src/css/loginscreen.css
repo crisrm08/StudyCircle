@@ -7,6 +7,15 @@
         grid-template-columns: 1fr;
         overflow: scroll;
     }
+
+    .login-form{
+        padding-bottom: 30px;
+    }
+
+    .login-screen2{
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
 }
 
 .title{
