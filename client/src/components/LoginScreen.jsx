@@ -21,6 +21,10 @@ function LoginScreen() {
         }
     }
 
+    function studentSignUp(){
+        setCurrentScreen("StudentSignUp1")
+    }
+
     return (
         <div className="LogSign">
             <h1 className="title">StudyCircle</h1>
@@ -51,7 +55,7 @@ function LoginScreen() {
                 <div className="centered-container">
                     <h1>¿Eres nuevo aquí?</h1>
                     <p>Regístrate y conoce a tus futuros tutores</p>
-                    <button>Comenzar</button>
+                    <button onClick={studentSignUp}>Comenzar</button>
 
                     <div className="separator"> <span>O</span> </div>
 
