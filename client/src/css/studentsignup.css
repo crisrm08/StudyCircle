@@ -30,7 +30,6 @@
 .Sign-up-form div{
     display: flex;
     flex-direction: row;
-    width: 100%;
     justify-content: space-evenly;
     align-items: center;
 }
@@ -45,6 +44,7 @@
     width: 60%;              
 }
 
+
 .form-container h1{
     color: #163172;
     font-weight: 500;
@@ -52,15 +52,16 @@
 
 .form-container input{
     max-width: 400px;
-    background-color: #1E56A0;
-    color: #D6E4F0;
+    background-color: #F6F6F6;
+    color: #163172;
     border-radius: 25px;
     padding: 10px;
     border: none;
 }
 
 .form-container input::placeholder{
-    color: #D6E4F0;
+    color: #58769c;
+    font-size:medium;
 }
 
 .form-container label{
@@ -73,6 +74,7 @@
     justify-self: center;
     margin-top: 1rem;
     padding: 10px;
+    font-size: large;
     color: #D6E4F0;
     background-color: #1E56A0;
     border-radius: 20px;
@@ -82,15 +84,28 @@
 .form-container button:hover{
     background-color: #163172;
 }
+
+
   
 @media (max-width: 768px) {
     .form-container {
-        grid-template-columns: 1fr;        
+        grid-template-columns: 1fr;   
+        grid-row-gap: 1rem;
+        width: 90%;     
     }
 
+    .form-container > div:first-of-type {
+        display: none;
+    }
+      
     .Sign-up-form{
         position: relative;
         top: 100px;
+        padding: 1rem 0 1rem 0;
+    }
+
+    .second-form{
+        padding: 1rem 1rem 1rem 1rem;
     }
 
     .Student-sign-up-1{
@@ -100,6 +115,13 @@
     .form-contairner label,
     .form-contairner input {
         grid-column: 1;                      
+    }
+}
+
+@media (max-width: 391px) {
+    .login-screen {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
     }
 }
 

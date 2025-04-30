@@ -1,14 +1,22 @@
-import React from "react";
+import React, {useContext} from "react";
 import "../css/studentsignup.css";
 import { PiStudentFill } from "react-icons/pi";
+import { ScreenContext } from "../contexts/ScreenContext";
 
 function StudentSignUp1Screen() {
+
+    const { setCurrentScreen } = useContext(ScreenContext);
+
+    function next() {
+        setCurrentScreen("StudentSignUp2");
+    }
+
     return(
         <div className="Student-sign-up-1">
             <h1 className="title">StudyCircle</h1>
             <div className="Sign-up-form">
                 <div>
-                    <form className="form-container">
+                    <form className="form-container" onSubmit={next}>
                         <h1>Regístrate</h1>
                         <div></div>
 
