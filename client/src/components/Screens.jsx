@@ -6,6 +6,8 @@ import TutorScreen from "./TutorScreen";
 import LoginScreen from "./LoginScreen";
 import StudentSignUp1Screen from "./StudentSignUp1Screen";
 import StudentSignUp2Screen from "./StudentSignUp2Screen";
+import TutorSignUp1Screen from "./TutorSignUp1Screen";
+import TutorSignUp2Screen from "./TutorSignUp2Screen";
 import ChatScreen from "./ChatScreen";
 
 function Screens() {
@@ -20,6 +22,8 @@ function Screens() {
     {currentScreen === "Chat" && <ChatScreen />}
     {currentScreen === "StudentSignUp1" && <StudentSignUp1Screen />}
     {currentScreen === "StudentSignUp2" && <StudentSignUp2Screen />}
+    {currentScreen === "TutorSignUp1" && <TutorSignUp1Screen />}
+    {currentScreen === "TutorSignUp2" && <TutorSignUp2Screen />}
     </>
   );
 }

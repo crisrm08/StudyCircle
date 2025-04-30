@@ -131,3 +131,14 @@
     }
 }
   
+/******************************************************Tutor sign up***********************************************/
+
+.next{
+    background-color: #D6E4F0 !important;
+    color: #1E56A0 !important;
+}
+
+.next:hover{
+    background-color: #1E56A0 !important;
+    color: #D6E4F0 !important;
+}

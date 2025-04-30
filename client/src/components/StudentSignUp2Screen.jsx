@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Select from "react-select";
-import "../css/studentsignup.css";
+import "../css/signup.css";
 import { PiStudentFill } from "react-icons/pi";
 
 const engineeringOptions = [
@@ -66,7 +66,6 @@ const enrrollingYears = [
   { value: "2025", label: "2025"},
 ];
 
-// customStyles para adaptar react-select a tu paleta
 const customStyles = {
   control: (provided, state) => ({
     ...provided,
@@ -81,7 +80,7 @@ const customStyles = {
   menu: provided => ({
     ...provided,
     backgroundColor: "#F6F6F6",
-    borderRadius: 8,
+    borderRadius: 25,
     marginTop: 4,
   }),
   option: (provided, { isFocused, isSelected }) => ({
@@ -102,6 +101,7 @@ function StudentSignUp2Screen() {
   const [degree, setDegree] = useState(null);
   const [weakness, setWeakness] = useState([]);
   const [strength, setStrength] = useState([]);
+  const [year, setYear] = useState(null);
 
   return (
     <div className="Student-sign-up-1">
@@ -145,8 +145,8 @@ function StudentSignUp2Screen() {
             name="enrolling-year"
             placeholder="Selecciona aquí..."
             options={enrrollingYears}
-            value={degree}
-            onChange={setDegree}
+            value={year}
+            onChange={setYear}
             styles={customStyles}
           />
 

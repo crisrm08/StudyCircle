@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import "../css/studentsignup.css";
+import "../css/signup.css";
 import { PiStudentFill } from "react-icons/pi";
 import { ScreenContext } from "../contexts/ScreenContext";
 

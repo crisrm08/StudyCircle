@@ -17,12 +17,16 @@ function LoginScreen() {
             setCurrentScreen("Search");
         }
         if (user === "tutor") {
-            setCurrentScreen("Tutor")
+            setCurrentScreen("Tutor");
         }
     }
 
     function studentSignUp(){
-        setCurrentScreen("StudentSignUp1")
+        setCurrentScreen("StudentSignUp1");
+    }
+
+    function tutorSignUp() {
+        setCurrentScreen("TutorSignUp1");
     }
 
     return (
@@ -60,7 +64,7 @@ function LoginScreen() {
                     <div className="separator"> <span>O</span> </div>
 
                     <p>Regístrate y empieza tu camino como tutor</p>
-                    <button>Comenzar</button>
+                    <button onClick={tutorSignUp}>Comenzar</button>
                 </div>
             </div>
 
