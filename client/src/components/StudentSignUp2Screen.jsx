@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Select from "react-select";
+import { ScreenContext } from "../contexts/ScreenContext";
 import "../css/signup.css";
 import { PiStudentFill } from "react-icons/pi";
 
@@ -102,6 +103,11 @@ function StudentSignUp2Screen() {
   const [weakness, setWeakness] = useState([]);
   const [strength, setStrength] = useState([]);
   const [year, setYear] = useState(null);
+  const {setCurrentScreen} = useContext(ScreenContext);
+
+  function signUpSuccesful() {
+      setCurrentScreen("Search")
+  }
 
   return (
     <div className="Student-sign-up-1">
@@ -163,7 +169,7 @@ function StudentSignUp2Screen() {
             styles={customStyles}
           />
 
-          <button type="submit">Siguiente</button>
+          <button type="submit" onClick={signUpSuccesful}>Registrar</button>
         </form>
       </div>
     </div>

@@ -134,12 +134,12 @@
     border-radius: 20px;
     font-size: 14px;
     background-color: #D6E4F0; 
-    color: #1E56A0;
+    color: #163172;
     outline: none;
 }
 
 .input-container input::placeholder{
-    color: #1E56A0;
+    color: #58769c;
 }
 
 .input-container input:focus {

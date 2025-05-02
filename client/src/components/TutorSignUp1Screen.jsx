@@ -1,11 +1,14 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import "../css/signup.css";
 import { GiTeacher } from "react-icons/gi";
+import { LuEyeClosed } from "react-icons/lu";
+import { LuEye } from "react-icons/lu";
 import { ScreenContext } from "../contexts/ScreenContext";
 
 function TutorSignUp1Screen() {
 
     const { setCurrentScreen } = useContext(ScreenContext);
+    const [visible, setVisible] = useState(false);
 
     function next() {
         setCurrentScreen("TutorSignUp2");
@@ -30,10 +33,30 @@ function TutorSignUp1Screen() {
                         <input htmlFor="email" type="text" placeholder="Escriba su correo electrónico" />
 
                         <label htmlFor="password" style={{color:"#D6E4F0"}}>Contraseña</label>
-                        <input htmlFor="password" type="text" placeholder="Ingrese su contraseña" />
+                        <div className="input-with-icon">
+                            <input id="password" type={visible ? "text" : "password"} placeholder="Ingrese su contraseña"/>
+                            <button
+                                type="button"
+                                className="eye-toggle"
+                                onClick={() => setVisible(previousValue => !previousValue)}
+                                aria-label={visible ? "Ocultar contraseña" : "Mostrar contraseña"}
+                            >
+                                {visible ? <LuEyeClosed size={26}/> : <LuEye size={26}/>}
+                            </button>
+                        </div>
 
                         <label htmlFor="confirm-password" style={{color:"#D6E4F0"}}>Reingrese contraseña</label>
-                        <input htmlFor="confirm-password" type="text" placeholder="Ingrese nuevamente su contraseña" />
+                        <div className="input-with-icon">
+                            <input id="confirm-password" type={visible ? "text" : "password"} placeholder="Ingrese nuevamente su contraseña"/>
+                            <button
+                                type="button"
+                                className="eye-toggle"
+                                onClick={() => setVisible(previousValue => !previousValue)}
+                                aria-label={visible ? "Ocultar contraseña" : "Mostrar contraseña"}
+                            >
+                                {visible ? <LuEyeClosed size={26}/> : <LuEye  size={26}/>}
+                            </button>
+                        </div>
 
                         <button type="submit" className="next">Siguiente</button>
                     </form>

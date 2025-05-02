@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { ScreenContext } from "../contexts/ScreenContext";
 import Select from "react-select";
+
 import "../css/signup.css";
 import { PiStudentFill } from "react-icons/pi";
 
@@ -88,6 +90,12 @@ function TutorSignUp2Screen() {
     const [academicLevel, setAcademicLevel] = useState(null);
     const [subjectsTeached, setSubjectsTeached] = useState(null);
     const [strength, setStrength] = useState([]);
+    const {setCurrentScreen} = useContext(ScreenContext);
+  
+    function signUpSuccesful() {
+        setCurrentScreen("Search");
+    }
+    
 
     return (
         <div className="Student-sign-up-1" style={{backgroundColor:"#D6E4F0"}}>
@@ -140,7 +148,7 @@ function TutorSignUp2Screen() {
                     <label htmlFor="price-per-hour" style={{color:"#D6E4F0"}}>Tarifa por hora</label>
                     <input id="price-per-hour" type="number" placeholder="Ingrese su precio en DOP" style={{maxWidth: "-webkit-fill-available"}}/>
                                     
-                    <button type="submit">Siguiente</button>
+                    <button type="submit" className="next" onClick={signUpSuccesful}>Registrar</button>
                 </form>
         </div>
         </div>

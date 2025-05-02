@@ -27,7 +27,7 @@
     text-align: left;
 }
 
-.Sign-up-form div{
+.Sign-up-form > div{
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -51,7 +51,6 @@
 }
 
 .form-container input{
-    max-width: 400px;
     background-color: #F6F6F6;
     color: #163172;
     border-radius: 25px;
@@ -85,8 +84,43 @@
     background-color: #163172;
 }
 
+/*Password*/
 
-  
+.input-with-icon {
+    position: relative;
+    width: 100%;
+}
+
+.input-with-icon input {
+    width: 100%;
+    padding-right: 2.5rem;
+    background-color: #F6F6F6;
+    color: #163172;
+    border-radius: 25px;
+    padding: 10px;
+    border: none;
+    box-sizing: border-box;
+}
+
+.input-with-icon .eye-toggle {
+    position: absolute;
+    top: 3px;
+    right: 0.75rem;       
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #163172;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-with-icon .eye-toggle:hover {
+    background: none;
+}
+
 @media (max-width: 768px) {
     .form-container {
         grid-template-columns: 1fr;   
