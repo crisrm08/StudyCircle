@@ -1,12 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { ScreenContext } from "../contexts/ScreenContext";
+import { LuEyeClosed } from "react-icons/lu";
+import { LuEye } from "react-icons/lu";
 import "../css/loginscreen.css";
 
 function LoginScreen() {
 
     const { user, setUser } = useContext(UserContext);
     const { setCurrentScreen } = useContext(ScreenContext);
+     const [visible, setVisible] = useState(false);
 
     function handleChange(event){
         setUser(event.target.value);
@@ -17,8 +20,16 @@ function LoginScreen() {
             setCurrentScreen("Search");
         }
         if (user === "tutor") {
-            setCurrentScreen("Tutor")
+            setCurrentScreen("Tutor");
         }
+    }
+
+    function studentSignUp(){
+        setCurrentScreen("StudentSignUp1");
+    }
+
+    function tutorSignUp() {
+        setCurrentScreen("TutorSignUp1");
     }
 
     return (
@@ -38,7 +49,18 @@ function LoginScreen() {
                         </div>
 
                         <div className="input-container">
-                            <input id="password" type="password" placeholder="Ingresa tu contraseña" />
+                             <div className="input-with-icon">
+                                <input id="password" type={visible ? "text" : "password"} placeholder="Ingrese su contraseña"/>
+                                <button
+                                    type="button"
+                                    className="eye-toggle"
+                                    onClick={() => setVisible(previousValue => !previousValue)}
+                                    style={{top:"18px"}}
+                                    aria-label={visible ? "Ocultar contraseña" : "Mostrar contraseña"}
+                                >
+                                    {visible ? <LuEyeClosed size={26}/> : <LuEye size={26} />}
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -51,12 +73,12 @@ function LoginScreen() {
                 <div className="centered-container">
                     <h1>¿Eres nuevo aquí?</h1>
                     <p>Regístrate y conoce a tus futuros tutores</p>
-                    <button>Comenzar</button>
+                    <button onClick={studentSignUp}>Comenzar</button>
 
                     <div className="separator"> <span>O</span> </div>
 
                     <p>Regístrate y empieza tu camino como tutor</p>
-                    <button>Comenzar</button>
+                    <button onClick={tutorSignUp}>Comenzar</button>
                 </div>
             </div>
 
