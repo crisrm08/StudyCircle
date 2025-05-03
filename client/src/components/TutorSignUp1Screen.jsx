@@ -3,12 +3,35 @@ import "../css/signup.css";
 import { GiTeacher } from "react-icons/gi";
 import { LuEyeClosed } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
+import { IoIosWarning } from "react-icons/io";
 import { ScreenContext } from "../contexts/ScreenContext";
 
 function TutorSignUp1Screen() {
 
     const { setCurrentScreen } = useContext(ScreenContext);
     const [visible, setVisible] = useState(false);
+     const [password, setPassword] = useState("");
+    const [confirm, setConfirm] = useState("");
+    const [match, setMatch] = useState(false);
+    const [startedTypingConfirm, setStartedTypingConfirm] = useState(false);
+
+    function handleChangePwd(event) {
+        const userInput = event.target.value;
+        setPassword(userInput);
+    }
+
+    function handleChangeCf(event) {
+        setStartedTypingConfirm(true);
+        const userInput = event.target.value;
+        setConfirm(userInput);
+        if (password === userInput) {
+            console.log("match");
+            setMatch(true);
+        }
+        else{
+            setMatch(false);
+        }
+    }
 
     function next() {
         setCurrentScreen("TutorSignUp2");
@@ -34,20 +57,21 @@ function TutorSignUp1Screen() {
 
                         <label htmlFor="password" style={{color:"#D6E4F0"}}>Contraseña</label>
                         <div className="input-with-icon">
-                            <input id="password" type={visible ? "text" : "password"} placeholder="Ingrese su contraseña"/>
+                            <input id="password" type={visible ? "text" : "password"} placeholder="Ingrese su contraseña" onChange={handleChangePwd}/>
                             <button
                                 type="button"
                                 className="eye-toggle"
                                 onClick={() => setVisible(previousValue => !previousValue)}
                                 aria-label={visible ? "Ocultar contraseña" : "Mostrar contraseña"}
                             >
+                                {(startedTypingConfirm && !match &&  <IoIosWarning title="Las contraseñas no coinciden." style={{ cursor: 'help' }} />)}
                                 {visible ? <LuEyeClosed size={26}/> : <LuEye size={26}/>}
                             </button>
                         </div>
 
                         <label htmlFor="confirm-password" style={{color:"#D6E4F0"}}>Reingrese contraseña</label>
                         <div className="input-with-icon">
-                            <input id="confirm-password" type={visible ? "text" : "password"} placeholder="Ingrese nuevamente su contraseña"/>
+                            <input id="confirm-password" type={visible ? "text" : "password"} placeholder="Ingrese nuevamente su contraseña" onChange={handleChangeCf}/>
                             <button
                                 type="button"
                                 className="eye-toggle"

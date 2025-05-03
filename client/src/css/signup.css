@@ -110,6 +110,7 @@
     background: none;
     border: none;
     padding: 0;
+    padding-left: 3px;
     cursor: pointer;
     color: #163172;
     display: flex;
