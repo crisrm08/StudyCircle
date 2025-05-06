@@ -1,19 +1,19 @@
-import React, {useContext, useState} from "react";
+import React, {useState} from "react";
 import "../css/signup.css";
 import { GiTeacher } from "react-icons/gi";
 import { LuEyeClosed } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
 import { IoIosWarning } from "react-icons/io";
-import { ScreenContext } from "../contexts/ScreenContext";
+import { useNavigate } from "react-router-dom";
 
 function TutorSignUp1Screen() {
 
-    const { setCurrentScreen } = useContext(ScreenContext);
     const [visible, setVisible] = useState(false);
-     const [password, setPassword] = useState("");
-    const [confirm, setConfirm] = useState("");
+    const [password, setPassword] = useState("");
+    const [setConfirm] = useState("");
     const [match, setMatch] = useState(false);
     const [startedTypingConfirm, setStartedTypingConfirm] = useState(false);
+    const navigate = useNavigate();
 
     function handleChangePwd(event) {
         const userInput = event.target.value;
@@ -34,7 +34,7 @@ function TutorSignUp1Screen() {
     }
 
     function next() {
-        setCurrentScreen("TutorSignUp2");
+        navigate("/tutorsignup2");
     }
 
     return(

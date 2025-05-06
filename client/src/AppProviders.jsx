@@ -1,5 +1,4 @@
 import React from "react";
-import { ScreenProvider } from "./contexts/ScreenContext";
 import { SubjectTopicProvider } from "./contexts/SubjectTopicContext";
 import { TimeProvider } from "./contexts/TimeContext";
 import { ModeProvider } from "./contexts/ModeContext";
@@ -9,7 +8,6 @@ import { UserProvider } from "./contexts/UserContext";
 function AppProviders({ children }) {
   return (
     <UserProvider>
-      <ScreenProvider>
         <SubjectTopicProvider>
           <TimeProvider>
             <ModeProvider>
@@ -19,7 +17,6 @@ function AppProviders({ children }) {
             </ModeProvider>
           </TimeProvider>
         </SubjectTopicProvider>
-      </ScreenProvider>
     </UserProvider>
   );
 }

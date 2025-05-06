@@ -1,15 +1,15 @@
 import React, { useContext } from "react";
-import { ScreenContext } from "../contexts/ScreenContext";
+import { useNavigate } from 'react-router-dom';
 import { ModeContext } from "../contexts/ModeContext";
 import "../css/modeselection.css";
 
 function ModeSelection() {
+  const navigate = useNavigate();
   const {mode, setMode} = useContext(ModeContext);
-  const { setCurrentScreen } = useContext(ScreenContext);
 
   function changeMode(event) {
     setMode(event.target.name);
-    setCurrentScreen("Results");
+    navigate("/results");
   }
     return (
         <div className="mode-selection-container">

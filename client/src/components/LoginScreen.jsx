@@ -1,15 +1,15 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
-import { ScreenContext } from "../contexts/ScreenContext";
 import { LuEyeClosed } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
+import { useNavigate } from 'react-router-dom';
 import "../css/loginscreen.css";
 
 function LoginScreen() {
 
     const { user, setUser } = useContext(UserContext);
-    const { setCurrentScreen } = useContext(ScreenContext);
-     const [visible, setVisible] = useState(false);
+    const navigate = useNavigate();  
+    const [visible, setVisible] = useState(false);
 
     function handleChange(event){
         setUser(event.target.value);
@@ -17,19 +17,19 @@ function LoginScreen() {
 
     function logIntoStudent() {
         if (user === "estudiante") {
-            setCurrentScreen("Search");
+            navigate("/");
         }
         if (user === "tutor") {
-            setCurrentScreen("Tutor");
+            navigate("/tutorhomepage");
         }
     }
 
     function studentSignUp(){
-        setCurrentScreen("StudentSignUp1");
+        navigate("/studentsignup1");
     }
 
     function tutorSignUp() {
-        setCurrentScreen("TutorSignUp1");
+        navigate("/studentsignup2");
     }
 
     return (

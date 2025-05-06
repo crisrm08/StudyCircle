@@ -9,6 +9,7 @@
   "author": "Cri",
   "license": "ISC",
   "dependencies": {
-    "react-icons": "^5.5.0"
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^6.30.0"
   }
 }

@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { SubjectTopicContext } from "../contexts/SubjectTopicContext";
 import { TimeContext } from "../contexts/TimeContext";
 import { ModeContext } from "../contexts/ModeContext";
 import { MessageContext } from "../contexts/MessageContext";
-import { ScreenContext } from "../contexts/ScreenContext";
 import "../css/requestbox.css";
 
 function RequestBox({ avatar }) {
@@ -11,7 +11,7 @@ function RequestBox({ avatar }) {
   const { hour, day } = useContext(TimeContext); 
   const { mode } = useContext(ModeContext);
   const { message } = useContext(MessageContext);
-  const { setCurrentScreen } = useContext(ScreenContext);
+  const navigate = useNavigate();
 
   const [rejected, setRejected] = useState(false);
 
@@ -20,7 +20,7 @@ function RequestBox({ avatar }) {
   };
 
   function handleAccept() {
-    setCurrentScreen("Chat");
+    navigate("/chat");
   }
 
   if (rejected) return null;

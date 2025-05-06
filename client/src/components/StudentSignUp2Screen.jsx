@@ -1,8 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Select from "react-select";
-import { ScreenContext } from "../contexts/ScreenContext";
 import "../css/signup.css";
-import { PiStudentFill } from "react-icons/pi";
+import { useNavigate } from "react-router-dom";
 
 const engineeringOptions = [
   { value: "industrial", label: "Ingeniería industrial" },
@@ -103,10 +102,10 @@ function StudentSignUp2Screen() {
   const [weakness, setWeakness] = useState([]);
   const [strength, setStrength] = useState([]);
   const [year, setYear] = useState(null);
-  const {setCurrentScreen} = useContext(ScreenContext);
+  const navigate = useNavigate();
 
   function signUpSuccesful() {
-      setCurrentScreen("Search")
+    navigate("/");
   }
 
   return (
