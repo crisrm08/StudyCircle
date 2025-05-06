@@ -1,14 +1,13 @@
 import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { FaSignOutAlt } from "react-icons/fa";
-import { ScreenContext } from "../contexts/ScreenContext";
 import '../css/header.css'
 
 function Header() {
-
-  const { setCurrentScreen } = useContext(ScreenContext)
+  const navigate = useNavigate();
 
   function logOut() {
-    setCurrentScreen("Login");
+    navigate("/login");
   }
 
   return (

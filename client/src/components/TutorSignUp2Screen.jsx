@@ -1,9 +1,8 @@
-import React, { useState, useContext } from "react";
-import { ScreenContext } from "../contexts/ScreenContext";
+import React, { useState } from "react";
 import Select from "react-select";
 
 import "../css/signup.css";
-import { PiStudentFill } from "react-icons/pi";
+import { useNavigate } from "react-router-dom";
 
 const academicLevels = [
   { value: "secundaria", label: "Secundaria" },
@@ -90,10 +89,10 @@ function TutorSignUp2Screen() {
     const [academicLevel, setAcademicLevel] = useState(null);
     const [subjectsTeached, setSubjectsTeached] = useState(null);
     const [strength, setStrength] = useState([]);
-    const {setCurrentScreen} = useContext(ScreenContext);
-  
+    const navigate = useNavigate();
+
     function signUpSuccesful() {
-        setCurrentScreen("Search");
+        navigate("/tutorhomepage")
     }
     
 
