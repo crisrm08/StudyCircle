@@ -32,6 +32,10 @@ function LoginScreen() {
         navigate("/studentsignup2");
     }
 
+    function forgotPassword() {
+        navigate("/forgotpwd");
+    }
+
     return (
         <div className="Log-Sign-Frgt">
             <h1 className="title">StudyCircle</h1>
@@ -65,7 +69,7 @@ function LoginScreen() {
                     </div>
 
                     <button className="login-forgotPWD-button" onClick={logIntoStudent}>Iniciar sesión</button>
-                    <p>Click aquí si olvidaste tu contraseña</p>
+                    <p onClick={forgotPassword}>Click aquí si olvidaste tu contraseña</p>
                 </div>
             </div>
             <div className="login-forgotPWD-screen2">
