@@ -33,11 +33,11 @@ function LoginScreen() {
     }
 
     return (
-        <div className="LogSign">
+        <div className="Log-Sign-Frgt">
             <h1 className="title">StudyCircle</h1>
 
-            <div className="login-screen">
-                <div className="login-form">
+            <div className="login-forgotPWD-screen">
+                <div className="login-forgotPWD-form">
                     <h2>Inicia sesión en tu cuenta</h2>
                     <h3>Inicia sesión con tu cuenta de google</h3>
 
@@ -45,17 +45,17 @@ function LoginScreen() {
                     <div className="separator2"> <span>O</span> </div>
                     <div className="inputs-container">
                         <div className="input-container">
-                            <input id="user" type="text" placeholder="Ingresa tu usuario" onChange={handleChange} />
+                            <input id="user" type="text" placeholder="Ingresa tu usuario 👩🏻‍💻" onChange={handleChange} />
                         </div>
 
                         <div className="input-container">
                              <div className="input-with-icon">
-                                <input id="password" type={visible ? "text" : "password"} placeholder="Ingrese su contraseña"/>
+                                <input id="password" type={visible ? "text" : "password"} placeholder="Ingresa tu contraseña 🔐"/>
                                 <button
                                     type="button"
                                     className="eye-toggle"
                                     onClick={() => setVisible(previousValue => !previousValue)}
-                                    style={{top:"18px"}}
+                                    style={{top:"23px"}}
                                     aria-label={visible ? "Ocultar contraseña" : "Mostrar contraseña"}
                                 >
                                     {visible ? <LuEyeClosed size={26}/> : <LuEye size={26} />}
@@ -64,12 +64,11 @@ function LoginScreen() {
                         </div>
                     </div>
 
-                <button className="login-button" onClick={logIntoStudent}>Iniciar sesión</button>
-
-                <p>Click aquí si olvidaste tu contraseña</p>
+                    <button className="login-forgotPWD-button" onClick={logIntoStudent}>Iniciar sesión</button>
+                    <p>Click aquí si olvidaste tu contraseña</p>
                 </div>
             </div>
-            <div className="login-screen2">
+            <div className="login-forgotPWD-screen2">
                 <div className="centered-container">
                     <h1>¿Eres nuevo aquí?</h1>
                     <p>Regístrate y conoce a tus futuros tutores</p>
@@ -81,7 +80,6 @@ function LoginScreen() {
                     <button onClick={tutorSignUp}>Comenzar</button>
                 </div>
             </div>
-
         </div>
     );
 }

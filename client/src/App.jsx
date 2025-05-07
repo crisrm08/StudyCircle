@@ -3,6 +3,7 @@ import AppProviders from "./AppProviders";
 import { createBrowserRouter, RouterProvider  } from "react-router-dom";
 import SearchScreen from "./components/SearchScreen";
 import LoginScreen from "./components/LoginScreen";
+import ForgotPWDScreen from "./components/ForgotPWDScreen";
 import StudentSignUp1Screen from "./components/StudentSignUp1Screen";
 import StudentSignUp2Screen from "./components/StudentSignUp2Screen";
 import TutorSignUp1Screen from "./components/TutorSignUp1Screen";
@@ -18,6 +19,7 @@ function App() {
       children: [
         { index: true, element: <SearchScreen /> },        
         { path: 'login', element: <LoginScreen /> },
+        { path: 'forgotpwd', element: <ForgotPWDScreen />},
         { path: 'studentsignup1', element: <StudentSignUp1Screen /> },
         { path: 'studentsignup2', element: <StudentSignUp2Screen /> },
         { path: 'tutorsignup1', element: <TutorSignUp1Screen /> },
