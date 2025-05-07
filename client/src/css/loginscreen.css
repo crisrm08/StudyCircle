@@ -1,19 +1,19 @@
-.LogSign{
+.Log-Sign-Frgt{
     display: grid;
     grid-template-columns: 2fr 1fr;
 }
 
 @media screen and (max-width: 768px) {
-    .LogSign {
+    .Log-Sign-Frgt {
         grid-template-columns: 1fr;
         overflow: scroll;
     }
 
-    .login-form{
+    .login-forgotPWD-form{
         padding-bottom: 30px;
     }
 
-    .login-screen2{
+    .login-forgotPWD-screen2{
         padding-top: 30px;
         padding-bottom: 30px;
     }
@@ -37,12 +37,12 @@
     color: #D6E4F0;
 }
 
-.login-screen{
+.login-forgotPWD-screen{
     min-height: 100vh;
     background-color: #163172; 
 }
 
-.login-form {
+.login-forgotPWD-form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -53,7 +53,7 @@
     top: 170px;
 }
 
-.login-form h2 {
+.login-forgotPWD-form h2 {
     color: #D6E4F0; 
     font-size: xx-large;
     text-align: center;
@@ -61,19 +61,19 @@
     margin-top: -10px;
 }
 
-.login-form h3{
+.login-forgotPWD-form h3{
     color: #D6E4F0;
 }
 
 
-.login-form img {
+.login-forgotPWD-form img {
     margin-top: 10px;
     width: 70px;
     background-color: #D6E4F0;
     border-radius: 50%;
 }
 
-.login-form p{
+.login-forgotPWD-form p{
     margin-top: 30px;
 }
 
@@ -131,7 +131,8 @@
 .input-container input {
     padding: 10px;
     border: none;
-    border-radius: 20px;
+    height: 45px;
+    border-radius: 25px;
     font-size: 14px;
     background-color: #D6E4F0; 
     color: #163172;
@@ -146,7 +147,7 @@
     box-shadow: 0 0 0 2px #1E56A0;
 }
 
-.login-button {
+.login-forgotPWD-button {
     background-color: #1E56A0; 
     color: #D6E4F0; 
     font-weight: bold;
@@ -162,21 +163,21 @@
     z-index: 1;
 }
 
-.login-button:hover {
+.login-forgotPWD-button:hover {
     background-color: #163172;
     color: #F6F6F6; 
 }
 
-.login-form p{
+.login-forgotPWD-form p{
     color: #D6E4F0;
     text-decoration: underline;
 }
 
-.login-form p:hover{
+.login-forgotPWD-form p:hover{
     color: #1E56A0;
 }
 
-.login-screen2{
+.login-forgotPWD-screen2{
     background-color: #D6E4F0;
     display: flex;
     flex-direction: column;
@@ -186,13 +187,13 @@
     padding-right: 10px;
 }
 
-.login-screen2 h1{
+.login-forgotPWD-screen2 h1{
     color: #163172;
     font-weight: 600;
     font-size: 2.5em;
 }
 
-.login-screen2 p{
+.login-forgotPWD-screen2 p{
     color: #163172;
     font-size: large;
 }

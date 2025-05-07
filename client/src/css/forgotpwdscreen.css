@@ -1,0 +1,27 @@
+.forgotPWD-form {
+    top: 300px;
+    gap: 30px;
+}
+
+.forgotPWD-form h2 {
+    font-size: xxx-large;
+}
+
+.forgotPWD-form h3 {
+    margin-bottom: 20px;
+    font-size: larger;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+}
+
+.forgotPWD-button {
+    margin: 0;
+}
+
+.forgotPWDcentered-container {
+    gap: 60px;
+}
+.centered-container img {
+    width: 250px;
+}
