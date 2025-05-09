@@ -33,6 +33,7 @@ function TimeSelection() {
         <div className="selector-card">
           <label htmlFor="day-select">Día de la semana:</label>
           <select id="day-select" value={day} onChange={handleDayChange}>
+          <option value="" disabled hidden> Cualquiera </option>
             <option value="Lunes">Lunes</option>
             <option value="Martes">Martes</option>
             <option value="Miércoles">Miércoles</option>
@@ -40,7 +41,6 @@ function TimeSelection() {
             <option value="Viernes">Viernes</option>
             <option value="Sábado">Sábado</option>
             <option value="Domingo">Domingo</option>
-            <option value="cualquiera">Cualquiera</option>
           </select>
           <p>Día seleccionado: <strong>{day}</strong></p>
         </div>
@@ -50,9 +50,9 @@ function TimeSelection() {
           <div className="hour-picker">
             <button onClick={() => handleClick(-1)}>-</button>
             {typeof hour === 'number' ? (
-              <input type="number" value={hour} onChange={handleHourChange} min="0" max="23"/>
+              <input type="number" value={hour} onChange={handleHourChange} min="0" max="23" placeholder="Cualquiera"/>
             ) : (
-              <input type="text" value={hour} onChange={handleHourChange}/>
+              <input type="text" value={hour} onChange={handleHourChange} placeholder="Cualquiera"/>
             )}
             <button onClick={() => handleClick(1)}>+</button>
           </div>

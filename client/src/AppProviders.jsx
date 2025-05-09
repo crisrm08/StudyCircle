@@ -4,10 +4,12 @@ import { TimeProvider } from "./contexts/TimeContext";
 import { ModeProvider } from "./contexts/ModeContext";
 import { MessageProvider } from "./contexts/MessageContext";
 import { UserProvider } from "./contexts/UserContext";
+import { SidebarProvider } from "./contexts/SidebarContext";
 
 function AppProviders({ children }) {
   return (
     <UserProvider>
+      <SidebarProvider>
         <SubjectTopicProvider>
           <TimeProvider>
             <ModeProvider>
@@ -17,6 +19,7 @@ function AppProviders({ children }) {
             </ModeProvider>
           </TimeProvider>
         </SubjectTopicProvider>
+      </SidebarProvider>
     </UserProvider>
   );
 }

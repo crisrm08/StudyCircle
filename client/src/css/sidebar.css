@@ -1,0 +1,118 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 280px;
+    height: 100%;
+    background-color: #163172;
+    transform: translateX(-100%);
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    transition: transform 0.3s ease;
+    padding: 30px 15px;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+    color: #F6F6F6;
+    z-index: 1000;
+}
+
+.sidebar.open {
+    transform: translateX(0);
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: x-large;
+    color: #f6f6f6;
+    cursor: pointer;
+}
+
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 40px;
+}
+
+.avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #D6E4F0;
+}
+
+.username {
+    color: #f6f6f6;
+    font-weight: 500;
+    font-size: x-large;
+}
+
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 40px;
+    width: 100%;
+    padding-left: 30px;
+}
+
+.nav-links h2 {
+    font-size: larger;
+    font-weight: 500;
+    color: #f6f6f6;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-links h2:hover {
+    color: #D6E4F0;
+}
+
+.log-out {
+    position: absolute;
+    bottom: 30px;
+    font-size: large;
+    font-weight: 500;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.log-out:hover {
+    color: #d32f2f;
+}
+
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 100vw;
+        border-radius: 0;
+    }
+
+    .nav-links {
+        padding-left: 20px;
+        align-items: center;
+        padding-left: 0;
+    }
+
+    .close-btn {
+        top: 20px;
+        right: 20px;
+    }
+
+    .log-out {
+        margin-bottom: 40px;
+    }
+}
+  

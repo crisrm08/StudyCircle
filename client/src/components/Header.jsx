@@ -1,20 +1,20 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { FaSignOutAlt } from "react-icons/fa";
+import React, {useContext} from "react";
+import { FiMenu } from "react-icons/fi";
+import { SidebarContext } from "../contexts/SidebarContext";
 import '../css/header.css'
 
 function Header() {
-  const navigate = useNavigate();
+  const { setIsSidebarClicked } = useContext(SidebarContext);
 
-  function logOut() {
-    navigate("/login");
+  function OpenSidebar() {
+    setIsSidebarClicked(true);
   }
 
   return (
     <header>
       <h1>StudyCircle</h1>
-      <button className="logout-btn" title="Cerrar sesión" onClick={logOut}>
-        <FaSignOutAlt />
+      <button className="logout-btn" title="Open Sidebar" onClick={OpenSidebar}>
+        <FiMenu />
       </button>
     </header>
   );
