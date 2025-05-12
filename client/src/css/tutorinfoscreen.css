@@ -1,0 +1,94 @@
+.tutor-info-screen{
+    min-height: 100vh;
+    min-width: 100vh;
+}
+
+.tutor-info-container{
+    display: grid;
+    grid-template-columns: 40% 60%;
+}
+
+@media screen and (max-width: 768px) {
+    .tutor-info-container {
+        grid-template-columns: 1fr;
+    }
+
+    .right-section{
+        margin-top: 50px;
+    }
+}
+
+.tutor-full-description{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.right-section{
+    width: 100%;
+    height: 100%;
+    gap: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/***********************************************************About tutor********************************************************************/
+.about-tutor {
+    background-color: #D6E4F0;
+    width: 95%;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    overflow: hidden;              
+}
+
+.about-tutor__scroll {
+    max-height: 250px;   
+    min-height: 250px;           
+    padding: 20px 25px;
+    overflow-y: auto;             
+    -webkit-overflow-scrolling: touch;
+}
+
+.about-tutor__scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #1E56A0 #D6E4F0;
+}
+
+.about-tutor__scroll::-webkit-scrollbar {
+    width: 6px;               
+}
+
+.about-tutor__scroll::-webkit-scrollbar-track {
+    background: #D6E4F0;     
+}
+
+.about-tutor__scroll::-webkit-scrollbar-thumb {
+    background-color: #1E56A0; 
+    border-radius: 3px;        
+    border: 1px solid #D6E4F0; 
+}
+
+.about-tutor h2 {
+    color: #1E56A0;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.about-tutor hr {
+    border: none;
+    border-top: 2px solid #1E56A0;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.about-tutor p {
+    color: #163172;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+/**********************************************************Tutor Reviews***********************************************************************/

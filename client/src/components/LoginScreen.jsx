@@ -20,20 +20,20 @@ function LoginScreen() {
             navigate("/");
         }
         if (user === "tutor") {
-            navigate("/tutorhomepage");
+            navigate("/tutor-home-page");
         }
     }
 
     function studentSignUp(){
-        navigate("/studentsignup1");
+        navigate("/student-signup-1");
     }
 
     function tutorSignUp() {
-        navigate("/studentsignup2");
+        navigate("/student-signup-2");
     }
 
     function forgotPassword() {
-        navigate("/forgotpwd");
+        navigate("/forgot-pwd");
     }
 
     return (

@@ -34,7 +34,7 @@ function TutorSignUp1Screen() {
     }
 
     function next() {
-        navigate("/tutorsignup2");
+        navigate("/tutor-signup-2");
     }
 
     return(

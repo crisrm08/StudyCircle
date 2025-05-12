@@ -11,6 +11,7 @@ import TutorSignUp2Screen from "./components/TutorSignUp2Screen";
 import ResultScreen from "./components/ResultScreen";
 import ChatScreen from "./components/ChatScreen";
 import TutorScreen from "./components/TutorScreen";
+import TutorInfoScreen from "./components/TutorInfoScreen";
 
 function App() {
   const router = createBrowserRouter([
@@ -19,14 +20,15 @@ function App() {
       children: [
         { index: true, element: <SearchScreen /> },        
         { path: 'login', element: <LoginScreen /> },
-        { path: 'forgotpwd', element: <ForgotPWDScreen />},
-        { path: 'studentsignup1', element: <StudentSignUp1Screen /> },
-        { path: 'studentsignup2', element: <StudentSignUp2Screen /> },
-        { path: 'tutorsignup1', element: <TutorSignUp1Screen /> },
-        { path: 'tutorsignup2', element: <TutorSignUp2Screen /> },
+        { path: 'forgot-pwd', element: <ForgotPWDScreen />},
+        { path: 'student-signup-1', element: <StudentSignUp1Screen /> },
+        { path: 'student-signup-2', element: <StudentSignUp2Screen /> },
+        { path: 'tutor-signup-1', element: <TutorSignUp1Screen /> },
+        { path: 'tutorsignup-2', element: <TutorSignUp2Screen /> },
         { path: 'results', element: <ResultScreen /> },
         { path: 'chat', element: <ChatScreen /> },
-        { path: 'tutorhomepage', element: <TutorScreen /> },
+        { path: 'tutor-home-page', element: <TutorScreen /> },
+        { path: 'tutor-info', element: <TutorInfoScreen />}
       ]
     }
   ]);

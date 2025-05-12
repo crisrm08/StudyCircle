@@ -34,7 +34,7 @@ function StudentSignUp1Screen() {
     }
 
     function next() {
-        navigate("/studentsignup2");
+        navigate("/student-signup-2");
         console.log(password);
         console.log(confirm);
     }
