@@ -2,17 +2,8 @@ import React, {useState}from "react";
 import Request from "./Request";
 import "../css/modal.css";
 
-function Modal({ tutor, onClose }) {
+function Modal({ tutor }) {
   const { image, name, occupation, description, pricePerHour, rating } = tutor;
-  const [showRequestModal, setShowRequestModal] = useState(false);
-
-  function openRequestModal() {
-    setShowRequestModal(true);
-  }
-
-  function sendRequest(data) {
-    setShowRequestModal(false);
-  }
 
   const renderStars = () => {
     const filledStars = Math.floor(rating);
@@ -36,42 +27,29 @@ function Modal({ tutor, onClose }) {
   };
 
   return (
-    showRequestModal ? (
-      <Request onClose={() => setShowRequestModal(false)} onSend={sendRequest} />
-    ) : (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>✕</button>
+    <div className="modal-content">
 
-        <img src={image} alt={`Foto de ${name}`} className="modal-image" />
-        
-        <h2 className="modal-name">{name}</h2>
-        <p className="modal-occupation">{occupation}</p>
+      <img src={image} alt={`Foto de ${name}`} className="modal-image" />
+      
+      <h2 className="modal-name">{name}</h2>
+      <p className="modal-occupation">{occupation}</p>
 
-        {tutor.specialties?.length > 0 && (
-          <div className="modal-specialties">
-            {tutor.specialties.map((topic, index) => (
-              <span key={index} className="specialty-pill">{topic}</span>
-            ))}
-          </div>
-        )}
-
-        <div className="modal-rating">
-          {renderStars()} <span className="rating-number">({rating.toFixed(1)})</span>
+      {tutor.specialties?.length > 0 && (
+        <div className="modal-specialties">
+          {tutor.specialties.map((topic, index) => (
+            <span key={index} className="specialty-pill">{topic}</span>
+          ))}
         </div>
+      )}
 
-        <p className="modal-description">{description}</p>
-        
-        <p className="modal-price">
-          <strong>Precio por hora:</strong> RD${pricePerHour}
-        </p>
+      <div className="modal-rating"> {renderStars()} <span className="rating-number">({rating.toFixed(1)})</span> </div>
 
-        <button className="tutor-button" onClick={openRequestModal}>Solicitar tutoría</button>
-      </div>
+      <p className="modal-description">{description}</p>
+      
+      <p className="modal-price"> <strong>Precio por hora:</strong> RD${pricePerHour} </p>
+      <button className="tutor-button">Solicitar tutoría</button>
     </div>
-    )
-  );
-  
+  )
 }
 
 export default Modal;

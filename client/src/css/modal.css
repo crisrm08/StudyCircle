@@ -1,108 +1,84 @@
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-  }
-  
-  .modal-content {
-    background-color: #F6F6F6;
-    padding: 30px;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 450px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    position: relative;
-    text-align: center;
-  }
-  
-  .modal-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: transparent;
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-  }
-  
-  .modal-image {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-bottom: 15px;
-  }
-  
-  .modal-name {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 5px 0;
-  }
-  
-  .modal-occupation {
-    font-size: 14px;
-    color: #888;
-    margin-bottom: 10px;
-  }
+.modal-content {
+  background-color: #F6F6F6;
+  padding: 30px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  text-align: center;
+}
 
-  .modal-specialties {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    margin: 15px 0;
-  }
-  
-  .specialty-pill {
-    background-color: #D6E4F0;
-    border: 1px solid #D6E4F0;
-    color: #163172;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 500;
-  }
-  
-  .modal-rating {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-    margin-bottom: 15px;
-  }
-  
-  .star {
-    font-size: 20px;
-    color: #f5ba13;
-  }
-  
-  .star.empty {
-    color: #ccc;
-  }
-  
-  .rating-number {
-    font-size: 14px;
-    color: #888;
-  }
-  
-  .modal-description {
-    font-size: 15px;
-    color: #444;
-    line-height: 1.5;
-    margin-bottom: 15px;
-  }
-  
-  .modal-price {
-    font-size: 16px;
-    margin-bottom: 15px;
-    font-weight: bold;
-    color: #163172;
-  }
-  
+.modal-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.modal-name {
+  font-size: large;
+  color: #163172;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.modal-occupation {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.modal-specialties {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.specialty-pill {
+  background-color: #D6E4F0;
+  border: 1px solid #D6E4F0;
+  color: #163172;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.modal-rating {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 15px;
+}
+
+.star {
+  font-size: 20px;
+  color: #f5ba13;
+}
+
+.star.empty {
+  color: #ccc;
+}
+
+.rating-number {
+  font-size: 14px;
+  color: #888;
+}
+
+.modal-description {
+  font-size: 15px;
+  color: #444;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.modal-price {
+  font-size: 16px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: #163172;
+}

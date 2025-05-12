@@ -92,7 +92,7 @@ function TutorSignUp2Screen() {
     const navigate = useNavigate();
 
     function signUpSuccesful() {
-        navigate("/tutorhomepage")
+        navigate("/tutor-home-page")
     }
     
 
