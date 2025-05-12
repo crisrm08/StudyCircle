@@ -3,10 +3,12 @@ import { SidebarContext } from "../contexts/SidebarContext";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import TutorProfileCard from "./TutorProfileCard";
-import Modal from "./Modal";
+import { useNavigate } from "react-router-dom";
 import "../css/resultscreen.css";
 
 function ResultScreen() {
+    const navigate = useNavigate();  
+
     const [tutor, setTutor] = useState({
         id: null,
         image: '',
@@ -17,12 +19,10 @@ function ResultScreen() {
         rating: 0,
         specialties: []
     });
-    const [tutorClicked, setTutorClicked] = useState(false);
     const { isSidebarClicked } = useContext(SidebarContext);
 
-    function openModal(id, image, name, occupation, description, pricePerHour, rating, specialties) {
-        setTutor({ id, image, name, occupation, description, pricePerHour, rating, specialties });
-        setTutorClicked(true);
+    function goToInfo() {
+        navigate("/tutor-info");
     }
       
     return(
@@ -42,7 +42,7 @@ function ResultScreen() {
                         "Ondas y sonido", 
                         "Física nuclear"
                     ]}
-                    onExplore={openModal}
+                    onExplore={goToInfo}
                 />
 
                 <TutorProfileCard 
@@ -60,7 +60,7 @@ function ResultScreen() {
                         "Electromagnetismo",
                         "Leyes de la termonidinámica"
                     ]}
-                    onExplore={openModal}
+                    onExplore={goToInfo}
                 />
                 <TutorProfileCard 
                     id="3"
@@ -74,7 +74,7 @@ function ResultScreen() {
                         "Cinemática y movimiento", 
                         "Fluidos y su dinámica"
                     ]}
-                    onExplore={openModal}
+                    onExplore={goToInfo}
                 />
                 <TutorProfileCard 
                     id="4"
@@ -90,9 +90,8 @@ function ResultScreen() {
                         "Electromagnetismo",
                         "Ondas y sonido"
                     ]}
-                    onExplore={openModal}
+                    onExplore={goToInfo}
                 />
-                {tutorClicked && (<Modal tutor={tutor} onClose={() => setTutorClicked(false)}/>)}
             </div>
             {isSidebarClicked && <Sidebar />}
         </div>
