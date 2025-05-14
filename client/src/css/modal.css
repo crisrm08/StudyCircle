@@ -16,6 +16,17 @@
   border-radius: 50%;
 }
 
+.edit-icon{
+  color: #163172;
+  position: absolute;
+  top: 30px; 
+  right: 30px;
+}
+
+.edit-icon:hover{
+  color: #1E56A0;
+}
+
 .modal-name {
   font-size: large;
   color: #163172;
@@ -41,6 +52,16 @@
   background-color: #D6E4F0;
   border: 1px solid #D6E4F0;
   color: #163172;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.weakness-pill {
+  background-color: #F8D7DA;   
+  border: 1px solid #F5C6CB;  
+  color: #721C24;              
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 14px;
@@ -81,4 +102,19 @@
   margin-bottom: 15px;
   font-weight: bold;
   color: #163172;
+}
+
+
+/************************************************************************ Student Modal ***************************************************/
+
+.modal-strengths-title{
+  color: #888;
+  font-weight: lighter;
+  font-size: medium;
+}
+
+.modal-weaknesses-title{
+  color: #888;
+  font-weight: lighter;
+  font-size: medium;
 }

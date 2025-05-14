@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { SidebarContext } from "../contexts/SidebarContext";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
@@ -8,17 +8,6 @@ import "../css/resultscreen.css";
 
 function ResultScreen() {
     const navigate = useNavigate();  
-
-    const [tutor, setTutor] = useState({
-        id: null,
-        image: '',
-        name: '',
-        occupation: '',
-        description: '',
-        pricePerHour: 0,
-        rating: 0,
-        specialties: []
-    });
     const { isSidebarClicked } = useContext(SidebarContext);
 
     function goToInfo() {

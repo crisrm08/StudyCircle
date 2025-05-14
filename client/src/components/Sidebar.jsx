@@ -30,8 +30,13 @@ function Sidebar() {
       setIsSidebarClicked(false);
     }
 
-    function goToChat(params) {
+    function goToChat() {
       navigate("/chat");
+      setIsSidebarClicked(false);
+    }
+
+    function goToProfile() {
+      navigate("/student-profile");
       setIsSidebarClicked(false);
     }
 
@@ -45,7 +50,7 @@ function Sidebar() {
           </div>
 
           <nav className="nav-links">
-              <h2><FiUser /> Mi perfil</h2>
+              <h2 onClick={goToProfile}><FiUser /> Mi perfil</h2>
               <h2 onClick={goToChat}><FiMessageSquare /> Mensajes</h2>
               <h2><FiClock /> Historial</h2>
           </nav>
