@@ -64,7 +64,7 @@ function StudentModal() {
 
       <div className="modal-rating"> {renderStars()} <span className="rating-number">({student.rating.toFixed(1)})</span> </div>
 
-      <p className="modal-description">{student.description}</p>
+      <p style={{marginBottom:'0px'}} className="modal-description">{student.description}</p>
     </div>
   )
 }
