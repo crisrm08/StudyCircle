@@ -1,5 +1,4 @@
-import React, {useState}from "react";
-import Request from "./Request";
+import React from "react";
 import "../css/modal.css";
 
 function Modal({ tutor }) {
@@ -30,7 +29,6 @@ function Modal({ tutor }) {
     <div className="modal-content">
 
       <img src={image} alt={`Foto de ${name}`} className="modal-image" />
-      
       <h2 className="modal-name">{name}</h2>
       <p className="modal-occupation">{occupation}</p>
 
@@ -45,7 +43,6 @@ function Modal({ tutor }) {
       <div className="modal-rating"> {renderStars()} <span className="rating-number">({rating.toFixed(1)})</span> </div>
 
       <p className="modal-description">{description}</p>
-      
       <p className="modal-price"> <strong>Precio por hora:</strong> RD${pricePerHour} </p>
       <button className="tutor-button">Solicitar tutoría</button>
     </div>

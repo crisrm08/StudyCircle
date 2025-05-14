@@ -26,7 +26,7 @@ function TutorProfileCard({ id, image, name, occupation, description, pricePerHo
   };
 
   function handleClick() {
-    onExplore(id, image, name, occupation, description, pricePerHour, rating, specialties);
+    onExplore();
   }
 
   return (

@@ -12,6 +12,7 @@ import ResultScreen from "./components/ResultScreen";
 import ChatScreen from "./components/ChatScreen";
 import TutorScreen from "./components/TutorScreen";
 import TutorInfoScreen from "./components/TutorInfoScreen";
+import StudentProfileScreen from "./components/StudentProfileScreen";
 
 function App() {
   const router = createBrowserRouter([
@@ -28,7 +29,8 @@ function App() {
         { path: 'results', element: <ResultScreen /> },
         { path: 'chat', element: <ChatScreen /> },
         { path: 'tutor-home-page', element: <TutorScreen /> },
-        { path: 'tutor-info', element: <TutorInfoScreen />}
+        { path: 'tutor-info', element: <TutorInfoScreen />},
+        { path: 'student-profile', element: <StudentProfileScreen />},
       ]
     }
   ]);

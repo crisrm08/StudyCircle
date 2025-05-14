@@ -1,0 +1,46 @@
+import React, { useContext } from "react";
+import Header from "./Header";
+import StudentModal from "./StudentModal";
+import Sidebar from "./Sidebar";
+import StudentReviews from "./StudentReviews";
+import { SidebarContext } from "../contexts/SidebarContext";
+import { MdEdit } from "react-icons/md";
+import "../css/studentprofile.css";
+
+function StudentProfileScreen() {
+    const { isSidebarClicked } = useContext(SidebarContext);
+
+    const studentName = "Elvis García";
+    const studentFullDescription = "Estudiante de primer año de la carrera de Ingeniería en Ciencias de la Computación en la Pontificia Universidad Católica Madre y Maestra. Me interesa mejorar mis habilidades en la asignatura de Ecuaciones Diferenciales, ya que no me fue muy bien en mi primer parcial y necesito reforzar."
+
+    return(
+        <div className="student-profile-screen">
+            <Header />
+            <div className="student-profile-container">
+                <div className="right-section">
+                    <div className="about-student">
+                        <div className="about-student__scroll">
+                            <MdEdit className="edit-button" size={30}/>
+                            <h2>Sobre {studentName}:</h2>
+                            <hr/>
+                            <p>{studentFullDescription}</p>
+                        </div>
+                    </div>
+                    <StudentReviews 
+                        reviews={[
+                            { name: "Juan José", rating: 4, text: "Muy respetuoso...", avatar: "https://randomuser.me/api/portraits/men/42.jpg" },
+                            { name: "José Ramón", rating: 5, text: "Atento...", avatar: "https://randomuser.me/api/portraits/men/53.jpg" },
+                            { name: "Luisa Maria", rating: 3, text: "Flexible, pero no aprende muy rápido...", avatar: "https://randomuser.me/api/portraits/women/19.jpg" },
+                        ]}
+                    />
+                </div>
+                <div className="student-profile-card">
+                    <StudentModal/>
+                </div>
+            </div>
+            {isSidebarClicked && <Sidebar />}
+        </div>
+    )
+}
+
+export default StudentProfileScreen;

@@ -1,23 +1,28 @@
-.tutor-info-screen{
+.student-profile-screen{
     min-height: 100vh;
-} 
+}
 
-.tutor-info-container{
+.student-profile-container{
     display: grid;
-    grid-template-columns: 40% 60%;
+    grid-template-columns: 60% 40%;
 }
 
 @media screen and (max-width: 768px) {
-    .tutor-info-container {
+    .student-profile-container {
         grid-template-columns: 1fr;
     }
 
     .right-section{
         margin-top: 50px;
     }
+
+    .right-section  {
+        order: 2;
+    }
+
 }
 
-.tutor-full-description{
+.student-profile-card{
     width: 100%;
     height: 100%;
     display: flex;
@@ -35,8 +40,9 @@
     align-items: center;
 }
 
-/***********************************************************About tutor********************************************************************/
-.about-tutor {
+/***********************************************************About student********************************************************************/
+
+.about-student {
     background-color: #D6E4F0;
     width: 95%;
     border-radius: 15px;
@@ -44,9 +50,19 @@
     overflow: hidden;              
 }
 
+.edit-button {
+    color: #163172;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
 
+.edit-button:hover {
+    color: #1E56A0;
+}
 
-.about-tutor__scroll {
+.about-student__scroll {
+    position: relative;
     max-height: 250px;   
     min-height: 250px;           
     padding: 20px 25px;
@@ -54,42 +70,41 @@
     -webkit-overflow-scrolling: touch;
 }
 
-.about-tutor__scroll {
+.about-student__scroll {
     scrollbar-width: thin;
     scrollbar-color: #1E56A0 #D6E4F0;
 }
 
-.about-tutor__scroll::-webkit-scrollbar {
+.about-student__scroll::-webkit-scrollbar {
     width: 6px;               
 }
 
-.about-tutor__scroll::-webkit-scrollbar-track {
+.about-student__scroll::-webkit-scrollbar-track {
     background: #D6E4F0;     
 }
 
-.about-tutor__scroll::-webkit-scrollbar-thumb {
+.about-student__scroll::-webkit-scrollbar-thumb {
     background-color: #1E56A0; 
     border-radius: 3px;        
     border: 1px solid #D6E4F0; 
 }
 
-.about-tutor h2 {
+.about-student h2 {
     color: #1E56A0;
     font-size: 18px;
     margin-bottom: 10px;
+    margin-top: 10px;
 }
 
-.about-tutor hr {
+.about-student hr {
     border: none;
     border-top: 2px solid #1E56A0;
     width: 100%;
     margin-bottom: 15px;
 }
 
-.about-tutor p {
+.about-student p {
     color: #163172;
     font-size: 15px;
     line-height: 1.5;
 }
-
-/**********************************************************Tutor Reviews***********************************************************************/
