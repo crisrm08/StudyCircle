@@ -1,0 +1,134 @@
+.edit-profile-screen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-title{
+    text-align: center;
+    font-size: 28px;
+    color: #163172;
+}
+
+.edit-profile-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 20px 50px;
+}
+
+.left{
+    background-color: #D6E4F0;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: grid;
+    grid-template-columns: max-content 1fr; 
+    grid-row-gap: 2rem;
+    grid-column-gap: 5rem;
+    align-items: center;     
+    gap: 15px;
+}
+
+.right {
+    background-color: #D6E4F0;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.left label, .right label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #163172;
+}
+
+.left input,
+.right textarea {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    color: #1E56A0;
+    padding: 10px 15px;
+    font-size: 14px;
+    outline: none;
+}
+
+.right textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+.left .react-select__control {
+    border-radius: 8px;
+    border-color: #ccc;
+}
+
+.right img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #1E56A0;
+    align-self: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.right img:hover {
+    transform: scale(1.05);
+}
+
+.right p{
+    text-align: center;
+    color: #555;
+    font-size: 12px;
+}
+
+.save-button {
+    background-color: #1E56A0;
+    color: #F6F6F6;
+    border: none;
+    align-self: center;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 25px auto 0 auto;
+    display: block;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.save-button:hover {
+    background-color: #163172;
+    transform: scale(1.02);
+}
+
+.save-button:active {
+  transform: scale(0.98);
+}
+
+@media screen and (max-width: 768px) {
+    .edit-profile-container {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+
+    .left {
+        grid-template-columns: 1fr;   
+        grid-row-gap: 1rem;
+        width: 100%;  
+    }
+
+    .right img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .save-button {
+        margin: 25px auto 25px auto;
+    }
+}

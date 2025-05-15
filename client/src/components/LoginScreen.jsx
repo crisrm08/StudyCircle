@@ -29,7 +29,7 @@ function LoginScreen() {
     }
 
     function tutorSignUp() {
-        navigate("/student-signup-2");
+        navigate("/tutor-signup-1");
     }
 
     function forgotPassword() {
