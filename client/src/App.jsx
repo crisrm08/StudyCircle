@@ -13,6 +13,7 @@ import ChatScreen from "./components/ChatScreen";
 import TutorScreen from "./components/TutorScreen";
 import TutorInfoScreen from "./components/TutorInfoScreen";
 import StudentProfileScreen from "./components/StudentProfileScreen";
+import EditStudentProfileScreen from "./components/EditStudentProfileScreen";
 
 function App() {
   const router = createBrowserRouter([
@@ -25,12 +26,13 @@ function App() {
         { path: 'student-signup-1', element: <StudentSignUp1Screen /> },
         { path: 'student-signup-2', element: <StudentSignUp2Screen /> },
         { path: 'tutor-signup-1', element: <TutorSignUp1Screen /> },
-        { path: 'tutorsignup-2', element: <TutorSignUp2Screen /> },
+        { path: 'tutor-signup-2', element: <TutorSignUp2Screen /> },
         { path: 'results', element: <ResultScreen /> },
         { path: 'chat', element: <ChatScreen /> },
         { path: 'tutor-home-page', element: <TutorScreen /> },
         { path: 'tutor-info', element: <TutorInfoScreen />},
         { path: 'student-profile', element: <StudentProfileScreen />},
+        { path: 'edit-stu-profile', element: <EditStudentProfileScreen />}
       ]
     }
   ]);
