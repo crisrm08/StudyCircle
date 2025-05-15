@@ -1,8 +1,10 @@
 import React, {useState}from "react";
+import { useNavigate } from "react-router-dom";
 import { MdEdit } from "react-icons/md";
 import "../css/modal.css";
 
 function StudentModal() {
+  const navigate = useNavigate();
   const [student] = useState({
         id: 1,
         image: 'https://randomuser.me/api/portraits/men/12.jpg',
@@ -14,7 +16,11 @@ function StudentModal() {
         description: 'Estudiante de primer año de la carrera de Ingeniería en Ciencias de la Computación'
     });
 
-  const renderStars = () => {
+  function goToEdit() {
+    navigate("/edit-stu-profile");
+  }
+
+  function renderStars(){
     const filledStars = Math.floor(student.rating);
     const hasHalfStar = student.rating - filledStars >= 0.5;
     const emptyStars = 5 - filledStars - (hasHalfStar ? 1 : 0);
@@ -39,7 +45,7 @@ function StudentModal() {
     <div className="modal-content">
 
       <img src={student.image} alt={`Foto de ${student.name}`} className="modal-image" />
-      <MdEdit className="edit-icon" size={30}/>
+      <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>
       
       <h2 className="modal-name">{student.name}</h2>
       <p className="modal-occupation">{student.institution}</p>

@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import StudentModal from "./StudentModal";
 import Sidebar from "./Sidebar";
@@ -9,10 +10,14 @@ import "../css/studentprofile.css";
 
 function StudentProfileScreen() {
     const { isSidebarClicked } = useContext(SidebarContext);
+    const navigate = useNavigate();
 
     const studentName = "Elvis García";
     const studentFullDescription = "Estudiante de primer año de la carrera de Ingeniería en Ciencias de la Computación en la Pontificia Universidad Católica Madre y Maestra. Me interesa mejorar mis habilidades en la asignatura de Ecuaciones Diferenciales, ya que no me fue muy bien en mi primer parcial y necesito reforzar."
 
+    function goToEdit() {
+        navigate("/edit-stu-profile");
+    }
     return(
         <div className="student-profile-screen">
             <Header />
@@ -20,7 +25,7 @@ function StudentProfileScreen() {
                 <div className="right-section">
                     <div className="about-student">
                         <div className="about-student__scroll">
-                            <MdEdit className="edit-button" size={30}/>
+                            <MdEdit className="edit-button" size={30} onClick={goToEdit}/>
                             <h2>Sobre {studentName}:</h2>
                             <hr/>
                             <p>{studentFullDescription}</p>

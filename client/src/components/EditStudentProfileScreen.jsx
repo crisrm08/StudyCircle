@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Select from "react-select";
 import "../css/editprofilescreen.css";
@@ -99,7 +100,9 @@ function EditStudentProfileScreen() {
     const [strength, setStrength] = useState(strengthInitialValues);
     const currentImageUrl = "https://randomuser.me/api/portraits/men/12.jpg";
     const [preview, setPreview] = useState(currentImageUrl);
+    const [ showToast, setShowToast ] = useState(false);
 
+    const navigate = useNavigate();
     const fileInputRef = useRef();
 
     const handleImageClick = () => {
@@ -113,6 +116,15 @@ function EditStudentProfileScreen() {
         const imageUrl = URL.createObjectURL(file);
         setPreview(imageUrl);
       }
+    }
+
+    function handleSubmit(event) {
+      event.preventDefault();
+      setShowToast(true);
+
+      setTimeout(() => {
+        navigate("/student-profile");
+      }, 2000);
     }
   
 
@@ -179,11 +191,12 @@ function EditStudentProfileScreen() {
                     <input type="file" accept="image/*" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange}/>
 
                     <label htmlFor="about-me">Sobre mí</label>
-                    <textarea name="about-me" id="about-me" value={"Estudiante de primer año de la carrera de Ingeniería en Ciencias de la Computación en la Pontificia Universidad Católica Madre y Maestra. Me interesa mejorar mis habilidades en la asignatura de Ecuaciones Diferenciales, ya que no me fue muy bien en mi primer parcial y necesito reforzar."}></textarea>
+                    <textarea name="about-me" id="about-me" value={fullDescription}></textarea>
                 </div>
             </form>
 
-            <button className="save-button">Guardar</button>
+            <button className="save-button" onClick={handleSubmit}>Guardar</button>
+            {showToast && <div className="toast">✅ Cambios guardados</div>}
         </div>
     )
 }
