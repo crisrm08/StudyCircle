@@ -6,7 +6,7 @@ import { SidebarContext } from "../contexts/SidebarContext";
 
 function TutorScreen() {
 
-    const { isSidebarClicked } = useContext(SidebarContext);
+    const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
 
     return(
         <div>
@@ -14,7 +14,15 @@ function TutorScreen() {
             <RequestBox avatar={"https://randomuser.me/api/portraits/men/12.jpg"} />
             <RequestBox avatar={"https://randomuser.me/api/portraits/men/12.jpg"} />
             <RequestBox avatar={"https://randomuser.me/api/portraits/men/12.jpg"} />
-            {isSidebarClicked && <Sidebar />}
+             {isSidebarClicked && (
+                <>
+                    <div 
+                        className="overlay" 
+                        onClick={() => setIsSidebarClicked(false)}
+                    />
+                    <Sidebar />
+                </>
+            )}
         </div>
     )
 }
