@@ -9,7 +9,7 @@ import { MdEdit } from "react-icons/md";
 import "../css/studentprofile.css";
 
 function StudentProfileScreen() {
-    const { isSidebarClicked } = useContext(SidebarContext);
+    const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
     const navigate = useNavigate();
 
     const studentName = "Elvis García";
@@ -43,7 +43,15 @@ function StudentProfileScreen() {
                     <StudentModal/>
                 </div>
             </div>
-            {isSidebarClicked && <Sidebar />}
+             {isSidebarClicked && (
+                <>
+                    <div 
+                        className="overlay" 
+                        onClick={() => setIsSidebarClicked(false)}
+                    />
+                    <Sidebar />
+                </>
+            )}
         </div>
     )
 }

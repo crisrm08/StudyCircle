@@ -8,7 +8,7 @@ import ModeSelection from "./ModeSelection";
 import '../css/searchscreen.css';
 
 function SearchScreen() {
-    const { isSidebarClicked } = useContext(SidebarContext);
+    const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
     
     return(
         <div>
@@ -18,7 +18,15 @@ function SearchScreen() {
                 <TimeSelection/>
                 <ModeSelection/>
             </div>
-            {isSidebarClicked && <Sidebar />}
+            {isSidebarClicked && (
+                <>
+                    <div 
+                        className="overlay" 
+                        onClick={() => setIsSidebarClicked(false)}
+                    />
+                    <Sidebar />
+                </>
+            )}
         </div>
     )
 }

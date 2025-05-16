@@ -6,7 +6,7 @@ import { SidebarContext } from "../contexts/SidebarContext";
 import "../css/chatscreen.css"
 
 function ChatScreen() {
-    const { isSidebarClicked } = useContext(SidebarContext);
+    const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
 
     return(
         <div className="chat-screen" >
@@ -14,7 +14,15 @@ function ChatScreen() {
             <div className="chat-screen-container">
                 <ChatContainer/>
             </div>
-            {isSidebarClicked && <Sidebar />}
+            {isSidebarClicked && (
+                <>
+                    <div 
+                        className="overlay" 
+                        onClick={() => setIsSidebarClicked(false)}
+                    />
+                    <Sidebar />
+                </>
+            )}
         </div>
     )
 }

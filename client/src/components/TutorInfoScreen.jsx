@@ -8,7 +8,7 @@ import "../css/tutorinfoscreen.css";
 
 
 function TutorInfoScreen() {
-    const { isSidebarClicked } = useContext(SidebarContext);
+    const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
   
     const tutor = {
             id: 1,
@@ -48,7 +48,15 @@ function TutorInfoScreen() {
               />
             </div>
           </div>
-          {isSidebarClicked && <Sidebar />}
+           {isSidebarClicked && (
+                <>
+                    <div 
+                        className="overlay" 
+                        onClick={() => setIsSidebarClicked(false)}
+                    />
+                    <Sidebar />
+                </>
+            )}
       </div>
     )
 }

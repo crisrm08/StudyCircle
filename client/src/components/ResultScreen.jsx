@@ -8,7 +8,7 @@ import "../css/resultscreen.css";
 
 function ResultScreen() {
     const navigate = useNavigate();  
-    const { isSidebarClicked } = useContext(SidebarContext);
+    const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
 
     function goToInfo() {
         navigate("/tutor-info");
@@ -82,7 +82,15 @@ function ResultScreen() {
                     onExplore={goToInfo}
                 />
             </div>
-            {isSidebarClicked && <Sidebar />}
+            {isSidebarClicked && (
+                <>
+                    <div 
+                        className="overlay" 
+                        onClick={() => setIsSidebarClicked(false)}
+                    />
+                    <Sidebar />
+                </>
+            )}
         </div>
     )
 }

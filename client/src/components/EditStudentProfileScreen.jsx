@@ -1,5 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "./Sidebar";
+import { SidebarContext } from "../contexts/SidebarContext";
 import Header from "./Header";
 import Select from "react-select";
 import "../css/editprofilescreen.css";
@@ -101,6 +103,7 @@ function EditStudentProfileScreen() {
     const currentImageUrl = "https://randomuser.me/api/portraits/men/12.jpg";
     const [preview, setPreview] = useState(currentImageUrl);
     const [ showToast, setShowToast ] = useState(false);
+    const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
 
     const navigate = useNavigate();
     const fileInputRef = useRef();
@@ -197,6 +200,15 @@ function EditStudentProfileScreen() {
 
             <button className="save-button" onClick={handleSubmit}>Guardar</button>
             {showToast && <div className="toast">✅ Cambios guardados</div>}
+            {isSidebarClicked && (
+                <>
+                    <div 
+                        className="overlay" 
+                        onClick={() => setIsSidebarClicked(false)}
+                    />
+                    <Sidebar />
+                </>
+            )}
         </div>
     )
 }
