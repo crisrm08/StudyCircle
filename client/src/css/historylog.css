@@ -1,0 +1,107 @@
+.log {
+    background-color: #163172;
+    border-radius: 12px;
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    color: #f6f6f6;
+    gap: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.log-header {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.log-date {
+    background-color: #f3f3f3;
+    color: #1E56A0;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.log-mode {
+    background-color: #D6E4F0;
+    color: #163172;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.log-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.log-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.log-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.request-button {
+    position: absolute;
+    top: -5px;
+    right: 0;
+
+    background-color: #F6F6F6;
+    color: #1E56A0;
+    font-weight: 600;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+}
+
+.request-button:hover {
+    background-color: #D6E4F0;
+    color: #163172;
+    transform: scale(1.03);
+}
+
+.request-button:active {
+    transform: scale(0.97);
+}
+
+
+.log-tutor-rating {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.log-topic {
+    font-size: 14px;
+}
+
+
+@media screen and (max-width: 768px) {
+    .request-button{
+      
+    /* remove the absolute positioning */
+    position: static;    /* or `relative` if you need it positioned but not absolutely */
+    top: auto;
+    right: auto;
+    /* if you set margins on it, you can now use margin instead of top/right */
+    margin: 0.5em 0;     /* whatever you need for spacing */
+  
+    }
+}

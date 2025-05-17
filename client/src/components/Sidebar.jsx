@@ -45,7 +45,7 @@ function Sidebar() {
           <button className="close-btn" onClick={() => setIsSidebarClicked(false)} title="Cerrar sidebar"> <FiX /></button>
 
           <div className="profile-section">
-              <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="imagen perfil" className="avatar"/>
+              <img src="https://randomuser.me/api/portraits/men/12.jpg" alt="imagen perfil" className="avatar"/>
               <p className="username">Cristian Rodríguez</p>
           </div>
 
