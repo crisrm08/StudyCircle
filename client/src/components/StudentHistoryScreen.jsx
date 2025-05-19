@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
 import { SidebarContext } from "../contexts/SidebarContext";
-import Sidebar from "./Sidebar";
+import StudentSidebar from "./StudentSidebar";
 import Header from "./Header";
 import StudentHistory from "./StudentHistory";
 import "../css/studenthistoryscreen.css";
@@ -16,7 +16,7 @@ function StudentHistoryScreen() {
             {isSidebarClicked && (
                 <>
                     <div className="overlay" onClick={() => setIsSidebarClicked(false)}/>
-                    <Sidebar />
+                    <StudentSidebar />
                 </>
             )}
         </div>

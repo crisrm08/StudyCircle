@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { SidebarContext } from "../contexts/SidebarContext";
 import Header from "./Header";
-import Sidebar from "./Sidebar";
+import StudentSidebar from "./StudentSidebar";
 import TutorProfileCard from "./TutorProfileCard";
 import { useNavigate } from "react-router-dom";
 import "../css/resultscreen.css";
@@ -88,7 +88,7 @@ function ResultScreen() {
                         className="overlay" 
                         onClick={() => setIsSidebarClicked(false)}
                     />
-                    <Sidebar />
+                    <StudentSidebar />
                 </>
             )}
         </div>

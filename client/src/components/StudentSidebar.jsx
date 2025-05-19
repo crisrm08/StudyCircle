@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { FiUser, FiMessageSquare, FiClock, FiX } from "react-icons/fi";
+import { FiUser, FiMessageSquare, FiClock, FiX, FiHome } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import '../css/sidebar.css';
 import { SidebarContext } from "../contexts/SidebarContext";
 
-function Sidebar() {
+function StudentSidebar() {
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
     const sidebarRef = useRef();
     const navigate = useNavigate();
@@ -40,8 +40,12 @@ function Sidebar() {
       setIsSidebarClicked(false);
     }
 
-    function goToHistory(params) {
+    function goToHistory() {
       navigate("/student-history")
+    }
+
+    function goToHome() {
+      navigate("/");
     }
 
     return (
@@ -57,6 +61,7 @@ function Sidebar() {
               <h2 onClick={goToProfile}><FiUser /> Mi perfil</h2>
               <h2 onClick={goToChat}><FiMessageSquare /> Mensajes</h2>
               <h2 onClick={goToHistory}><FiClock /> Historial</h2>
+              <h2 onClick={goToHome}><FiHome/>Home</h2>
           </nav>
 
           <h2 className="log-out" onClick={logOut}>Cerrar Sesión</h2>
@@ -64,4 +69,4 @@ function Sidebar() {
     );
 }
 
-export default Sidebar;
+export default StudentSidebar;

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "./Sidebar";
+import StudentSidebar from "./StudentSidebar";
 import { SidebarContext } from "../contexts/SidebarContext";
 import Header from "./Header";
 import Select from "react-select";
@@ -206,7 +206,7 @@ function EditStudentProfileScreen() {
                         className="overlay" 
                         onClick={() => setIsSidebarClicked(false)}
                     />
-                    <Sidebar />
+                    <StudentSidebar />
                 </>
             )}
         </div>
