@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import StudentModal from "./StudentModal";
-import Sidebar from "./Sidebar";
+import StudentSidebar from "./StudentSidebar";
 import StudentReviews from "./StudentReviews";
 import { SidebarContext } from "../contexts/SidebarContext";
 import { MdEdit } from "react-icons/md";
@@ -46,7 +46,7 @@ function StudentProfileScreen() {
              {isSidebarClicked && (
                 <>
                     <div className="overlay" onClick={() => setIsSidebarClicked(false)}/>
-                    <Sidebar />
+                    <StudentSidebar />
                 </>
             )}
         </div>

@@ -2,7 +2,7 @@ import React, {useContext} from "react";
 import Header from "./Header";
 import Modal from "./Modal";
 import TutorReviews from "./TutorReviews";
-import Sidebar from "./Sidebar";
+import StudentSidebar from "./StudentSidebar";
 import { SidebarContext } from "../contexts/SidebarContext";
 import "../css/tutorinfoscreen.css";
 
@@ -54,7 +54,7 @@ function TutorInfoScreen() {
                         className="overlay" 
                         onClick={() => setIsSidebarClicked(false)}
                     />
-                    <Sidebar />
+                    <StudentSidebar />
                 </>
             )}
       </div>

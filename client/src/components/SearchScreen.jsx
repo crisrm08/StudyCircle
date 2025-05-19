@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Header from "./Header";
 import SubjectSelection from "./SubjectSelection";
-import Sidebar from "./Sidebar";
+import StudentSidebar from "./StudentSidebar";
 import { SidebarContext } from "../contexts/SidebarContext";
 import TimeSelection from "./TimeSelection";
 import ModeSelection from "./ModeSelection";
@@ -24,7 +24,7 @@ function SearchScreen() {
                         className="overlay" 
                         onClick={() => setIsSidebarClicked(false)}
                     />
-                    <Sidebar />
+                    <StudentSidebar />
                 </>
             )}
         </div>
