@@ -34,7 +34,7 @@ function App() {
         { path: 'tutor-info', element: <TutorInfoScreen />},
         { path: 'student-profile', element: <StudentProfileScreen />},
         { path: 'edit-stu-profile', element: <EditStudentProfileScreen />},
-        { path: 'history-log', element: <StudentHistoryScreen />}
+        { path: 'student-history', element: <StudentHistoryScreen />}
       ]
     }
   ]);

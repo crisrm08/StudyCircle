@@ -95,13 +95,9 @@
 
 @media screen and (max-width: 768px) {
     .request-button{
-      
-    /* remove the absolute positioning */
-    position: static;    /* or `relative` if you need it positioned but not absolutely */
-    top: auto;
-    right: auto;
-    /* if you set margins on it, you can now use margin instead of top/right */
-    margin: 0.5em 0;     /* whatever you need for spacing */
-  
+        position: static;    
+        top: auto;
+        right: auto;
+        margin: 0.5em 0;   
     }
 }

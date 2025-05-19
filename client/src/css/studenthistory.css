@@ -68,4 +68,12 @@
     .history-logs-container{
         grid-template-columns: 1fr;
     }
+
+    .icon-container{
+        display: none;
+    }
+
+    .logs__scroll{
+        padding: 10px 15px;
+    }
 }
