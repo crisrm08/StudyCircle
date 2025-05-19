@@ -45,10 +45,7 @@ function StudentProfileScreen() {
             </div>
              {isSidebarClicked && (
                 <>
-                    <div 
-                        className="overlay" 
-                        onClick={() => setIsSidebarClicked(false)}
-                    />
+                    <div className="overlay" onClick={() => setIsSidebarClicked(false)}/>
                     <Sidebar />
                 </>
             )}

@@ -14,6 +14,7 @@ import TutorScreen from "./components/TutorScreen";
 import TutorInfoScreen from "./components/TutorInfoScreen";
 import StudentProfileScreen from "./components/StudentProfileScreen";
 import EditStudentProfileScreen from "./components/EditStudentProfileScreen";
+import StudentHistoryScreen from "./components/StudentHistoryScreen";
 
 function App() {
   const router = createBrowserRouter([
@@ -32,7 +33,8 @@ function App() {
         { path: 'tutor-home-page', element: <TutorScreen /> },
         { path: 'tutor-info', element: <TutorInfoScreen />},
         { path: 'student-profile', element: <StudentProfileScreen />},
-        { path: 'edit-stu-profile', element: <EditStudentProfileScreen />}
+        { path: 'edit-stu-profile', element: <EditStudentProfileScreen />},
+        { path: 'student-history', element: <StudentHistoryScreen />}
       ]
     }
   ]);

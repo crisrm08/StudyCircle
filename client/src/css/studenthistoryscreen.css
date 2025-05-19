@@ -1,0 +1,20 @@
+.stu-history-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;              
+}
+
+.main-history-container{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+@media screen and (max-width: 768px) {
+    .stu-history-screen{
+        padding-bottom: 20px;
+        height: fit-content;
+    }
+}
