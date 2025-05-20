@@ -29,12 +29,8 @@ function RequestBox({ avatar }) {
     <div className="request-box">
       <div className="request-header">
         <div className="request-student-info">
-          {avatar && (
-            <img src={avatar} alt="Estudiante" className="student-avatar" />
-          )}
-          <span className="subject-topic">
-            {subject} - {topic}
-          </span>
+          {avatar && (<img src={avatar} alt="Estudiante" className="student-avatar" />)}
+          <span className="subject-topic"> {subject} - {topic} </span>
         </div>
         <span className="request-mode">{mode}</span>
       </div>

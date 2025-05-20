@@ -1,0 +1,11 @@
+.tutorship-request-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-height: 450px;
+    overflow-y: auto;
+    scrollbar-width: auto;
+    scrollbar-color: #1E56A0 #D6E4F0;
+}
