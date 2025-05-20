@@ -1,0 +1,122 @@
+.tutor-topbar {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 20px;
+    background-color: #D6E4F0;
+    padding: 25px 30px;
+    align-items: center;
+    border-bottom: 2px solid #1E56A0;
+    flex-wrap: wrap;
+}
+
+.left-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.tutor-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.tutor-name-rating h2 {
+    margin: 0;
+    color: #163172;
+}
+
+.stars {
+    display: flex;
+    gap: 2px;
+}
+
+.middle-info {
+    text-align: center;
+}
+
+.label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1E56A0;
+    margin-bottom: 8px;
+}
+
+.subject-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.tag {
+    background-color: #7fb9e6;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    color: white;
+}
+
+.right-info {
+    text-align: right;
+}
+
+.price-label, .schedule-label {
+    font-weight: 500;
+    font-size: 14px;
+    color: #1E56A0;
+}
+
+.price-pill {
+    background-color: #1E56A0;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.schedule-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-style: italic;
+    font-size: 13px;
+    color: #163172;
+}
+
+@media screen and (max-width: 768px) {
+    .tutor-topbar {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 30px;
+    }
+
+    .left-info, .right-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .left-info {
+        flex-direction: column;
+    }
+
+    .tutor-name-rating{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .subject-tags {
+        justify-content: center;
+    }
+
+    .schedule-list {
+        text-align: center;
+    }
+}

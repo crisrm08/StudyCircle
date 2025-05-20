@@ -1,0 +1,31 @@
+.tutorship-request-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    max-height: 450px;
+    min-height: 450px;
+    overflow-y: auto;
+    scrollbar-width: auto;
+    scrollbar-color: #1E56A0 transparent;
+}
+
+.tutor-history-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 20px;
+    padding-top: 15px;
+    flex-wrap: wrap;
+    max-height: 450px;
+    min-height: 450px;
+    overflow-y: auto;
+    scrollbar-width: auto;
+    scrollbar-color: #1E56A0 transparent;
+}
+
+.tutor-history-log{
+    min-width: 300px;
+}

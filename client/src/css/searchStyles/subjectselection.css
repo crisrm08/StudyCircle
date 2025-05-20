@@ -6,6 +6,10 @@
     gap: 20px;
 }
 
+.subject-selection-container > h1:first-child {
+  margin-top: 20px;
+}
+
 .subject-selection-container h1{
     padding-bottom: 10px;
 }
@@ -19,18 +23,13 @@
 
 @media (max-width: 768px) {
     .subjects-container {
-        gap: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .subjects-container {
-        flex-direction: column; 
-        gap: 15px;
+        gap: 10px;
+        flex-direction: row;
         align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
     }
 }
-
 
 .subjects-container button{
     background-color: #b6d2ea;
