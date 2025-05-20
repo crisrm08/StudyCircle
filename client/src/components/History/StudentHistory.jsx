@@ -23,6 +23,7 @@ function StudentHistory() {
                                     rating={2}
                                     modality="presencial"
                                     avatar="https://randomuser.me/api/portraits/men/25.jpg"
+                                    showRequestButton = {true}
                                 />
 
                                 <HistoryLog 
@@ -33,6 +34,7 @@ function StudentHistory() {
                                     rating={3}
                                     modality="presencial"
                                     avatar="https://randomuser.me/api/portraits/men/25.jpg"
+                                    showRequestButton = {true}
                                 />
 
                                 <HistoryLog 
@@ -43,6 +45,7 @@ function StudentHistory() {
                                     rating={4}
                                     modality="presencial"
                                     avatar="https://randomuser.me/api/portraits/women/25.jpg"
+                                    showRequestButton = {true}
                                 />
 
                                 <HistoryLog 
@@ -53,10 +56,11 @@ function StudentHistory() {
                                     rating={5}
                                     modality="virtual"
                                     avatar="https://randomuser.me/api/portraits/men/26.jpg"
+                                    showRequestButton = {true}
                                 />
                             </>
                         ) : (
-                            <h1>Aquí aparecerán tus sesiones de tutorías</h1>
+                            <h1>Aquí aparecerán tus sesiones de tutorías previas</h1>
                         )}
                     </div>
                 </div>

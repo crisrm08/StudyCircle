@@ -2,9 +2,9 @@ import React from "react";
 import { FaStar } from "react-icons/fa";
 import "../../css/studentHistoryStyles/historylog.css";
 
-function HistoryLog({ tutorName, date, topic, subtopic, rating, modality, avatar }) {
+function HistoryLog({ tutorName, date, topic, subtopic, rating, modality, avatar, showRequestButton}) {
   return (
-    <div className="log">
+    <div className="log tutor-history-log">
         <div className="log-header">
             <span className="log-date">{date}</span>
             <span className="log-mode">{modality}</span>
@@ -26,7 +26,9 @@ function HistoryLog({ tutorName, date, topic, subtopic, rating, modality, avatar
                     </div>
                     <div className="log-topic">{topic} - {subtopic}</div>
                 </div>
-                <button className="request-button">Solicitar tutoría</button>
+                {showRequestButton && (
+                <button className="request-button"> Solicitar tutoría</button>
+                )}
         </div>
     </div>
   );

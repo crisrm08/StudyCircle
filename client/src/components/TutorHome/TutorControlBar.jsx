@@ -1,8 +1,9 @@
-import React, {useState} from "react";
+import React, {useContext} from "react";
+import { ActiveTabContext } from "../../contexts/ActiveTabContext";
 import "../../css/tutorHomeStyles/tutorcontrolbar.css"
 
 function TutorControlBar() {
-    const [ activeTab, setActiveTab ] = useState("");
+    const { activeTab, setActiveTab } = useContext(ActiveTabContext);
     return(
         <div className="tutor-control-bar">
             <h1 onClick={() => setActiveTab("Historial")} className={activeTab === "Historial" ? "active" : ""}>Historial</h1>

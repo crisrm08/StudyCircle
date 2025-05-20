@@ -6,11 +6,13 @@ import RequestBox from "../TutorHome/RequestBox";
 import HistoryLog from "../History/HistoryLog"
 import StudentSidebar from "../Common/StudentSidebar";
 import { SidebarContext } from "../../contexts/SidebarContext";
+import { ActiveTabContext } from "../../contexts/ActiveTabContext";
 import "../../css/tutorHomeStyles/tutorhomescreen.css";
 
 function TutorHomeScreen() {
 
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
+    const { activeTab } = useContext(ActiveTabContext);
 
     return(
         <div>
@@ -25,15 +27,127 @@ function TutorHomeScreen() {
             />
             <TutorControlBar /> 
 
-            <div className="tutorship-request-container">
-                <RequestBox avatar={"https://randomuser.me/api/portraits/men/12.jpg"} />
-                <RequestBox avatar={"https://randomuser.me/api/portraits/men/15.jpg"} />
-                <RequestBox avatar={"https://randomuser.me/api/portraits/men/16.jpg"} />
-                <RequestBox avatar={"https://randomuser.me/api/portraits/men/16.jpg"} />
-            </div>
-
-           
-
+        
+            {activeTab === "Solicitudes" ? (
+                <div className="tutorship-request-container">
+                    <RequestBox avatar={"https://randomuser.me/api/portraits/men/12.jpg"} />
+                    <RequestBox avatar={"https://randomuser.me/api/portraits/men/15.jpg"} />
+                    <RequestBox avatar={"https://randomuser.me/api/portraits/men/16.jpg"} />
+                    <RequestBox avatar={"https://randomuser.me/api/portraits/men/23.jpg"} />
+                </div>
+            ) : (
+                <div className="tutor-history-container">
+                    <HistoryLog 
+                        tutorName="Julio Morales"
+                        date="27/4/2025"
+                        topic="Cálculo"
+                        subtopic="Integrales"
+                        rating={2}
+                        modality="presencial"
+                        avatar="https://randomuser.me/api/portraits/men/25.jpg"
+                    />
+                    <HistoryLog 
+                        tutorName="Julio Morales"
+                        date="27/4/2025"
+                        topic="Cálculo"
+                        subtopic="Derivadas"
+                        rating={3}
+                        modality="presencial"
+                        avatar="https://randomuser.me/api/portraits/men/25.jpg"
+                    />
+                    <HistoryLog 
+                        tutorName="Cecilia López"
+                        date="12/4/2025"
+                        topic="Álgebra"
+                        subtopic="Álgebra lineal"
+                        rating={4}
+                        modality="presencial"
+                        avatar="https://randomuser.me/api/portraits/women/25.jpg"
+                    />
+                    <HistoryLog 
+                        tutorName="Jeffrey Pérez"
+                        date="1/4/2025"
+                        topic="Programación"
+                        subtopic="Control de Versiones"
+                        rating={5}
+                        modality="virtual"
+                        avatar="https://randomuser.me/api/portraits/men/26.jpg"
+                    />
+                     <HistoryLog 
+                        tutorName="Julio Morales"
+                        date="27/4/2025"
+                        topic="Cálculo"
+                        subtopic="Integrales"
+                        rating={2}
+                        modality="presencial"
+                        avatar="https://randomuser.me/api/portraits/men/25.jpg"
+                    />
+                    <HistoryLog 
+                        tutorName="Julio Morales"
+                        date="27/4/2025"
+                        topic="Cálculo"
+                        subtopic="Derivadas"
+                        rating={3}
+                        modality="presencial"
+                        avatar="https://randomuser.me/api/portraits/men/25.jpg"
+                    />
+                    <HistoryLog 
+                        tutorName="Cecilia López"
+                        date="12/4/2025"
+                        topic="Álgebra"
+                        subtopic="Álgebra lineal"
+                        rating={4}
+                        modality="presencial"
+                        avatar="https://randomuser.me/api/portraits/women/25.jpg"
+                    />
+                    <HistoryLog 
+                        tutorName="Jeffrey Pérez"
+                        date="1/4/2025"
+                        topic="Programación"
+                        subtopic="Control de Versiones"
+                        rating={5}
+                        modality="virtual"
+                        avatar="https://randomuser.me/api/portraits/men/26.jpg"
+                    />
+                     <HistoryLog 
+                        tutorName="Julio Morales"
+                        date="27/4/2025"
+                        topic="Cálculo"
+                        subtopic="Integrales"
+                        rating={2}
+                        modality="presencial"
+                        avatar="https://randomuser.me/api/portraits/men/25.jpg"
+                    />
+                    <HistoryLog 
+                        tutorName="Julio Morales"
+                        date="27/4/2025"
+                        topic="Cálculo"
+                        subtopic="Derivadas"
+                        rating={3}
+                        modality="presencial"
+                        avatar="https://randomuser.me/api/portraits/men/25.jpg"
+                    />
+                    <HistoryLog 
+                        tutorName="Cecilia López"
+                        date="12/4/2025"
+                        topic="Álgebra"
+                        subtopic="Álgebra lineal"
+                        rating={4}
+                        modality="presencial"
+                        avatar="https://randomuser.me/api/portraits/women/25.jpg"
+                    />
+                    <HistoryLog 
+                        tutorName="Jeffrey Pérez"
+                        date="1/4/2025"
+                        topic="Programación"
+                        subtopic="Control de Versiones"
+                        rating={5}
+                        modality="virtual"
+                        avatar="https://randomuser.me/api/portraits/men/26.jpg"
+                    />
+                
+                </div>
+            )}
             {isSidebarClicked && (
                 <>
                     <div className="overlay" onClick={() => setIsSidebarClicked(false)}/>
