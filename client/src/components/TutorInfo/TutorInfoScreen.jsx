@@ -4,6 +4,7 @@ import Header from "../Common/Header";
 import Modal from "./Modal";
 import TutorReviews from "./TutorReviews";
 import StudentSidebar from "../Common/StudentSidebar";
+import TutorSidebar from "../Common/TutorSidebar";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import { MdEdit } from "react-icons/md";
 import "../../css/tutorInfoStyles/tutorinfoscreen.css";
@@ -17,7 +18,7 @@ function TutorInfoScreen() {
     const tutor = {
             id: 1,
             image: 'https://randomuser.me/api/portraits/men/32.jpg',
-            name: 'Carlos Pérez',
+            name: 'Carlos Santana',
             occupation: 'Profesor',
             description: 'Apasionado por la enseñanza de matemáticas y física. Vamos a resolver tus dudas juntos.',
             fullDescription: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
@@ -57,12 +58,17 @@ function TutorInfoScreen() {
               />
             </div>
           </div>
-           {isSidebarClicked && (
-                <>
-                    <div className="overlay" onClick={() => setIsSidebarClicked(false)}/>
-                    <StudentSidebar />
-                </>
-            )}
+          {isSidebarClicked && (
+              <>
+                <div
+                  className="overlay"
+                  onClick={() => setIsSidebarClicked(false)}
+                />
+                {isTutorLogged
+                  ? <TutorSidebar />
+                  : <StudentSidebar />}
+              </>
+          )}
       </div>
     )
 }

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { FiUser, FiMessageSquare, FiClock, FiX } from "react-icons/fi";
+import { FiUser, FiMessageSquare, FiHome, FiX } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import '../css/sidebar.css';
+import '../../css/sidebar.css';
 import { SidebarContext } from "../../contexts/SidebarContext";
 
 function TutorSidebar() {
@@ -36,12 +36,12 @@ function TutorSidebar() {
     }
 
     function goToProfile() {
-      navigate("/tutor-profile");
+      navigate("/tutor-info");
       setIsSidebarClicked(false);
     }
 
     function goToHome(params) {
-      navigate("/student-history")
+      navigate("/tutor-home-page")
     }
 
     return (
@@ -49,14 +49,14 @@ function TutorSidebar() {
           <button className="close-btn" onClick={() => setIsSidebarClicked(false)} title="Cerrar sidebar"> <FiX /></button>
 
           <div className="profile-section">
-              <img src="https://randomuser.me/api/portraits/men/17.jpg" alt="imagen perfil" className="avatar"/>
-              <p className="username">Cristian Rodríguez</p>
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="imagen perfil" className="avatar"/>
+              <p className="username">Carlos Santana</p>
           </div>
 
           <nav className="nav-links">
               <h2 onClick={goToProfile}><FiUser /> Mi perfil</h2>
               <h2 onClick={goToChat}><FiMessageSquare /> Mensajes</h2>
-              <h2 onClick={goToHome}><FiClock /> Home</h2>
+              <h2 onClick={goToHome}><FiHome /> Home</h2>
           </nav>
 
           <h2 className="log-out" onClick={logOut}>Cerrar Sesión</h2>
