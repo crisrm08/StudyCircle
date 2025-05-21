@@ -1,8 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { MdEdit } from "react-icons/md";
 import "../../css/studentProfileStyles/modal.css";
 
-function Modal({ tutor }) {
+function Modal({ tutor, showEditButton }) {
   const { image, name, occupation, description, pricePerHour, rating } = tutor;
+  const navigate = useNavigate();
 
   const renderStars = () => {
     const filledStars = Math.floor(rating);
@@ -25,10 +28,17 @@ function Modal({ tutor }) {
     return stars;
   };
 
+  function goToEdit() {
+    navigate("/edit-ttr-profile");
+  }
+
+
   return (
     <div className="modal-content">
 
       <img src={image} alt={`Foto de ${name}`} className="modal-image" />
+      {showEditButton === true && ( <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>)}
+     
       <h2 className="modal-name">{name}</h2>
       <p className="modal-occupation">{occupation}</p>
 
@@ -44,7 +54,8 @@ function Modal({ tutor }) {
 
       <p className="modal-description">{description}</p>
       <p className="modal-price"> <strong>Precio por hora:</strong> RD${pricePerHour} </p>
-      <button className="tutor-button">Solicitar tutoría</button>
+      {showEditButton === false && ( <button className="tutor-button">Solicitar tutoría</button>)}
+    
     </div>
   )
 }

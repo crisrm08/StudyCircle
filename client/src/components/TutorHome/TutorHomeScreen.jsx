@@ -4,7 +4,7 @@ import TutorTopBar from "./TutorTopBar";
 import TutorControlBar from "./TutorControlBar";
 import RequestBox from "../TutorHome/RequestBox";
 import HistoryLog from "../History/HistoryLog"
-import StudentSidebar from "../Common/StudentSidebar";
+import TutorSidebar from "../Common/TutorSidebar";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import { ActiveTabContext } from "../../contexts/ActiveTabContext";
 import "../../css/tutorHomeStyles/tutorhomescreen.css";
@@ -151,7 +151,7 @@ function TutorHomeScreen() {
             {isSidebarClicked && (
                 <>
                     <div className="overlay" onClick={() => setIsSidebarClicked(false)}/>
-                    <StudentSidebar />
+                    <TutorSidebar />
                 </>
             )}
         </div>
