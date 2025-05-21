@@ -125,7 +125,6 @@ function StudentSignUp2Screen() {
             value={degree}
             onChange={setDegree}
             styles={customStyles}
-            
           />
 
           <label htmlFor="weaknesses">¿Qué asignaturas se te dificultan?</label>

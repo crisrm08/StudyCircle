@@ -14,6 +14,7 @@ import TutorHomeScreen from "./components/TutorHome/TutorHomeScreen";
 import TutorInfoScreen from "./components/TutorInfo/TutorInfoScreen";
 import StudentProfileScreen from "./components/StudentProfile/StudentProfileScreen";
 import EditStudentProfileScreen from "./components/EditStudentProfile/EditStudentProfileScreen";
+import EditTutorProfileScreen from "./components/EditTutorProfile/EditTutorProfileScreen";
 import StudentHistoryScreen from "./components/History/StudentHistoryScreen";
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
         { path: 'tutor-info', element: <TutorInfoScreen />},
         { path: 'student-profile', element: <StudentProfileScreen />},
         { path: 'edit-stu-profile', element: <EditStudentProfileScreen />},
+        { path: 'edit-ttr-profile', element: <EditTutorProfileScreen />},
         { path: 'student-history', element: <StudentHistoryScreen />}
       ]
     }

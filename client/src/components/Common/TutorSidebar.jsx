@@ -42,6 +42,7 @@ function TutorSidebar() {
 
     function goToHome(params) {
       navigate("/tutor-home-page")
+      setIsSidebarClicked(false);
     }
 
     return (

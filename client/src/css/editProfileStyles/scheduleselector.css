@@ -1,0 +1,38 @@
+.schedule-selector {
+  background-color: #D6E4F0;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.schedule-selector h3 {
+  color: #163172;
+  margin-bottom: 15px;
+}
+
+.schedule-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.schedule-row label {
+  flex: 1;
+  color: #1E56A0;
+  font-weight: 500;
+}
+
+.time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-inputs input[type="time"] {
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}

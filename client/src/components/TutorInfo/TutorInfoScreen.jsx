@@ -9,7 +9,6 @@ import { SidebarContext } from "../../contexts/SidebarContext";
 import { MdEdit } from "react-icons/md";
 import "../../css/tutorInfoStyles/tutorinfoscreen.css";
 
-
 function TutorInfoScreen() {
     const navigate = useNavigate();
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
@@ -20,15 +19,22 @@ function TutorInfoScreen() {
             image: 'https://randomuser.me/api/portraits/men/32.jpg',
             name: 'Carlos Santana',
             occupation: 'Profesor',
+            institution: "INTEC",
+            academicLevel: "Maestría",
             description: 'Apasionado por la enseñanza de matemáticas y física. Vamos a resolver tus dudas juntos.',
-            fullDescription: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+            fullDescription: "Docente egresado de la Universidad Autónoma de Santo Domingo de la carrera de Física. Cuento con más de 10 años de experiencia dedicados a la docencia de estudiantes universitarios en el Insituto Tecnológico de Santo Domingo.",
             pricePerHour: 1000,
             rating: 4.4,
             specialties: ["Cinemática y movimiento", "Ondas y sonido", "Física nuclear"]
         };
 
     function goToEdit() {
-      navigate("/edit-ttr-profile")
+      if (isTutorLogged) {
+        navigate("/edit-ttr-profile");
+      }
+      else{
+        navigate("/edit-stu-profile");
+      }
     }
     return(
         <div className="tutor-info-screen">

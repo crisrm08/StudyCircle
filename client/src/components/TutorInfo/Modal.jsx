@@ -4,7 +4,7 @@ import { MdEdit } from "react-icons/md";
 import "../../css/studentProfileStyles/modal.css";
 
 function Modal({ tutor, showEditButton }) {
-  const { image, name, occupation, description, pricePerHour, rating } = tutor;
+  const { image, name, institution, occupation, academicLevel, description, pricePerHour, rating } = tutor;
   const navigate = useNavigate();
 
   const renderStars = () => {
@@ -40,7 +40,7 @@ function Modal({ tutor, showEditButton }) {
       {showEditButton === true && ( <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>)}
      
       <h2 className="modal-name">{name}</h2>
-      <p className="modal-occupation">{occupation}</p>
+      <p className="modal-occupation">{occupation} - {institution} - {academicLevel}</p>
 
       {tutor.specialties?.length > 0 && (
         <div className="modal-specialties">
