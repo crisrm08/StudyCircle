@@ -8,6 +8,7 @@
     text-align: center;
     font-size: 28px;
     color: #163172;
+    margin-top: 15px;
 }
 
 .edit-profile-container {
@@ -24,10 +25,10 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     display: grid;
     grid-template-columns: max-content 1fr; 
-    grid-row-gap: 2rem;
+    grid-row-gap: 1rem;
     grid-column-gap: 5rem;
     align-items: center;     
-    gap: 15px;
+    
 }
 
 .right {
@@ -40,6 +41,26 @@
     gap: 15px;
 }
 
+.top-right{
+    display: grid;
+    grid-template-columns: 60% 30%;
+    align-items: center;
+    gap: 40px;
+}
+
+.name-lastname{
+    display: grid;
+    grid-template-columns: 30% 70%; 
+    gap: 10px;
+}
+
+.top-right-image{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .left label, .right label {
     font-weight: 600;
     font-size: 14px;
@@ -47,6 +68,7 @@
 }
 
 .left input,
+.right input,
 .right textarea {
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -144,13 +166,17 @@
 
     .left {
         grid-template-columns: 1fr;   
-        grid-row-gap: 1rem;
+        grid-row-gap: 1rem !important;
         width: 100%;  
     }
 
     .right img {
         width: 100px;
         height: 100px;
+    }
+
+    .top-right{
+        grid-template-columns: 1fr;
     }
 
     .save-button {

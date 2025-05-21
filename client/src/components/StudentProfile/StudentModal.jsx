@@ -9,6 +9,7 @@ function StudentModal() {
         id: 1,
         image: 'https://randomuser.me/api/portraits/men/12.jpg',
         name: 'Elvis García',
+        degree: "Ingeniería en Ciencias de la Computación",
         institution: 'INTEC',
         strengths: ['Leyes de Newton', 'Base de Datos', 'Tecnicas de Integración'],
         weaknesses: ['Ecuaciones diferenciales', 'Purebas y depuración de código'],
@@ -48,7 +49,7 @@ function StudentModal() {
       <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>
       
       <h2 className="modal-name">{student.name}</h2>
-      <p className="modal-occupation">{student.institution}</p>
+      <p className="modal-occupation">{student.institution} - {student.degree}</p>
 
       <h2 className="modal-strengths-title" >Destrezas</h2>
       {student.strengths?.length > 0 && (

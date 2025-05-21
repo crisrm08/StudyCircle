@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { lazy, useState } from "react";
 import Select from "react-select";
 import "../../css/signUpStyles/signup.css";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +17,12 @@ const subjects = [
     { value: "Química", label: "Química"},
     { value: "Programación", label: "Progrmación"},
     { value: "Álgebra", label: "Álgebra"}
+]
+
+const ocupations = [
+  {value: "estudiante", label: "Estudiante avanzado"},
+  {value: "profesor", label: "Profesor"},
+  {value: "Ingeniero", label: "Ingeniero"}
 ]
 
 const groupedSubjects = [
@@ -86,7 +92,7 @@ const customStyles = {
 
 function TutorSignUp2Screen() {
     const [academicLevel, setAcademicLevel] = useState(null);
-    const [subjectsTeached, setSubjectsTeached] = useState(null);
+    const [tutorOcupation, setTutorOcupation] = useState(null);
     const [strength, setStrength] = useState([]);
     const navigate = useNavigate();
 
@@ -94,7 +100,6 @@ function TutorSignUp2Screen() {
         navigate("/tutor-home-page")
     }
     
-
     return (
         <div className="Student-sign-up-1" style={{backgroundColor:"#D6E4F0"}}>
             <h1 className="title" style={{color:"#163172"}}>StudyCircle</h1>
@@ -114,19 +119,19 @@ function TutorSignUp2Screen() {
                         styles={customStyles}
                     />
 
-                    <label htmlFor="institution" style={{color:"#D6E4F0"}}>Universidad donde estudia o estudió</label>
+                    <label htmlFor="institution" style={{color:"#D6E4F0"}}>Institución donde trabaja o estudia</label>
                     <input id="institution" type="text" placeholder="Escribe el nombre aquí" style={{maxWidth: "-webkit-fill-available"}}/>
 
-                    <label htmlFor="subjects-teached" style={{color:"#D6E4F0"}}>Asignaturas a enseñar</label>
+                    <label htmlFor="ocupations" style={{color:"#D6E4F0"}}>Selecciona tu ocupación principal</label>
                     <Select
-                        id="subjects-teached"
-                        name="subjects-teached"
+                        id="ocupations"
+                        name="ocupations"
                         placeholder="Selecciona aquí..."
                         isMulti
                         closeMenuOnSelect={false}
-                        options={subjects}
-                        value={subjectsTeached}
-                        onChange={setSubjectsTeached}
+                        options={ocupations}
+                        value={tutorOcupation}
+                        onChange={setTutorOcupation}
                         styles={customStyles}
                     />
 

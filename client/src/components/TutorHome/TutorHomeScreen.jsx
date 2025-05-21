@@ -22,7 +22,7 @@ function TutorHomeScreen() {
                 avatar="https://randomuser.me/api/portraits/men/32.jpg"
                 rating={4}
                 subjects={["Derivadas", "Series y secuencias", "Límites", "Ecuaciones", "Integrales"]}
-                price={800}
+                price={1000}
                 schedule={["Lunes 16:00 - 18:00", "Miércoles 19:00 - 22:00"]}
             />
             <TutorControlBar /> 
