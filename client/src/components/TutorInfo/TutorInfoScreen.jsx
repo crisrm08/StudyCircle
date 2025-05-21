@@ -1,14 +1,18 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../Common/Header";
 import Modal from "./Modal";
 import TutorReviews from "./TutorReviews";
 import StudentSidebar from "../Common/StudentSidebar";
 import { SidebarContext } from "../../contexts/SidebarContext";
+import { MdEdit } from "react-icons/md";
 import "../../css/tutorInfoStyles/tutorinfoscreen.css";
 
 
 function TutorInfoScreen() {
+    const navigate = useNavigate();
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
+    const [ isTutorLogged ] = useState(true);
   
     const tutor = {
             id: 1,
@@ -21,17 +25,22 @@ function TutorInfoScreen() {
             rating: 4.4,
             specialties: ["Cinemática y movimiento", "Ondas y sonido", "Física nuclear"]
         };
+
+    function goToEdit() {
+      navigate("/edit-ttr-profile")
+    }
     return(
         <div className="tutor-info-screen">
           <Header />
           <div className="tutor-info-container">
             <div className="tutor-full-description">
-                <Modal tutor={tutor}/>
+                <Modal tutor={tutor} showEditButton={isTutorLogged}/>
             </div>
 
             <div className="right-section">
               <div className="about-tutor">
                 <div className="about-tutor__scroll">
+                  {isTutorLogged === true && ( <MdEdit className="edit-button" size={30} onClick={goToEdit}/>)}
                   <h2>Sobre {tutor.name}:</h2>
                   <hr/>
                   <p>{tutor.fullDescription}</p>
