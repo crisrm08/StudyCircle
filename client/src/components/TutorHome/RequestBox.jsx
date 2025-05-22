@@ -23,13 +23,17 @@ function RequestBox({ avatar }) {
     navigate("/chat");
   }
 
+  function seeStudentsProfile() {
+    navigate("/student-profile");
+  }
+
   if (rejected) return null;
 
   return (
     <div className="request-box">
       <div className="request-header">
         <div className="request-student-info">
-          {avatar && (<img src={avatar} alt="Estudiante" className="student-avatar" />)}
+          {avatar && (<img src={avatar} alt="Estudiante" className="student-avatar" onClick={seeStudentsProfile} />)}
           <span className="subject-topic"> {subject} - {topic} </span>
         </div>
         <span className="request-mode">{mode}</span>

@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../Common/Header";
 import StudentModal from "./StudentModal";
 import StudentSidebar from "../Common/StudentSidebar";
+import TutorSidebar from "../Common/TutorSidebar";
 import StudentReviews from "./StudentReviews";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import { MdEdit } from "react-icons/md";
@@ -10,6 +11,8 @@ import "../../css/studentProfileStyles/studentprofile.css";
 
 function StudentProfileScreen() {
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
+    const [ isTutorLogged ] = useState(true);
+    
     const navigate = useNavigate();
 
     const studentName = "Elvis García";
@@ -25,7 +28,7 @@ function StudentProfileScreen() {
                 <div className="right-section">
                     <div className="about-student">
                         <div className="about-student__scroll">
-                            <MdEdit className="edit-button" size={30} onClick={goToEdit}/>
+                            {isTutorLogged === false && <MdEdit className="edit-button" size={30} onClick={goToEdit}/> }
                             <h2>Sobre {studentName}:</h2>
                             <hr/>
                             <p>{studentFullDescription}</p>
@@ -40,14 +43,19 @@ function StudentProfileScreen() {
                     />
                 </div>
                 <div className="student-profile-card">
-                    <StudentModal/>
+                    <StudentModal showAcceptButton={isTutorLogged}/>
                 </div>
             </div>
-             {isSidebarClicked && (
-                <>
-                    <div className="overlay" onClick={() => setIsSidebarClicked(false)}/>
-                    <StudentSidebar />
-                </>
+            {isSidebarClicked && (
+              <>
+                <div
+                  className="overlay"
+                  onClick={() => setIsSidebarClicked(false)}
+                />
+                {isTutorLogged
+                  ? <TutorSidebar />
+                  : <StudentSidebar />}
+              </>
             )}
         </div>
     )
