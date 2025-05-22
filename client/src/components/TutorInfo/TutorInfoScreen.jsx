@@ -12,7 +12,7 @@ import "../../css/tutorInfoStyles/tutorinfoscreen.css";
 function TutorInfoScreen() {
     const navigate = useNavigate();
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
-    const [ isTutorLogged ] = useState(true);
+    const [ isTutorLogged ] = useState(false);
   
     const tutor = {
             id: 1,
