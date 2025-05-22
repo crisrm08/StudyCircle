@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { SubjectTopicContext } from "../../contexts/SubjectTopicContext";
 import { MessageContext } from "../../contexts/MessageContext";
-import "../css/request.css";
+import "../../css/tutorInfoStyles/request.css";
 
 function Request({ onClose, onSend }) {
   const { subject, topic } = useContext(SubjectTopicContext);

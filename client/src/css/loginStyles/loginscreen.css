@@ -40,6 +40,8 @@
 .login-forgotPWD-screen{
     min-height: 100vh;
     background-color: #163172; 
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .login-forgotPWD-form {

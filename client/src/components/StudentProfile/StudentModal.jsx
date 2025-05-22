@@ -1,9 +1,12 @@
 import React, {useState}from "react";
 import { useNavigate } from "react-router-dom";
 import { MdEdit } from "react-icons/md";
+import { FaAngleLeft } from "react-icons/fa";
 import "../../css/studentProfileStyles/modal.css";
 
-function StudentModal() {
+function StudentModal({showAcceptButton}) {
+  console.log("values" + showAcceptButton);
+  
   const navigate = useNavigate();
   const [student] = useState({
         id: 1,
@@ -19,6 +22,14 @@ function StudentModal() {
 
   function goToEdit() {
     navigate("/edit-stu-profile");
+  }
+
+  function openChat() {
+    navigate("/chat");
+  }
+
+  function backToHome() {
+    navigate("/tutor-home-page");
   }
 
   function renderStars(){
@@ -45,8 +56,17 @@ function StudentModal() {
   return (
     <div className="modal-content">
 
-      <img src={student.image} alt={`Foto de ${student.name}`} className="modal-image" />
-      <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>
+      <img
+        src={student.image}
+        alt={`Foto de ${student.name}`}
+        style={showAcceptButton
+          ? { width: 100, height: 100 }
+          : undefined
+        }
+        className="modal-image"
+    />
+
+      {showAcceptButton === false && <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>}
       
       <h2 className="modal-name">{student.name}</h2>
       <p className="modal-occupation">{student.institution} - {student.degree}</p>
@@ -70,8 +90,13 @@ function StudentModal() {
       )}
 
       <div className="modal-rating"> {renderStars()} <span className="rating-number">({student.rating.toFixed(1)})</span> </div>
-
       <p style={{marginBottom:'0px'}} className="modal-description">{student.description}</p>
+      <div className="modal-button-container">
+        {showAcceptButton === true && ( <button className="back-button" style={{marginTop: 15}} onClick={backToHome}><FaAngleLeft/> Volver</button>)}
+        {showAcceptButton === true && ( <button className="tutor-button" style={{marginTop: 15}} onClick={openChat}> Aceptar tutoría</button>)}
+      </div>
+      
+      
     </div>
   )
 }

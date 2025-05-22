@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdEdit } from "react-icons/md";
+import { FaAngleLeft } from "react-icons/fa";
+import Request from "./Request";
 import "../../css/studentProfileStyles/modal.css";
 
 function Modal({ tutor, showEditButton }) {
   const { image, name, institution, occupation, academicLevel, description, pricePerHour, rating } = tutor;
+  const [ renderRequest, setRenderRequest ] = useState(false);
   const navigate = useNavigate();
 
   const renderStars = () => {
@@ -32,6 +35,17 @@ function Modal({ tutor, showEditButton }) {
     navigate("/edit-ttr-profile");
   }
 
+  function goBack() {
+    navigate("/results");
+  }
+
+  function openRequestModal() {
+    setRenderRequest(true);
+  }
+
+  function closeRequestModal() {
+    setRenderRequest(false);
+  }
 
   return (
     <div className="modal-content">
@@ -54,7 +68,12 @@ function Modal({ tutor, showEditButton }) {
 
       <p className="modal-description">{description}</p>
       <p className="modal-price"> <strong>Precio por hora:</strong> RD${pricePerHour} </p>
-      {showEditButton === false && ( <button className="tutor-button">Solicitar tutoría</button>)}
+      <div className="modal-button-container">
+        {showEditButton === false && ( <button className="back-button" style={{marginTop: 15}} onClick={goBack}><FaAngleLeft/> Volver</button>)}
+        {showEditButton === false && ( <button className="tutor-button" style={{marginTop: 15}} onClick={openRequestModal}> Solicitar tutoría</button>)}
+      </div>
+
+      {renderRequest === true && (<Request onClose={closeRequestModal}/>)}
     
     </div>
   )
