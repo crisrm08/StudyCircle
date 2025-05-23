@@ -38,9 +38,10 @@ function LoginScreen() {
 
     return (
         <div className="Log-Sign-Frgt">
-            <h1 className="title">StudyCircle</h1>
 
             <div className="login-forgotPWD-screen">
+                <h1 className="title title-mobile">StudyCircle</h1>
+
                 <div className="login-forgotPWD-form">
                     <h2>Inicia sesión en tu cuenta</h2>
                     <h3>Inicia sesión con tu cuenta de google</h3>
