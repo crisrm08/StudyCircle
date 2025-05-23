@@ -9,8 +9,24 @@
         overflow: scroll;
     }
 
+    .login-forgotPWD-screen{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 50px;
+    }
+
+    .title-mobile{
+        position: static !important;
+        left: 30px;
+        margin-top: 1rem !important;
+    }
+
     .login-forgotPWD-form{
         padding-bottom: 30px;
+        position: relative !important;
+        top: 0 !important;
     }
 
     .login-forgotPWD-screen2{

@@ -61,6 +61,11 @@
 }
 
 @media screen and (max-width: 768px) {
+
+    .stu-history{
+        margin-top: 20px;
+    }
+    
     .logs__scroll{
         max-height: fit-content;   
     }
