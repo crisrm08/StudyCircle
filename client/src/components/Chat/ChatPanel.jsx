@@ -4,9 +4,10 @@ import SessionControlBar from "./SessionControlBar";
 import { SubjectTopicContext } from "../../contexts/SubjectTopicContext";
 import { ModeContext } from "../../contexts/ModeContext";
 import { IoSend } from "react-icons/io5";
+import { MdKeyboardArrowLeft } from "react-icons/md";
 import "../../css/chatStyles/chatpanel.css";
 
-function ChatPanel({ image, name }) {
+function ChatPanel({ image, name, hideChatPanel }) {
   const { subject, topic } = useContext(SubjectTopicContext);
   const { mode } = useContext(ModeContext);
 
@@ -14,6 +15,7 @@ function ChatPanel({ image, name }) {
     <div className="chat-panel">
       <div className="top-panel">
         <div className="left-side">
+          <MdKeyboardArrowLeft size={40} color="#163172" className="chat-go-back" onClick={hideChatPanel}/>
           <img className="profile-pic" src={image} alt={`Foto de ${name}`} />
           <div>
             <h2>{name}</h2>

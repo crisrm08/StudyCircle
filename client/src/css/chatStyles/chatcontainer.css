@@ -7,12 +7,18 @@
     box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
 }
 
+.chat-go-back{
+    display: none;
+}
+
 @media screen and (max-width: 768px) {
     .chat-container {
         grid-template-columns: 1fr;
     }
 
-    .chat-sidebar {
-        display: none;
+    .chat-go-back{
+        display: block;
     }
+
+  
 }
