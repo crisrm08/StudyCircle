@@ -1,5 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 import Header from "../Common/Header";
 import StudentModal from "./StudentModal";
 import StudentSidebar from "../Common/StudentSidebar";
@@ -11,7 +12,7 @@ import "../../css/studentProfileStyles/studentprofile.css";
 
 function StudentProfileScreen() {
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
-    const [ isTutorLogged ] = useState(true);
+    const { role } = useContext(AuthContext);
     
     const navigate = useNavigate();
 
@@ -28,7 +29,7 @@ function StudentProfileScreen() {
                 <div className="right-section">
                     <div className="about-student">
                         <div className="about-student__scroll">
-                            {isTutorLogged === false && <MdEdit className="edit-button" size={30} onClick={goToEdit}/> }
+                            {role === "Student" && <MdEdit className="edit-button" size={30} onClick={goToEdit}/> }
                             <h2>Sobre {studentName}:</h2>
                             <hr/>
                             <p>{studentFullDescription}</p>
@@ -43,7 +44,7 @@ function StudentProfileScreen() {
                     />
                 </div>
                 <div className="student-profile-card">
-                    <StudentModal showAcceptButton={isTutorLogged}/>
+                    <StudentModal showAcceptButton={role}/>
                 </div>
             </div>
             {isSidebarClicked && (
@@ -52,7 +53,7 @@ function StudentProfileScreen() {
                   className="overlay"
                   onClick={() => setIsSidebarClicked(false)}
                 />
-                {isTutorLogged
+                {role === "tutor"
                   ? <TutorSidebar />
                   : <StudentSidebar />}
               </>

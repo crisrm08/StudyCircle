@@ -44,3 +44,10 @@
     font-size: 1.5rem;
     margin-left: auto;
   }
+
+  .login-signup-button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 30px;
+  }

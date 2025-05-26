@@ -1,5 +1,6 @@
 import React, {useContext, useState} from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 import Header from "../Common/Header";
 import Modal from "./Modal";
 import TutorReviews from "./TutorReviews";
@@ -12,7 +13,7 @@ import "../../css/tutorInfoStyles/tutorinfoscreen.css";
 function TutorInfoScreen() {
     const navigate = useNavigate();
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
-    const [ isTutorLogged ] = useState(false);
+    const { role } = useContext(AuthContext);
   
     const tutor = {
             id: 1,
@@ -29,25 +30,26 @@ function TutorInfoScreen() {
         };
 
     function goToEdit() {
-      if (isTutorLogged) {
+      if (role === "Tutor") {
         navigate("/edit-ttr-profile");
       }
       else{
         navigate("/edit-stu-profile");
       }
     }
+
     return(
         <div className="tutor-info-screen">
           <Header />
           <div className="tutor-info-container">
             <div className="tutor-full-description">
-                <Modal tutor={tutor} showEditButton={isTutorLogged}/>
+                <Modal tutor={tutor}/>
             </div>
 
             <div className="right-section">
               <div className="about-tutor">
                 <div className="about-tutor__scroll">
-                  {isTutorLogged === true && ( <MdEdit className="edit-button" size={30} onClick={goToEdit}/>)}
+                  {role === "Tutor" && (<MdEdit className="edit-button" size={30} onClick={goToEdit}/>)}
                   <h2>Sobre {tutor.name}:</h2>
                   <hr/>
                   <p>{tutor.fullDescription}</p>
@@ -70,7 +72,7 @@ function TutorInfoScreen() {
                   className="overlay"
                   onClick={() => setIsSidebarClicked(false)}
                 />
-                {isTutorLogged
+                {role === "Tutor"
                   ? <TutorSidebar />
                   : <StudentSidebar />}
               </>

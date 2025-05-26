@@ -5,7 +5,7 @@ import { FaAngleLeft } from "react-icons/fa";
 import "../../css/studentProfileStyles/modal.css";
 
 function StudentModal({showAcceptButton}) {
-  console.log("values" + showAcceptButton);
+  console.log("values " + showAcceptButton);
   
   const navigate = useNavigate();
   const [student] = useState({
@@ -66,7 +66,7 @@ function StudentModal({showAcceptButton}) {
         className="modal-image"
     />
 
-      {showAcceptButton === false && <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>}
+      {showAcceptButton === "Student" && <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>}
       
       <h2 className="modal-name">{student.name}</h2>
       <p className="modal-occupation">{student.institution} - {student.degree}</p>
@@ -92,11 +92,9 @@ function StudentModal({showAcceptButton}) {
       <div className="modal-rating"> {renderStars()} <span className="rating-number">({student.rating.toFixed(1)})</span> </div>
       <p style={{marginBottom:'0px'}} className="modal-description">{student.description}</p>
       <div className="modal-button-container">
-        {showAcceptButton === true && ( <button className="back-button" style={{marginTop: 15}} onClick={backToHome}><FaAngleLeft/> Volver</button>)}
-        {showAcceptButton === true && ( <button className="tutor-button" style={{marginTop: 15}} onClick={openChat}> Aceptar tutoría</button>)}
+        {showAcceptButton === "Tutor" && ( <button className="back-button" style={{marginTop: 15}} onClick={backToHome}><FaAngleLeft/> Volver</button>)}
+        {showAcceptButton === "Tutor" && ( <button className="tutor-button" style={{marginTop: 15}} onClick={openChat}> Aceptar tutoría</button>)}
       </div>
-      
-      
     </div>
   )
 }
