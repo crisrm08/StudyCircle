@@ -1,47 +1,32 @@
-.payment-screen {
-  max-width: 1000px;
-  margin: 40px auto;
+.tutor-payment-screen {
+  max-width: 900px;
+  margin: 30px auto;
   margin-bottom: 0;
   padding: 30px;
-  font-family: sans-serif;
   background-color: #f6f6f6;
   border-radius: 20px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  font-family: sans-serif;
 }
 
-.payment-screen h1 {
+.tutor-payment-screen h1 {
   text-align: center;
   color: #1E56A0;
-  margin-bottom: 20px;
-}
-
-.info-box {
-  background-color: #D6E4F0;
-  padding: 15px 20px;
-  border-left: 5px solid #1E56A0;
-  border-radius: 10px;
-  color: #163172;
-  font-weight: 500;
   margin-bottom: 30px;
 }
 
-.payment-content {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 30px;
-  align-items: start;
-}
-
-.payment-options {
+.method-selector {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
 }
 
-.payment-options button {
+.method-selector button {
   background-color: #D6E4F0;
   border: none;
-  padding: 12px;
+  padding: 12px 20px;
   border-radius: 10px;
   font-size: 16px;
   color: #163172;
@@ -49,16 +34,16 @@
   transition: background-color 0.2s ease;
 }
 
-.payment-options button:hover {
+.method-selector button:hover {
   background-color: #a5c3e6;
 }
 
 .payment-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  background-color: #f6f6f6;
-  padding: 20px;
+  gap: 15px;
+  background-color: white;
+  padding: 25px;
   border-radius: 15px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
@@ -68,16 +53,17 @@
   color: #1E56A0;
 }
 
-.payment-form input {
+.payment-form input,
+.payment-form select {
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 14px;
 }
 
-.pay-button {
+.save-method-button {
   background-color: #1E56A0;
-  color: #f6f6f6;
+  color: white;
   border: none;
   padding: 10px;
   border-radius: 10px;
@@ -87,18 +73,15 @@
   transition: background-color 0.2s ease;
 }
 
-.pay-button:hover {
+.save-method-button:hover {
   background-color: #163172;
 }
 
 
 @media (max-width: 768px) {
-  .payment-content {
-    grid-template-columns: 1fr;
-  }
-
-  .payment-options {
+  .method-selector {
     flex-direction: column;
+    align-items: center;
   }
 
   .payment-form {
