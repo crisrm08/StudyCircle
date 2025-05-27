@@ -43,6 +43,9 @@
 }
 
 .title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     position: absolute;
     left: 30px;
     top: 30px;

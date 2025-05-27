@@ -1,11 +1,19 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import '../../css/forgotPWDStyles/forgotpwdscreen.css';
+import { MdKeyboardArrowLeft } from "react-icons/md";
 
 function ForgotPWDScreen() {
+    const navigate = useNavigate();
+
+    function goBack() {
+        navigate(-1);
+    }       
 
     return(
        <div className="Log-Sign-Frgt">
-            <h1 className="title">StudyCircle</h1>
+            
+            <h1 className="title" onClick={goBack}> <MdKeyboardArrowLeft size={50}/>StudyCircle</h1>
             
             <div className="login-forgotPWD-screen">
                 <div className="forgotPWD-form login-forgotPWD-form">

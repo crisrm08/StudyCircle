@@ -5,6 +5,7 @@ import { LuEyeClosed } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
 import { IoIosWarning } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { MdKeyboardArrowLeft } from "react-icons/md";
 
 function TutorSignUp1Screen() {
 
@@ -37,9 +38,13 @@ function TutorSignUp1Screen() {
         navigate("/tutor-signup-2");
     }
 
+    function goBack() {
+        navigate(-1);
+    }
+
     return(
         <div className="Student-sign-up-1" style={{backgroundColor:"#D6E4F0"}}>
-            <h1 className="title" style={{color:"#163172"}}>StudyCircle</h1>
+            <h1 className="title" onClick={goBack} style={{color:"#163172"}}> <MdKeyboardArrowLeft size={50}/> StudyCircle</h1>
             <div className="Sign-up-form" style={{backgroundColor:"#163172"}}>
                 <div>
                     <form className="form-container" onSubmit={next}>
