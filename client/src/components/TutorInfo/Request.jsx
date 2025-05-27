@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { SubjectTopicContext } from "../../contexts/SubjectTopicContext";
 import { MessageContext } from "../../contexts/MessageContext";
 import "../../css/tutorInfoStyles/request.css";
@@ -6,9 +7,10 @@ import "../../css/tutorInfoStyles/request.css";
 function Request({ onClose, onSend }) {
   const { subject, topic } = useContext(SubjectTopicContext);
   const { message, setMessage } = useContext(MessageContext);
+  const navigate = useNavigate();
 
   function handleSubmit() {
-    //onSend({ subject, topic, message });
+    navigate("/payment-method");
   };
 
   return (
