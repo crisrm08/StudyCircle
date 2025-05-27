@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { FiUser, FiMessageSquare, FiClock, FiX, FiHome } from "react-icons/fi";
+import { MdOutlinePayment } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import '../../css/sidebar.css';
 import { SidebarContext } from "../../contexts/SidebarContext";
@@ -50,6 +51,11 @@ function StudentSidebar() {
       setIsSidebarClicked(false);
     }
 
+    function goToPaymentSettings() {
+      navigate("/payment-method");
+      setIsSidebarClicked(false);
+    }
+
     return (
       <div className={`sidebar ${isSidebarClicked ? "open" : ""}`} ref={sidebarRef}>
           <button className="close-btn" onClick={() => setIsSidebarClicked(false)} title="Cerrar sidebar"> <FiX /></button>
@@ -60,10 +66,12 @@ function StudentSidebar() {
           </div>
 
           <nav className="nav-links">
+            <h2 onClick={goToHome}><FiHome/>Home</h2>
               <h2 onClick={goToProfile}><FiUser /> Mi perfil</h2>
               <h2 onClick={goToChat}><FiMessageSquare /> Mensajes</h2>
               <h2 onClick={goToHistory}><FiClock /> Historial</h2>
-              <h2 onClick={goToHome}><FiHome/>Home</h2>
+              <h2 onClick={goToPaymentSettings}><MdOutlinePayment /> Métodos de pago</h2>
+              
           </nav>
 
           <h2 className="log-out" onClick={logOut}>Cerrar Sesión</h2>

@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import Header from "../Common/Header";
 import StudentSidebar from "../Common/StudentSidebar";
+import {useNavigate} from "react-router-dom";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import "../../css/PaymentMethodStyles/paymentmethodscreen.css";
 
@@ -8,11 +9,17 @@ function PaymentMethodScreen() {
   const [selectedMethod, setSelectedMethod] = useState("");
   const [showForm, setShowForm] = useState(false);
   const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
+  const navigate = useNavigate();
   
   function handleSelection(method){
     setSelectedMethod(method);
     setShowForm(true);
   };
+
+  function handleSubmit(event) {
+    event.preventDefault(); 
+    navigate("/chat");
+  }
 
   return (
     <div>
@@ -33,7 +40,7 @@ function PaymentMethodScreen() {
             </div>
 
             {showForm && (
-            <form className="payment-form">
+            <form className="payment-form" onSubmit={handleSubmit}>
               {selectedMethod === "card" && (
                 <>
                   <label>Número de tarjeta</label>
