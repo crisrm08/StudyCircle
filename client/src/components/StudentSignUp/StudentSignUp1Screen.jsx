@@ -3,6 +3,7 @@ import { PiStudentFill } from "react-icons/pi";
 import { LuEyeClosed } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
 import { IoIosWarning } from "react-icons/io";
+import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import "../../css/signUpStyles/signup.css";
 
@@ -40,9 +41,13 @@ function StudentSignUp1Screen() {
         console.log(confirm);
     }
 
+    function goBack() {
+        navigate(-1);
+    }
+
     return(
         <div className="Student-sign-up-1">
-            <h1 className="title">StudyCircle</h1>
+            <h1 className="title" onClick={goBack}> <MdKeyboardArrowLeft size={50}/>StudyCircle</h1>
             <div className="Sign-up-form">
                 <div>
                     <form className="form-container" onSubmit={next}>

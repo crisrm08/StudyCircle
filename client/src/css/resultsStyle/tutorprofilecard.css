@@ -92,6 +92,11 @@
 }
 
 .back-button{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  justify-content: space-evenly;
   margin-top: auto;
   padding: 10px 20px;
   background-color: #444;

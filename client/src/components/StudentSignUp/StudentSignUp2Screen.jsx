@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Select from "react-select";
 import "../../css/signUpStyles/signup.css";
 import { useNavigate } from "react-router-dom";
+import { MdKeyboardArrowLeft } from "react-icons/md";
 
 const engineeringOptions = [
   { value: "industrial", label: "Ingeniería industrial" },
@@ -105,12 +106,16 @@ function StudentSignUp2Screen() {
   const navigate = useNavigate();
 
   function signUpSuccesful() {
-    navigate("/");
-  }
+    navigate("/edit-stu-profile");
+  } 
+
+  function goBack() {
+    navigate(-1);
+  } 
 
   return (
     <div className="Student-sign-up-1">
-      <h1 className="title">StudyCircle</h1>
+      <h1 className="title" onClick={goBack}> <MdKeyboardArrowLeft size={50}/>StudyCircle</h1>
       <div className="Sign-up-form second-form">
         <form className="form-container" style={{width:"100%"}}>
           <h1>Regístrate</h1>
