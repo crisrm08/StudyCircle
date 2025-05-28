@@ -71,7 +71,6 @@ function StudentSidebar() {
               <h2 onClick={goToChat}><FiMessageSquare /> Mensajes</h2>
               <h2 onClick={goToHistory}><FiClock /> Historial</h2>
               <h2 onClick={goToPaymentSettings}><MdOutlinePayment /> Métodos de pago</h2>
-              
           </nav>
 
           <h2 className="log-out" onClick={logOut}>Cerrar Sesión</h2>
