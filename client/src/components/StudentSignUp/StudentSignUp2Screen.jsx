@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { StudentSignUpContext } from "../../contexts/StudentSignUpContext";
 import Select from "react-select";
 import "../../css/signUpStyles/signup.css";
 import { useNavigate } from "react-router-dom";
@@ -99,15 +100,40 @@ const customStyles = {
 };
 
 function StudentSignUp2Screen() {
-  const [degree, setDegree] = useState(null);
-  const [weakness, setWeakness] = useState([]);
-  const [strength, setStrength] = useState([]);
-  const [year, setYear] = useState(null);
+  
   const navigate = useNavigate();
+  const { studentSignUpData, setStudentSignUpData } = useContext(StudentSignUpContext);
 
   function signUpSuccesful() {
     navigate("/edit-stu-profile");
   } 
+
+  function handleChangeCarrer(event) {
+    const selectedOption = event.target.value;
+    setStudentSignUpData({ ...studentSignUpData, career: selectedOption});
+  }
+
+  function handleChangeSubjectWeak(event) {
+    const selectedOptions = event;
+    const subjects = selectedOptions.map(option => option.value);
+    setStudentSignUpData({ ...studentSignUpData, subject_weak: subjects });
+  }
+
+  function handleChangeSubjectStrong(event) {
+    const selectedOptions = event;
+    const subjects = selectedOptions.map(option => option.value);
+    setStudentSignUpData({ ...studentSignUpData, subject_strong: subjects });
+  }
+
+  function handleChangeInstitution(event) {
+    const institution = event.target.value;
+    setStudentSignUpData({ ...studentSignUpData, institution: institution });
+  }
+
+  function handleChangeYear(event) {
+    const selectedOption = event.target.value;
+    setStudentSignUpData({ ...studentSignUpData, year: selectedOption });
+  }
 
   function goBack() {
     navigate(-1);
@@ -115,7 +141,7 @@ function StudentSignUp2Screen() {
 
   return (
     <div className="Student-sign-up-1">
-      <h1 className="title" onClick={goBack}> <MdKeyboardArrowLeft size={50}/>StudyCircle</h1>
+      <h1 className="title" onClick={goBack}> <MdKeyboardArrowLeft size={50}/> StudyCircle </h1>
       <div className="Sign-up-form second-form">
         <form className="form-container" style={{width:"100%"}}>
           <h1>Regístrate</h1>
@@ -127,8 +153,8 @@ function StudentSignUp2Screen() {
             name="engineering-degree"
             placeholder="Selecciona aquí..."
             options={engineeringOptions}
-            value={degree}
-            onChange={setDegree}
+            value={studentSignUpData.career}
+            onChange={handleChangeCarrer}
             styles={customStyles}
           />
 
@@ -140,8 +166,21 @@ function StudentSignUp2Screen() {
             isMulti
             closeMenuOnSelect={false}
             options={groupedSubjects}
-            value={weakness}
-            onChange={setWeakness}
+            value={studentSignUpData.subject_weak}
+            onChange={handleChangeSubjectWeak}
+            styles={customStyles}
+          />
+
+          <label htmlFor="strengths">¿Qué asignaturas se te dan bien?</label>
+          <Select
+            id="strengths"
+            name="strengths"
+            placeholder="Selecciona aquí..."
+            isMulti
+            closeMenuOnSelect={false}
+            options={groupedSubjects}
+            value={studentSignUpData.subject_strong}
+            onChange={handleChangeSubjectStrong}
             styles={customStyles}
           />
 
@@ -154,21 +193,8 @@ function StudentSignUp2Screen() {
             name="enrolling-year"
             placeholder="Selecciona aquí..."
             options={enrrollingYears}
-            value={year}
-            onChange={setYear}
-            styles={customStyles}
-          />
-
-          <label htmlFor="strengths">¿Qué asignaturas se te dan bien?</label>
-          <Select
-            id="strengths"
-            name="strengths"
-            placeholder="Selecciona aquí..."
-            isMulti
-            closeMenuOnSelect={false}
-            options={groupedSubjects}
-            value={strength}
-            onChange={setStrength}
+            value={studentSignUpData.year}
+            onChange={handleChangeYear}
             styles={customStyles}
           />
 
