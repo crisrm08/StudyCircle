@@ -1,68 +1,55 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
+import { StudentSignUpContext } from "../../contexts/StudentSignUpContext";
 import { PiStudentFill } from "react-icons/pi";
 import { LuEyeClosed } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
 import { IoIosWarning } from "react-icons/io";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import "../../css/signUpStyles/signup.css";
 
 
 function StudentSignUp1Screen() {
-
     const [visible, setVisible] = useState(false);
-    const [password, setPassword] = useState("");
     const [confirm, setConfirm] = useState("");
     const [match, setMatch] = useState(false);
     const [startedTypingConfirm, setStartedTypingConfirm] = useState(false);
-    const [studentData, setStudentData] = useState({
-        name: "",
-        lastName: "",
-        email: "",
-        password: password,
-    });
-
+    const { studentSignUpData, setStudentSignUpData } = useContext(StudentSignUpContext);
     const navigate = useNavigate();
 
     function handleChangePwd(event) {
         const userInput = event.target.value;
-        setPassword(userInput);
+        setStudentSignUpData({ ...studentSignUpData, password: userInput });
+        if (startedTypingConfirm) {
+            setMatch(userInput === confirm);
+        }
     }
 
     function handleChangeCf(event) {
         setStartedTypingConfirm(true);
-        const userInput = event.target.value;
-        setConfirm(userInput);
-        if (password === userInput) {
-            console.log("match");
-            setMatch(true);
-        }
-        else{
-            setMatch(false);
-        }
+        const typedPassword = event.target.value;
+        setConfirm(typedPassword);
+        setMatch(studentSignUpData.password === typedPassword);
     }
 
     function handleChangeName(event) {
         const typedName = event.target.value;
-        setStudentData({ ...studentData, name: typedName });
+        setStudentSignUpData({ ...studentSignUpData, name: typedName });
     }
 
     function handleChangeLastName(event) {
         const typedLastName = event.target.value;
-        setStudentData({ ...studentData, lastName: typedLastName });
+        setStudentSignUpData({ ...studentSignUpData, last_name: typedLastName });
     }
 
-    function handleChangeEmail(event) { 
+    function handleChangeEmail(event) {
         const typedEmail = event.target.value;
-        setStudentData({ ...studentData, email: typedEmail });
+        setStudentSignUpData({ ...studentSignUpData, email: typedEmail });
     }
 
-
-    function next() {
-        axios.post("http://localhost:5000/student-signup", {studentData});
+    function next(e) {
+        e.preventDefault();
         navigate("/student-signup-2");
-        console.log("Student data sent:", studentData);
     }
 
     function goBack() {
@@ -79,17 +66,17 @@ function StudentSignUp1Screen() {
                         <div></div>
 
                         <label htmlFor="name">Nombre(s)</label>
-                        <input htmlFor="name" type="text" placeholder="Escribe tu(s) nombre(s)" onChange={handleChangeName}/>
+                        <input htmlFor="name" type="text" placeholder="Escribe tu(s) nombre(s)" value={studentSignUpData.name} onChange={handleChangeName}/>
 
                         <label htmlFor="last-name">Apellidos(s)</label>
-                        <input htmlFor="last-name" type="last-name" placeholder="Escribe tu(s) apellido(s)" onChange={handleChangeLastName}/>
+                        <input htmlFor="last-name" type="last-name" placeholder="Escribe tu(s) apellido(s)" value={studentSignUpData.last_name} onChange={handleChangeLastName}/>
 
                         <label htmlFor="email">Correo electrónico</label>
-                        <input htmlFor="email" type="text" placeholder="Escribe tu correo electrónico" onChange={handleChangeEmail}/>
+                        <input htmlFor="email" type="text" placeholder="Escribe tu correo electrónico" value={studentSignUpData.email} onChange={handleChangeEmail}/>
 
                         <label htmlFor="password">Contraseña</label>
                         <div className="input-with-icon">
-                            <input id="password" type={visible ? "text" : "password"} placeholder="Escribe tu contraseña" onChange={handleChangePwd}/>
+                            <input id="password" type={visible ? "text" : "password"} placeholder="Escribe tu contraseña" value={studentSignUpData.password} onChange={handleChangePwd}/>
                             <button
                                 type="button"
                                 className="eye-toggle"
@@ -103,7 +90,7 @@ function StudentSignUp1Screen() {
 
                         <label htmlFor="confirm-password">Reingrese contraseña</label>
                         <div className="input-with-icon">
-                            <input id="confirm-password" type={visible ? "text" : "password"} placeholder="Escribe nuevamente tu contraseña" onChange={handleChangeCf}/>
+                            <input id="confirm-password" type={visible ? "text" : "password"} placeholder="Escribe nuevamente tu contraseña" value={confirm} onChange={handleChangeCf}/>
                             <button
                                 type="button"
                                 className="eye-toggle"
