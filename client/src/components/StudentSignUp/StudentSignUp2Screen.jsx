@@ -1,9 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { StudentSignUpContext } from "../../contexts/StudentSignUpContext";
 import Select from "react-select";
 import "../../css/signUpStyles/signup.css";
 import { useNavigate } from "react-router-dom";
 import { MdKeyboardArrowLeft } from "react-icons/md";
+import axios from "axios";
 
 const engineeringOptions = [
   { value: "industrial", label: "Ingeniería industrial" },
@@ -14,39 +15,6 @@ const engineeringOptions = [
   { value: "informatica", label: "Ingeniería en Ciencias de la Computación" },
   { value: "quimica", label: "Ingeniería Química" },
   { value: "mecatronica", label: "Ingeniería Mecatrónica" },
-];
-
-const groupedSubjects = [
-  {
-    label: "Cálculo",
-    options: [
-      { value: "limites", label: "Límites y continuidad" },
-      { value: "derivadas", label: "Derivadas y su interpretación" },
-      { value: "aplicaciones", label: "Aplicaciones de las derivadas" },
-      { value: "integrales", label: "Integrales definidas e indefinidas" },
-      { value: "tecnicas", label: "Técnicas de integración" },
-      { value: "fundamental", label: "Teorema fundamental del cálculo" },
-      { value: "series", label: "Series y secuencias" },
-      { value: "diferenciales", label: "Ecuaciones diferenciales" },
-      { value: "infinitos", label: "Teoría de los límites infinitos" },
-      { value: "multivariable", label: "Cálculo multivariable" },
-    ],
-  },
-  {
-    label: "Programación",
-    options: [
-      { value: "oop", label: "Programación Orientada a Objetos (OOP)" },
-      { value: "datastruct", label: "Estructuras de datos" },
-      { value: "algoritmos", label: "Algoritmos y complejidad computacional" },
-      { value: "bd", label: "Bases de datos" },
-      { value: "web", label: "Programación web (HTML, CSS, JavaScript)" },
-      { value: "movil", label: "Desarrollo móvil" },
-      { value: "patrones", label: "Patrones de diseño de software" },
-      { value: "lenguajes", label: "Lenguajes (Python, Java, C++)" },
-      { value: "so", label: "Sistemas operativos y gestión de memoria" },
-      { value: "testing", label: "Pruebas y depuración de código" },
-    ],
-  },
 ];
 
 const enrrollingYears = [
@@ -103,6 +71,20 @@ function StudentSignUp2Screen() {
   
   const navigate = useNavigate();
   const { studentSignUpData, setStudentSignUpData } = useContext(StudentSignUpContext);
+  const [subjects, setSubjects] = useState([]);
+  const [topics, setTopics] = useState([]);
+
+  useEffect(() => {
+    axios.get("http://10.0.0.16:5000/subjects-topics")
+      .then(response => {
+        setSubjects(response.data);
+        const allTopics = response.data.flatMap(subj => subj.topics.map(t => ({ ...t, subject: subj.name })));
+        setTopics(allTopics);
+      })
+      .catch(error => {
+        console.error("Error fetching subjects: ", error);
+      });
+  }, []);   
 
   function signUpSuccesful() {
     navigate("/edit-stu-profile");
@@ -113,16 +95,20 @@ function StudentSignUp2Screen() {
     setStudentSignUpData({ ...studentSignUpData, career: selectedOption});
   }
 
-  function handleChangeSubjectWeak(event) {
-    const selectedOptions = event;
-    const subjects = selectedOptions.map(option => option.value);
-    setStudentSignUpData({ ...studentSignUpData, subject_weak: subjects });
+  const groupedTopics = React.useMemo(() => {
+    if (!subjects || subjects.length === 0) return [];
+    return subjects.map(subj => ({
+      label: subj.name,
+      options: subj.topics.map(t => ({ value: t.id, label: t.name }))
+    }));
+  }, [subjects]);
+
+  function handleChangeSubjectWeak(selectedOptions) {
+    setStudentSignUpData({ ...studentSignUpData, subject_weak: selectedOptions });
   }
 
-  function handleChangeSubjectStrong(event) {
-    const selectedOptions = event;
-    const subjects = selectedOptions.map(option => option.value);
-    setStudentSignUpData({ ...studentSignUpData, subject_strong: subjects });
+  function handleChangeSubjectStrong(selectedOptions) {
+    setStudentSignUpData({ ...studentSignUpData, subject_strong: selectedOptions });
   }
 
   function handleChangeInstitution(event) {
@@ -165,7 +151,7 @@ function StudentSignUp2Screen() {
             placeholder="Selecciona aquí..."
             isMulti
             closeMenuOnSelect={false}
-            options={groupedSubjects}
+            options={groupedTopics}
             value={studentSignUpData.subject_weak}
             onChange={handleChangeSubjectWeak}
             styles={customStyles}
@@ -178,7 +164,7 @@ function StudentSignUp2Screen() {
             placeholder="Selecciona aquí..."
             isMulti
             closeMenuOnSelect={false}
-            options={groupedSubjects}
+            options={groupedTopics}
             value={studentSignUpData.subject_strong}
             onChange={handleChangeSubjectStrong}
             styles={customStyles}

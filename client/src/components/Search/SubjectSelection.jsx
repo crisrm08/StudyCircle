@@ -11,7 +11,7 @@ function SubjectSelection() {
     const [topics, setTopics] = useState([]);
 
     useEffect(() => {
-        axios.get("http://10.0.0.16:5000/subjects")
+        axios.get("http://10.0.0.16:5000/subjects-topics")
             .then(response => {
                 setSubjects(response.data);
                 

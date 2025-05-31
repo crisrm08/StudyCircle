@@ -20,18 +20,16 @@ const db = new pg.Client({
 
 db.connect();
 
-app.get('/subjects', async (req, res) => {
+app.get('/subjects-topics', async (req, res) => {
   try {    
-    // Fetch all subjects
     const getSubjects = await db.query('SELECT * FROM subjects');
     const subjects = getSubjects.rows.map(subject => ({
       id: subject.subject_id,
       name: subject.subject_name
     }));
 
-    // Fetch all topics
+  
     const getTopics = await db.query('SELECT * FROM topics');
-
     const topicsBySubject = {};
     getTopics.rows.forEach(topic => {
       if (!topicsBySubject[topic.subject_id]) topicsBySubject[topic.subject_id] = [];
@@ -41,18 +39,16 @@ app.get('/subjects', async (req, res) => {
       });
     });
   
- 
     const subjectsWithTopics = subjects.map(subject => ({
       ...subject,
       topics: topicsBySubject[subject.id] || []
     }));
-    console.log("Subjects with topics: ", subjectsWithTopics);
     res.json(subjectsWithTopics);
   } catch (error) {
     console.error('Error fetching subjects: ', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-})
+});
 
 app.post('/student-signup', async (req, res) => {
     try {
