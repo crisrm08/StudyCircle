@@ -20,6 +20,46 @@ const db = new pg.Client({
 
 db.connect();
 
+app.post('/student-signup', async (req, res) => {
+    try {
+      const { name, last_name, email, password, profile_type, career, subject_weak, subject_strong, institution, year } = req.body;
+      console.log("Received student data:", name, last_name, email, password, profile_type, career, subject_weak, subject_strong, institution, year);
+      
+      const checkEmail = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+      if (checkEmail.rows.length > 0) {
+        return res.send("Correo ya registrado");
+      } else { 
+        const newStudentResult = await db.query(
+          'INSERT INTO users (name, last_name, email, password, profile_type, career, institution, year_of_enrollment) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING user_id',
+          [name, last_name, email, password, profile_type, career, institution, year]
+        );
+        const userId = newStudentResult.rows[0].user_id;
+        if (Array.isArray(subject_weak)) {
+          for (const topic of subject_weak) {
+            await db.query(
+              'INSERT INTO user_topics (user_id, topic_id, type) VALUES ($1, $2, $3)',
+              [userId, topic.value, 'weak']
+            );
+          }
+        }
+        if (Array.isArray(subject_strong)) {
+          for (const topic of subject_strong) {
+            await db.query(
+              'INSERT INTO user_topics (user_id, topic_id, type) VALUES ($1, $2, $3)',
+              [userId, topic.value, 'strong']
+            );
+          }
+        }
+        res.send("Usuario registrado exitosamente");
+      }
+      
+    } catch (error) {
+        console.error('Error during signup:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      
+    }
+});
+
 app.get('/subjects-topics', async (req, res) => {
   try {    
     const getSubjects = await db.query('SELECT * FROM subjects');
@@ -50,41 +90,19 @@ app.get('/subjects-topics', async (req, res) => {
   }
 });
 
-app.post('/student-signup', async (req, res) => {
-    try {
-      const { name, last_name, email, password, career, subject_weak, subject_strong, institution, year } = req.body;
-      console.log("Received student data:", name, last_name, email, password);
-      
-      const checkEmail = await db.query('SELECT * FROM users WHERE email = $1', [email]);
-      if (checkEmail.rows.length > 0) {
-        return res.send("Correo ya registrado");
-      } else { 
-        const newStudent = await db.query(
-          'INSERT INTO users (name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING *',
-          [name, last_name, email, password]
-        );
-        console.log(newStudent);
-      }
-      
-    } catch (error) {
-        console.error('Error during signup:', error);
-        res.status(500).json({ error: 'Internal server error' });
-      
-    }
-});
 
-app.get('/degrees', async (req, res) => {
+app.get('/careers', async (req, res) => {
   try {
-    const getDegrees = await db.query('SELECT * FROM degrees');
+    const getCareers = await db.query('SELECT * FROM careers');
     
-    const degrees = getDegrees.rows.map(degree => ({
-      id: degree.degree_id,
-      name: degree.degree_name, 
+    const careers = getCareers.rows.map(career => ({
+      id: career.career_id,
+      name: career.career_name, 
     }));
 
-    res.json(degrees);
+    res.json(careers);
   } catch (error) {
-    console.error('Error fetching degrees: ', error);
+    console.error('Error fetching careers: ', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

@@ -6,34 +6,24 @@ import { useNavigate } from "react-router-dom";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import axios from "axios";
 
-const engineeringOptions = [
-  { value: "industrial", label: "Ingeniería industrial" },
-  { value: "electrica", label: "Ingeniería Eléctrica" },
-  { value: "mecanica", label: "Ingeniería Mecánica" },
-  { value: "civil", label: "Ingeniería Civil" },
-  { value: "telematica", label: "Ingeniería Telemática" },
-  { value: "informatica", label: "Ingeniería en Ciencias de la Computación" },
-  { value: "quimica", label: "Ingeniería Química" },
-  { value: "mecatronica", label: "Ingeniería Mecatrónica" },
-];
 
 const enrrollingYears = [
-  { value: "2010", label: "2010"},
-  { value: "2011", label: "2011"},
-  { value: "2012", label: "2012"},
-  { value: "2013", label: "2013"},
-  { value: "2014", label: "2014"},
-  { value: "2015", label: "2015"},
-  { value: "2016", label: "2016"},
-  { value: "2017", label: "2017"},
-  { value: "2018", label: "2018"},
-  { value: "2019", label: "2019"},
-  { value: "2020", label: "2020"},
-  { value: "2021", label: "2021"},
-  { value: "2022", label: "2022"},
-  { value: "2023", label: "2013"},
-  { value: "2024", label: "2024"},
-  { value: "2025", label: "2025"},
+  { value: 2025, label: "2025" },
+  { value: 2024, label: "2024" },
+  { value: 2023, label: "2023" },
+  { value: 2022, label: "2022" },
+  { value: 2021, label: "2021" },
+  { value: 2020, label: "2020" },
+  { value: 2019, label: "2019" },
+  { value: 2018, label: "2018" },
+  { value: 2017, label: "2017" },
+  { value: 2016, label: "2016" },
+  { value: 2015, label: "2015" },
+  { value: 2014, label: "2014" },
+  { value: 2013, label: "2013" },
+  { value: 2012, label: "2012" },
+  { value: 2011, label: "2011" },
+  { value: 2010, label: "2010" }
 ];
 
 const customStyles = {
@@ -73,7 +63,7 @@ function StudentSignUp2Screen() {
   const { studentSignUpData, setStudentSignUpData } = useContext(StudentSignUpContext);
   const [subjects, setSubjects] = useState([]);
   const [topics, setTopics] = useState([]);
-  const [degrees, setDegrees] = useState([]);
+  const [careers, setCareers] = useState([]);
 
   useEffect(() => {
     axios.get("http://10.0.0.16:5000/subjects-topics")
@@ -84,28 +74,35 @@ function StudentSignUp2Screen() {
       })
       .catch(error => {
         console.error("Error fetching subjects: ", error);
-      });
+    });
 
-    axios.get("http://10.0.0.16:5000/degrees")
+    axios.get("http://10.0.0.16:5000/careers")
       .then(response => {
-        const fetchedDegrees = response.data.map(degree => ({
-          value: degree.id,
-          label: degree.name,
+        const fetchedCareers = response.data.map(career => ({
+          value: career.id,
+          label: career.name,
         }));
-        setDegrees(fetchedDegrees);
+        setCareers(fetchedCareers);
       })
       .catch(error => {
-        console.error("Error fetching degrees: ", error);
-      });
+        console.error("Error fetching careers: ", error);
+    });
   }, []);   
 
-  function signUpSuccesful() {
-    navigate("/edit-stu-profile");
+  function signUpSuccesful(event) {
+    event.preventDefault();
+    axios.post("http://10.0.0.16:5000/student-signup", studentSignUpData)
+      .then(response => {
+        console.log("Signup response:", response.data);
+        navigate("/edit-stu-profile");
+      })
+      .catch(error => {
+        console.error("Error during signup:", error);
+      });
   } 
 
-  function handleChangeCarrer(event) {
-    const selectedOption = event.target.value;
-    setStudentSignUpData({ ...studentSignUpData, career: selectedOption});
+  function handleChangeCarrer(selectedOption) {
+    setStudentSignUpData({ ...studentSignUpData, career: selectedOption });
   }
 
   const groupedTopics = React.useMemo(() => {
@@ -129,10 +126,10 @@ function StudentSignUp2Screen() {
     setStudentSignUpData({ ...studentSignUpData, institution: institution });
   }
 
-  function handleChangeYear(event) {
-    const selectedOption = event.target.value;
-    setStudentSignUpData({ ...studentSignUpData, year: selectedOption });
+  function handleChangeYear(selectedOption) {
+    setStudentSignUpData({ ...studentSignUpData, year: selectedOption.value});
   }
+
 
   function goBack() {
     navigate(-1);
@@ -150,9 +147,10 @@ function StudentSignUp2Screen() {
           <Select
             id="engineering-degree"
             name="engineering-degree"
-            placeholder="Selecciona aquí..."
-            options={degrees}
+            placeholder="Selecciona o escribe aquí..."
+            options={careers}
             value={studentSignUpData.career}
+            isSearchable={true}
             onChange={handleChangeCarrer}
             styles={customStyles}
           />
@@ -161,8 +159,9 @@ function StudentSignUp2Screen() {
           <Select
             id="weaknesses"
             name="weaknesses"
-            placeholder="Selecciona aquí..."
+            placeholder="Selecciona o escribe aquí..."
             isMulti
+            isSearchable={true}
             closeMenuOnSelect={false}
             options={groupedTopics}
             value={studentSignUpData.subject_weak}
@@ -174,8 +173,9 @@ function StudentSignUp2Screen() {
           <Select
             id="strengths"
             name="strengths"
-            placeholder="Selecciona aquí..."
+            placeholder="Selecciona o escribe aquí..."
             isMulti
+            isSearchable={true}
             closeMenuOnSelect={false}
             options={groupedTopics}
             value={studentSignUpData.subject_strong}
@@ -184,16 +184,17 @@ function StudentSignUp2Screen() {
           />
 
           <label htmlFor="institution" >Universidad o Institución</label>
-          <input id="institution" type="text" placeholder="Escribe el nombre aquí" style={{maxWidth: "-webkit-fill-available"}}/>
+          <input id="institution" type="text" placeholder="Escribe el nombre aquí" onChange={handleChangeInstitution} style={{maxWidth: "-webkit-fill-available"}}/>
 
           <label htmlFor="enrolling-year">Año de ingreso</label>
           <Select
             id="enrolling-year"
             name="enrolling-year"
-            placeholder="Selecciona aquí..."
+            placeholder="Selecciona o escribe aquí..."
             options={enrrollingYears}
-            value={studentSignUpData.year}
+            value={enrrollingYears.find(year => year.value === studentSignUpData.year) || null}
             onChange={handleChangeYear}
+            isSearchable={true}
             styles={customStyles}
           />
 
