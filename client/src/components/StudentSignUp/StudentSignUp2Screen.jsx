@@ -73,6 +73,7 @@ function StudentSignUp2Screen() {
   const { studentSignUpData, setStudentSignUpData } = useContext(StudentSignUpContext);
   const [subjects, setSubjects] = useState([]);
   const [topics, setTopics] = useState([]);
+  const [degrees, setDegrees] = useState([]);
 
   useEffect(() => {
     axios.get("http://10.0.0.16:5000/subjects-topics")
@@ -83,6 +84,18 @@ function StudentSignUp2Screen() {
       })
       .catch(error => {
         console.error("Error fetching subjects: ", error);
+      });
+
+    axios.get("http://10.0.0.16:5000/degrees")
+      .then(response => {
+        const fetchedDegrees = response.data.map(degree => ({
+          value: degree.id,
+          label: degree.name,
+        }));
+        setDegrees(fetchedDegrees);
+      })
+      .catch(error => {
+        console.error("Error fetching degrees: ", error);
       });
   }, []);   
 
@@ -138,7 +151,7 @@ function StudentSignUp2Screen() {
             id="engineering-degree"
             name="engineering-degree"
             placeholder="Selecciona aquí..."
-            options={engineeringOptions}
+            options={degrees}
             value={studentSignUpData.career}
             onChange={handleChangeCarrer}
             styles={customStyles}

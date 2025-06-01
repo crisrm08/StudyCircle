@@ -73,6 +73,20 @@ app.post('/student-signup', async (req, res) => {
     }
 });
 
+app.get('/degrees', async (req, res) => {
+  try {
+    const getDegrees = await db.query('SELECT * FROM degrees');
+    
+    const degrees = getDegrees.rows.map(degree => ({
+      id: degree.degree_id,
+      name: degree.degree_name, 
+    }));
 
+    res.json(degrees);
+  } catch (error) {
+    console.error('Error fetching degrees: ', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
