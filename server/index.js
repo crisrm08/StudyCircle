@@ -22,16 +22,16 @@ db.connect();
 
 app.post('/student-signup', async (req, res) => {
     try {
-      const { name, last_name, email, password, profile_type, career, subject_weak, subject_strong, institution, year } = req.body;
-      console.log("Received student data:", name, last_name, email, password, profile_type, career, subject_weak, subject_strong, institution, year);
+      const { name, last_name, email, profile_type, career, subject_weak, subject_strong, institution, year, supabase_user_id } = req.body;
+      console.log("Received student data:", name, last_name, profile_type, career, subject_weak, subject_strong, institution, year, supabase_user_id);
       
-      const checkEmail = await db.query('SELECT * FROM users WHERE email = $1', [email]);
-      if (checkEmail.rows.length > 0) {
-        return res.send("Correo ya registrado");
+      const checkUser = await db.query('SELECT * FROM users WHERE supabase_user_id = $1', [supabase_user_id]);
+      if (checkUser.rows.length > 0) {
+        return res.send("Usuario ya registrado");
       } else { 
         const newStudentResult = await db.query(
-          'INSERT INTO users (name, last_name, email, password, profile_type, career, institution, year_of_enrollment) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING user_id',
-          [name, last_name, email, password, profile_type, career, institution, year]
+          'INSERT INTO users (name, last_name, email, profile_type, career, institution, year_of_enrollment, supabase_user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING user_id',
+          [name, last_name, email, profile_type, career, institution, year, supabase_user_id]
         );
         const userId = newStudentResult.rows[0].user_id;
         if (Array.isArray(subject_weak)) {
@@ -56,7 +56,6 @@ app.post('/student-signup', async (req, res) => {
     } catch (error) {
         console.error('Error during signup:', error);
         res.status(500).json({ error: 'Internal server error' });
-      
     }
 });
 

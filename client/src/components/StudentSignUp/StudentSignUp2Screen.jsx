@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
+import { supabase } from "../Supabase/supabaseClient";
 import { StudentSignUpContext } from "../../contexts/StudentSignUpContext";
 import Select from "react-select";
 import "../../css/signUpStyles/signup.css";
@@ -89,9 +90,19 @@ function StudentSignUp2Screen() {
     });
   }, []);   
 
-  function signUpSuccesful(event) {
+  async function signUpSuccesful(event) {
     event.preventDefault();
-    axios.post("http://10.0.0.16:5000/student-signup", studentSignUpData)
+
+    const { email, password, ...profileData } = studentSignUpData;
+    const { data, error } = await supabase.auth.signUp({ email, password});
+
+    if (error) {
+      alert("Error al registrar usuario: " + error.message);
+      return;
+    }
+
+    const supabase_user_id = data.user.id;
+    axios.post("http://10.0.0.16:5000/student-signup", { ...profileData, email,supabase_user_id,})
       .then(response => {
         console.log("Signup response:", response.data);
         navigate("/edit-stu-profile");
@@ -99,10 +110,16 @@ function StudentSignUp2Screen() {
       .catch(error => {
         console.error("Error during signup:", error);
       });
-  } 
+  }
+
+  const selectCareerObject = careers.find(
+    (c) => c.label === studentSignUpData.career
+  ) || null;
 
   function handleChangeCarrer(selectedOption) {
-    setStudentSignUpData({ ...studentSignUpData, career: selectedOption });
+    setStudentSignUpData({ ...studentSignUpData, career: selectedOption.label });
+    console.log("Selected career:", selectedOption.label);
+    
   }
 
   const groupedTopics = React.useMemo(() => {
@@ -149,7 +166,7 @@ function StudentSignUp2Screen() {
             name="engineering-degree"
             placeholder="Selecciona o escribe aquí..."
             options={careers}
-            value={studentSignUpData.career}
+            value={selectCareerObject}
             isSearchable={true}
             onChange={handleChangeCarrer}
             styles={customStyles}
