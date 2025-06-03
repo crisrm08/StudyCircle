@@ -11,7 +11,7 @@ import "../../css/chatStyles/chatpanel.css";
 function ChatPanel({ image, name, hideChatPanel }) {
   const { subject, topic } = useContext(SubjectTopicContext);
   const { mode } = useContext(ModeContext);
-  const [isTutorshipAccepted, setTutorshipAccepted] = useState(false); 
+  const [isTutorshipAccepted, setTutorshipAccepted] = useState(true); 
   const navigate = useNavigate();
 
   function handleProfileClick() {
@@ -29,7 +29,7 @@ function ChatPanel({ image, name, hideChatPanel }) {
                 <p className="subject-info">{subject} • {topic} • {mode}</p>
               </div>
             </div>
-          </div>
+      </div>
       {isTutorshipAccepted === false ? (
         <div className="tutorship-notification">
           <MdHourglassEmpty size={48} color="#163172" style={{ marginBottom: 12 }} />
@@ -41,21 +41,28 @@ function ChatPanel({ image, name, hideChatPanel }) {
         </div>
       ) : (
         <>
-          
-
           <div className="messages-container">
             <ChatMessage text="Hola, muchas gracias por tu ayuda" isOwn={false} />
             <ChatMessage text="¡Con gusto! ¿Tienes alguna otra duda?" isOwn={true} />
             <ChatMessage text="Eso era todo" isOwn={false} />
+            <ChatMessage text="¡Perfecto! Si tienes más dudas, no dudes en escribirme" isOwn={true} />
+            <ChatMessage text="¡Gracias!" isOwn={false} />  
+            <ChatMessage text="¡Gracias!" isOwn={false} />  
+            <ChatMessage text="¡Gracias!" isOwn={false} />  
+            <ChatMessage text="¡Gracias!" isOwn={false} />  
+              <ChatMessage text="¡Gracias!" isOwn={false} /> 
+                <ChatMessage text="¡Gracias!" isOwn={false} /> 
+                  <ChatMessage text="¡Gracias!" isOwn={false} /> 
           </div>
 
-          <SessionControlBar />
-
-          <div className="input-message-container">
-            <input type="text" placeholder="Escribe un mensaje..." />
-            <button className="send-button">
-              <IoSend />
-            </button>
+          <div className="bottom-bar-container">
+            <SessionControlBar />
+            <div className="input-message-container">
+              <input type="text" placeholder="Escribe un mensaje..." />
+              <button className="send-button">
+                <IoSend />
+              </button>
+            </div>
           </div>
         </>
       )}
