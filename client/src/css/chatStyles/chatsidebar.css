@@ -2,7 +2,7 @@
     background-color: #163172;
     color: #f6f6f6;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     border-right: 1px solid #ccc;
@@ -49,4 +49,23 @@
     flex: 1;
     overflow-y: auto;
     padding: 10px 5px;
+}
+
+.chat-sidebar___scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #D6E4F0;
+}   
+
+.chat-list__scroll::-webkit-scrollbar {
+    width: 6px;               
+}
+
+.chat-list__scroll::-webkit-scrollbar-track {
+    background: #D6E4F0;     
+}
+
+.chat-list__scroll::-webkit-scrollbar-thumb {
+    background-color: #1E56A0; 
+    border-radius: 3px;        
+    border: 1px solid #D6E4F0; 
 }
