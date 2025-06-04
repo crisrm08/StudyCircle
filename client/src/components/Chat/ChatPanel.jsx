@@ -11,7 +11,7 @@ import "../../css/chatStyles/chatpanel.css";
 function ChatPanel({ image, name, hideChatPanel }) {
   const { subject, topic } = useContext(SubjectTopicContext);
   const { mode } = useContext(ModeContext);
-  const [isTutorshipAccepted, setTutorshipAccepted] = useState(true); 
+  const [isTutorshipAccepted, setTutorshipAccepted] = useState(false); 
   const navigate = useNavigate();
 
   function handleProfileClick() {
@@ -47,12 +47,7 @@ function ChatPanel({ image, name, hideChatPanel }) {
             <ChatMessage text="Eso era todo" isOwn={false} />
             <ChatMessage text="¡Perfecto! Si tienes más dudas, no dudes en escribirme" isOwn={true} />
             <ChatMessage text="¡Gracias!" isOwn={false} />  
-            <ChatMessage text="¡Gracias!" isOwn={false} />  
-            <ChatMessage text="¡Gracias!" isOwn={false} />  
-            <ChatMessage text="¡Gracias!" isOwn={false} />  
-              <ChatMessage text="¡Gracias!" isOwn={false} /> 
-                <ChatMessage text="¡Gracias!" isOwn={false} /> 
-                  <ChatMessage text="¡Gracias!" isOwn={false} /> 
+      
           </div>
 
           <div className="bottom-bar-container">
