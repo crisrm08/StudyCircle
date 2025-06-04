@@ -24,6 +24,7 @@ function ChatSidebar({hideChatSidebar}) {
       </div>
 
       <div className="chat-list">
+        <div className="chat-list___scroll">
         <ChatPreview
           name="Carlos Santana"
           lastMessage="Gracias por la explicación, ahora sí entiendo"
@@ -48,6 +49,8 @@ function ChatSidebar({hideChatSidebar}) {
           image="https://randomuser.me/api/portraits/men/16.jpg"
           handleOpenChat={hideChatSidebar}
         />
+  
+        </div>
       </div>
     </div>
   );

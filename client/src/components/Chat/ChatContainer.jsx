@@ -24,7 +24,7 @@ function ChatContainer() {
   }
 
     window.addEventListener("resize", handleResize);
-    handleResize(); // initialize on mount
+    handleResize();
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 

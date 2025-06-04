@@ -10,7 +10,7 @@ function Request({ onClose, onSend }) {
   const navigate = useNavigate();
 
   function handleSubmit() {
-    navigate("/payment-method");
+    navigate("/chat");
   };
 
   return (
