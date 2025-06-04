@@ -29,7 +29,7 @@ function StudentModal({showAcceptButton}) {
   }
 
   function backToHome() {
-    navigate("/tutor-home-page");
+    navigate(-1);
   }
 
   function renderStars(){

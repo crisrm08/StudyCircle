@@ -1,9 +1,11 @@
 .chat-panel {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100%;
+    max-height: 100%;
+    min-height: 0;
     background-color: transparent; 
-    position: relative;
+    overflow: hidden;
 }
 
 .top-panel {
@@ -43,24 +45,47 @@
 .messages-container {
     flex: 1;
     padding: 20px;
-    max-height: 400px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #163172 transparent;
+}
+
+.messages-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+    background: #D6E4F0;
+    border-radius: 4px;
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+    background: #163172;
+    border-radius: 4px;
+    border: 2px solid #D6E4F0;
+}
+
+.bottom-bar-container {
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  box-sizing: border-box;
 }
 
 .input-message-container {
-    position: fixed;
     display: flex;
-    width: -webkit-fill-available;
+    width: 100%;
     flex-direction: row;
-    bottom: 0;
     padding: 10px 20px;
     background-color: transparent;
     z-index: 10;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
-
 
 .input-message-container input {
     flex: 1;
@@ -88,4 +113,65 @@
 
 .send-button:hover {
     background-color: #1E56A0;
+}
+
+.tutorship-notification {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #D6E4F0;
+    border: 1px solid #163172;
+    border-radius: 12px;
+    padding: 32px 24px;
+    margin: 150px auto;
+    max-width: 480px;
+    box-shadow: 0 2px 8px rgba(22, 49, 114, 0.08);
+    text-align: center;
+}
+
+.tutorship-notification h2 {
+    color: #163172;
+    font-size: 22px;
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.tutorship-notification p {
+    color: #555;
+    font-size: 15px;
+    margin-bottom: 18px;
+}
+
+.cancel-tutorship-button {
+    background-color: #ff7875;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-weight: 500;
+}
+
+.cancel-tutorship-button:hover {
+    background-color: #d4380d;
+}
+
+.cancel-tutorship-button.subtle {
+    background: none;
+    color: #1E56A0;
+    border: 1px solid #163172;
+    border-radius: 20px;
+    padding: 8px 22px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
+}
+
+.cancel-tutorship-button.subtle:hover {
+    background: #163172;
+    color: #f6f6f6;
 }
