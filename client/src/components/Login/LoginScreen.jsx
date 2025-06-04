@@ -39,7 +39,7 @@ function LoginScreen() {
     return (
         <div className="Log-Sign-Frgt">
 
-            <div className="login-forgotPWD-screen">
+            <form className="login-forgotPWD-screen" onSubmit={logIntoStudent}>
                 <h1 className="title title-mobile">StudyCircle</h1>
 
                 <div className="login-forgotPWD-form">
@@ -69,10 +69,10 @@ function LoginScreen() {
                         </div>
                     </div>
 
-                    <button className="login-forgotPWD-button" onClick={logIntoStudent}>Iniciar sesión</button>
+                    <button className="login-forgotPWD-button" type="submit">Iniciar sesión</button>
                     <p onClick={forgotPassword}>Click aquí si olvidaste tu contraseña</p>
                 </div>
-            </div>
+            </form>
             <div className="login-forgotPWD-screen2">
                 <div className="centered-container">
                     <h1>¿Eres nuevo aquí?</h1>

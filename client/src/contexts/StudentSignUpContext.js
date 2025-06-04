@@ -9,6 +9,7 @@ export function StudentSignUpProvider({ children }) {
     email: "",
     password: "",
     career: "",
+    profile_type: "student",
     subject_weak: [],
     subject_strong: [],
     institution: "",

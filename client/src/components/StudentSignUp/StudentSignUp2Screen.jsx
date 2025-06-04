@@ -1,71 +1,30 @@
-import React, { useState, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
+import { supabase } from "../Supabase/supabaseClient";
 import { StudentSignUpContext } from "../../contexts/StudentSignUpContext";
 import Select from "react-select";
 import "../../css/signUpStyles/signup.css";
 import { useNavigate } from "react-router-dom";
 import { MdKeyboardArrowLeft } from "react-icons/md";
+import axios from "axios";
 
-const engineeringOptions = [
-  { value: "industrial", label: "Ingeniería industrial" },
-  { value: "electrica", label: "Ingeniería Eléctrica" },
-  { value: "mecanica", label: "Ingeniería Mecánica" },
-  { value: "civil", label: "Ingeniería Civil" },
-  { value: "telematica", label: "Ingeniería Telemática" },
-  { value: "informatica", label: "Ingeniería en Ciencias de la Computación" },
-  { value: "quimica", label: "Ingeniería Química" },
-  { value: "mecatronica", label: "Ingeniería Mecatrónica" },
-];
-
-const groupedSubjects = [
-  {
-    label: "Cálculo",
-    options: [
-      { value: "limites", label: "Límites y continuidad" },
-      { value: "derivadas", label: "Derivadas y su interpretación" },
-      { value: "aplicaciones", label: "Aplicaciones de las derivadas" },
-      { value: "integrales", label: "Integrales definidas e indefinidas" },
-      { value: "tecnicas", label: "Técnicas de integración" },
-      { value: "fundamental", label: "Teorema fundamental del cálculo" },
-      { value: "series", label: "Series y secuencias" },
-      { value: "diferenciales", label: "Ecuaciones diferenciales" },
-      { value: "infinitos", label: "Teoría de los límites infinitos" },
-      { value: "multivariable", label: "Cálculo multivariable" },
-    ],
-  },
-  {
-    label: "Programación",
-    options: [
-      { value: "oop", label: "Programación Orientada a Objetos (OOP)" },
-      { value: "datastruct", label: "Estructuras de datos" },
-      { value: "algoritmos", label: "Algoritmos y complejidad computacional" },
-      { value: "bd", label: "Bases de datos" },
-      { value: "web", label: "Programación web (HTML, CSS, JavaScript)" },
-      { value: "movil", label: "Desarrollo móvil" },
-      { value: "patrones", label: "Patrones de diseño de software" },
-      { value: "lenguajes", label: "Lenguajes (Python, Java, C++)" },
-      { value: "so", label: "Sistemas operativos y gestión de memoria" },
-      { value: "testing", label: "Pruebas y depuración de código" },
-    ],
-  },
-];
 
 const enrrollingYears = [
-  { value: "2010", label: "2010"},
-  { value: "2011", label: "2011"},
-  { value: "2012", label: "2012"},
-  { value: "2013", label: "2013"},
-  { value: "2014", label: "2014"},
-  { value: "2015", label: "2015"},
-  { value: "2016", label: "2016"},
-  { value: "2017", label: "2017"},
-  { value: "2018", label: "2018"},
-  { value: "2019", label: "2019"},
-  { value: "2020", label: "2020"},
-  { value: "2021", label: "2021"},
-  { value: "2022", label: "2022"},
-  { value: "2023", label: "2013"},
-  { value: "2024", label: "2024"},
-  { value: "2025", label: "2025"},
+  { value: 2025, label: "2025" },
+  { value: 2024, label: "2024" },
+  { value: 2023, label: "2023" },
+  { value: 2022, label: "2022" },
+  { value: 2021, label: "2021" },
+  { value: 2020, label: "2020" },
+  { value: 2019, label: "2019" },
+  { value: 2018, label: "2018" },
+  { value: 2017, label: "2017" },
+  { value: 2016, label: "2016" },
+  { value: 2015, label: "2015" },
+  { value: 2014, label: "2014" },
+  { value: 2013, label: "2013" },
+  { value: 2012, label: "2012" },
+  { value: 2011, label: "2011" },
+  { value: 2010, label: "2010" }
 ];
 
 const customStyles = {
@@ -103,26 +62,80 @@ function StudentSignUp2Screen() {
   
   const navigate = useNavigate();
   const { studentSignUpData, setStudentSignUpData } = useContext(StudentSignUpContext);
+  const [subjects, setSubjects] = useState([]);
+  const [topics, setTopics] = useState([]);
+  const [careers, setCareers] = useState([]);
 
-  function signUpSuccesful() {
-    navigate("/edit-stu-profile");
-  } 
+  useEffect(() => {
+    axios.get("http://10.0.0.16:5000/subjects-topics")
+      .then(response => {
+        setSubjects(response.data);
+        const allTopics = response.data.flatMap(subj => subj.topics.map(t => ({ ...t, subject: subj.name })));
+        setTopics(allTopics);
+      })
+      .catch(error => {
+        console.error("Error fetching subjects: ", error);
+    });
 
-  function handleChangeCarrer(event) {
-    const selectedOption = event.target.value;
-    setStudentSignUpData({ ...studentSignUpData, career: selectedOption});
+    axios.get("http://10.0.0.16:5000/careers")
+      .then(response => {
+        const fetchedCareers = response.data.map(career => ({
+          value: career.id,
+          label: career.name,
+        }));
+        setCareers(fetchedCareers);
+      })
+      .catch(error => {
+        console.error("Error fetching careers: ", error);
+    });
+  }, []);   
+
+  async function signUpSuccesful(event) {
+    event.preventDefault();
+
+    const { email, password, ...profileData } = studentSignUpData;
+    const { data, error } = await supabase.auth.signUp({ email, password});
+
+    if (error) {
+      alert("Error al registrar usuario: " + error.message);
+      return;
+    }
+
+    const supabase_user_id = data.user.id;
+    axios.post("http://10.0.0.16:5000/student-signup", { ...profileData, email,supabase_user_id,})
+      .then(response => {
+        console.log("Signup response:", response.data);
+        navigate("/edit-stu-profile");
+      })
+      .catch(error => {
+        console.error("Error during signup:", error);
+      });
   }
 
-  function handleChangeSubjectWeak(event) {
-    const selectedOptions = event;
-    const subjects = selectedOptions.map(option => option.value);
-    setStudentSignUpData({ ...studentSignUpData, subject_weak: subjects });
+  const selectCareerObject = careers.find(
+    (c) => c.label === studentSignUpData.career
+  ) || null;
+
+  function handleChangeCarrer(selectedOption) {
+    setStudentSignUpData({ ...studentSignUpData, career: selectedOption.label });
+    console.log("Selected career:", selectedOption.label);
+    
   }
 
-  function handleChangeSubjectStrong(event) {
-    const selectedOptions = event;
-    const subjects = selectedOptions.map(option => option.value);
-    setStudentSignUpData({ ...studentSignUpData, subject_strong: subjects });
+  const groupedTopics = React.useMemo(() => {
+    if (!subjects || subjects.length === 0) return [];
+    return subjects.map(subj => ({
+      label: subj.name,
+      options: subj.topics.map(t => ({ value: t.id, label: t.name }))
+    }));
+  }, [subjects]);
+
+  function handleChangeSubjectWeak(selectedOptions) {
+    setStudentSignUpData({ ...studentSignUpData, subject_weak: selectedOptions });
+  }
+
+  function handleChangeSubjectStrong(selectedOptions) {
+    setStudentSignUpData({ ...studentSignUpData, subject_strong: selectedOptions });
   }
 
   function handleChangeInstitution(event) {
@@ -130,10 +143,10 @@ function StudentSignUp2Screen() {
     setStudentSignUpData({ ...studentSignUpData, institution: institution });
   }
 
-  function handleChangeYear(event) {
-    const selectedOption = event.target.value;
-    setStudentSignUpData({ ...studentSignUpData, year: selectedOption });
+  function handleChangeYear(selectedOption) {
+    setStudentSignUpData({ ...studentSignUpData, year: selectedOption.value});
   }
+
 
   function goBack() {
     navigate(-1);
@@ -151,9 +164,10 @@ function StudentSignUp2Screen() {
           <Select
             id="engineering-degree"
             name="engineering-degree"
-            placeholder="Selecciona aquí..."
-            options={engineeringOptions}
-            value={studentSignUpData.career}
+            placeholder="Selecciona o escribe aquí..."
+            options={careers}
+            value={selectCareerObject}
+            isSearchable={true}
             onChange={handleChangeCarrer}
             styles={customStyles}
           />
@@ -162,10 +176,11 @@ function StudentSignUp2Screen() {
           <Select
             id="weaknesses"
             name="weaknesses"
-            placeholder="Selecciona aquí..."
+            placeholder="Selecciona o escribe aquí..."
             isMulti
+            isSearchable={true}
             closeMenuOnSelect={false}
-            options={groupedSubjects}
+            options={groupedTopics}
             value={studentSignUpData.subject_weak}
             onChange={handleChangeSubjectWeak}
             styles={customStyles}
@@ -175,26 +190,28 @@ function StudentSignUp2Screen() {
           <Select
             id="strengths"
             name="strengths"
-            placeholder="Selecciona aquí..."
+            placeholder="Selecciona o escribe aquí..."
             isMulti
+            isSearchable={true}
             closeMenuOnSelect={false}
-            options={groupedSubjects}
+            options={groupedTopics}
             value={studentSignUpData.subject_strong}
             onChange={handleChangeSubjectStrong}
             styles={customStyles}
           />
 
           <label htmlFor="institution" >Universidad o Institución</label>
-          <input id="institution" type="text" placeholder="Escribe el nombre aquí" style={{maxWidth: "-webkit-fill-available"}}/>
+          <input id="institution" type="text" placeholder="Escribe el nombre aquí" onChange={handleChangeInstitution} style={{maxWidth: "-webkit-fill-available"}}/>
 
           <label htmlFor="enrolling-year">Año de ingreso</label>
           <Select
             id="enrolling-year"
             name="enrolling-year"
-            placeholder="Selecciona aquí..."
+            placeholder="Selecciona o escribe aquí..."
             options={enrrollingYears}
-            value={studentSignUpData.year}
+            value={enrrollingYears.find(year => year.value === studentSignUpData.year) || null}
             onChange={handleChangeYear}
+            isSearchable={true}
             styles={customStyles}
           />
 

@@ -78,6 +78,10 @@
 
 .nav-links h2:hover {
     color: #D6E4F0;
+    background-color: #1E56A0;
+    border-radius: 20px;
+    padding: 5px 10px;
+    width: fit-content;
 }
 
 .log-out {

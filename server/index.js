@@ -20,18 +20,55 @@ const db = new pg.Client({
 
 db.connect();
 
-app.get('/subjects', async (req, res) => {
+app.post('/student-signup', async (req, res) => {
+    try {
+      const { name, last_name, email, profile_type, career, subject_weak, subject_strong, institution, year, supabase_user_id } = req.body;
+      console.log("Received student data:", name, last_name, profile_type, career, subject_weak, subject_strong, institution, year, supabase_user_id);
+      
+      const checkUser = await db.query('SELECT * FROM users WHERE supabase_user_id = $1', [supabase_user_id]);
+      if (checkUser.rows.length > 0) {
+        return res.send("Usuario ya registrado");
+      } else { 
+        const newStudentResult = await db.query(
+          'INSERT INTO users (name, last_name, email, profile_type, career, institution, year_of_enrollment, supabase_user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING user_id',
+          [name, last_name, email, profile_type, career, institution, year, supabase_user_id]
+        );
+        const userId = newStudentResult.rows[0].user_id;
+        if (Array.isArray(subject_weak)) {
+          for (const topic of subject_weak) {
+            await db.query(
+              'INSERT INTO user_topics (user_id, topic_id, type) VALUES ($1, $2, $3)',
+              [userId, topic.value, 'weak']
+            );
+          }
+        }
+        if (Array.isArray(subject_strong)) {
+          for (const topic of subject_strong) {
+            await db.query(
+              'INSERT INTO user_topics (user_id, topic_id, type) VALUES ($1, $2, $3)',
+              [userId, topic.value, 'strong']
+            );
+          }
+        }
+        res.send("Usuario registrado exitosamente");
+      }
+      
+    } catch (error) {
+        console.error('Error during signup:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.get('/subjects-topics', async (req, res) => {
   try {    
-    // Fetch all subjects
     const getSubjects = await db.query('SELECT * FROM subjects');
     const subjects = getSubjects.rows.map(subject => ({
       id: subject.subject_id,
       name: subject.subject_name
     }));
 
-    // Fetch all topics
+  
     const getTopics = await db.query('SELECT * FROM topics');
-
     const topicsBySubject = {};
     getTopics.rows.forEach(topic => {
       if (!topicsBySubject[topic.subject_id]) topicsBySubject[topic.subject_id] = [];
@@ -41,42 +78,32 @@ app.get('/subjects', async (req, res) => {
       });
     });
   
- 
     const subjectsWithTopics = subjects.map(subject => ({
       ...subject,
       topics: topicsBySubject[subject.id] || []
     }));
-    console.log("Subjects with topics: ", subjectsWithTopics);
     res.json(subjectsWithTopics);
   } catch (error) {
     console.error('Error fetching subjects: ', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-})
-
-app.post('/student-signup', async (req, res) => {
-    try {
-      const { name, last_name, email, password, career, subject_weak, subject_strong, institution, year } = req.body;
-      console.log("Received student data:", name, last_name, email, password);
-      
-      const checkEmail = await db.query('SELECT * FROM users WHERE email = $1', [email]);
-      if (checkEmail.rows.length > 0) {
-        return res.send("Correo ya registrado");
-      } else { 
-        const newStudent = await db.query(
-          'INSERT INTO users (name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING *',
-          [name, last_name, email, password]
-        );
-        console.log(newStudent);
-      }
-      
-    } catch (error) {
-        console.error('Error during signup:', error);
-        res.status(500).json({ error: 'Internal server error' });
-      
-    }
 });
 
 
+app.get('/careers', async (req, res) => {
+  try {
+    const getCareers = await db.query('SELECT * FROM careers');
+    
+    const careers = getCareers.rows.map(career => ({
+      id: career.career_id,
+      name: career.career_name, 
+    }));
+
+    res.json(careers);
+  } catch (error) {
+    console.error('Error fetching careers: ', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
