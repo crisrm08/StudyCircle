@@ -3,12 +3,16 @@ import cors from 'cors';
 import axios from 'axios';
 import pg from 'pg';
 import dotenv from 'dotenv';
+import { createClient } from "@supabase/supabase-js";
+
+dotenv.config();
 const app = express();
 const PORT = 5000;
+const supabase= createClient(process.env.SUPABASE_URL, process.env.SERVICE_ROLE_KEY);
 
 app.use(cors());
 app.use(express.json());
-dotenv.config();
+
 
 const db = new pg.Client({
   user: process.env.PG_USER,
@@ -19,6 +23,16 @@ const db = new pg.Client({
 });
 
 db.connect();
+
+app.get('/api/check-email', async (req, res) => {
+  const { email } = req.query;
+  const { data, error } = await supabase.auth.admin.listUsers({ email });
+  if (error) return res.status(500).json({ error: error.message });
+  if (data.users.length > 0) {
+    return res.json({ exists: true });
+  }
+  return res.json({ exists: false });
+});
 
 app.post('/student-signup', async (req, res) => {
     try {

@@ -47,11 +47,22 @@ function StudentSignUp1Screen() {
         setStudentSignUpData({ ...studentSignUpData, email: typedEmail });
     }
 
-    function next(e) {
-        e.preventDefault();
-        navigate("/student-signup-2");
+    async function checkEmailExists(email) {
+        const response = await fetch(`http://10.0.0.16:5000/api/check-email?email=${encodeURIComponent(email)}`);
+        const data = await response.json();
+        return data.exists;
     }
 
+    async function next(e) {
+        e.preventDefault();
+        const exists = await checkEmailExists(studentSignUpData.email);
+        if (exists) {
+            alert("Este correo ya está registrado. Por favor, usa otro.");
+            return;
+        }
+        navigate("/student-signup-2");
+    }
+    
     function goBack() {
         navigate(-1);
     }
