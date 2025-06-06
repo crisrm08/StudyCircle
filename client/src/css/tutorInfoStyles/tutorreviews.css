@@ -86,3 +86,11 @@
 .stars {
     display: flex;
 }
+
+.review-topic {
+    font-size: 13px;
+    color: #b3c6e0;
+    font-style: italic;
+    margin-bottom: 8px;
+    margin-left: 2px;
+}

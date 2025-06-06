@@ -26,7 +26,7 @@ function TutorInfoScreen() {
             fullDescription: "Docente egresado de la Universidad Autónoma de Santo Domingo de la carrera de Física. Cuento con más de 10 años de experiencia dedicados a la docencia de estudiantes universitarios en el Insituto Tecnológico de Santo Domingo.",
             pricePerHour: 1000,
             rating: 4.4,
-            specialties: ["Cinemática y movimiento", "Ondas y sonido", "Física nuclear"]
+            specialties: ["Cinemática y movimiento", "Ondas y sonido", "Física nuclear", "Electromagnetismo", "Termodinámica"]
         };
 
     function goToEdit() {
@@ -57,11 +57,11 @@ function TutorInfoScreen() {
               </div>
               <TutorReviews 
                   reviews={[
-                    { name: "Juan José", rating: 4, text: "Excelente explicación...", avatar: "https://randomuser.me/api/portraits/men/32.jpg" },
-                    { name: "José Ramón", rating: 5, text: "Muy atento y claro...", avatar: "https://randomuser.me/api/portraits/men/52.jpg" },
-                    { name: "Luisa Maria", rating: 3, text: "Explica un poco rápido...", avatar: "https://randomuser.me/api/portraits/women/18.jpg" },
-                    { name: "Perla Massiel", rating: 5, text: "El mejor...", avatar: "https://randomuser.me/api/portraits/women/52.jpg" },
-                    { name: "Miguel Castillo", rating: 4, text: "Explica muy claro...", avatar: "https://randomuser.me/api/portraits/men/51.jpg" },
+                    { name: "Juan José", rating: 4, text: "Excelente explicación...", avatar: "https://randomuser.me/api/portraits/men/32.jpg", topic: "Cinemática" },
+                    { name: "José Ramón", rating: 5, text: "Muy atento y claro...", avatar: "https://randomuser.me/api/portraits/men/52.jpg", topic: "Ondas y sonido" },
+                    { name: "Luisa Maria", rating: 3, text: "Explica un poco rápido...", avatar: "https://randomuser.me/api/portraits/women/18.jpg", topic: "Física nuclear" },
+                    { name: "Perla Massiel", rating: 5, text: "El mejor...", avatar: "https://randomuser.me/api/portraits/women/52.jpg", topic: "Termodinámica" },
+                    { name: "Miguel Castillo", rating: 4, text: "Explica muy claro...", avatar: "https://randomuser.me/api/portraits/men/51.jpg", topic: "Electromagnetismo" },
                   ]}
               />
             </div>
