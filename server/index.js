@@ -8,7 +8,7 @@ import { createClient } from "@supabase/supabase-js";
 dotenv.config();
 const app = express();
 const PORT = 5000;
-const supabase= createClient(process.env.SUPABASE_URL, process.env.SERVICE_ROLE_KEY);
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SERVICE_ROLE_KEY);
 
 app.use(cors());
 app.use(express.json());
@@ -26,19 +26,24 @@ db.connect();
 
 app.get('/api/check-email', async (req, res) => {
   const { email } = req.query;
-  const { data, error } = await supabase.auth.admin.listUsers({ email });
-  if (error) return res.status(500).json({ error: error.message });
-  if (data.users.length > 0) {
-    return res.json({ exists: true });
+  const { data, error } = await supabase.auth.admin.listUsers({
+    page: 1,
+    perPage: 1000
+  });
+
+  if (error) {
+    return res.status(500).json({ error: error.message });
   }
-  return res.json({ exists: false });
+
+  const exists = data.users.some(u => u.email === email);
+  return res.json({ exists });
 });
+
+
 
 app.post('/student-signup', async (req, res) => {
     try {
-      const { name, last_name, email, profile_type, career, subject_weak, subject_strong, institution, year, supabase_user_id } = req.body;
-      console.log("Received student data:", name, last_name, profile_type, career, subject_weak, subject_strong, institution, year, supabase_user_id);
-      
+      const { name, last_name, email, profile_type, career, subject_weak, subject_strong, institution, year, supabase_user_id } = req.body;      
       const checkUser = await db.query('SELECT * FROM users WHERE supabase_user_id = $1', [supabase_user_id]);
       if (checkUser.rows.length > 0) {
         return res.send("Usuario ya registrado");

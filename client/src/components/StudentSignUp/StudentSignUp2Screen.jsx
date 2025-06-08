@@ -96,7 +96,17 @@ function StudentSignUp2Screen() {
     event.preventDefault();
 
     const { email, password, ...profileData } = studentSignUpData;
-    const { data, error } = await supabase.auth.signUp({ email, password});
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: 'http://localhost:3000/edit-stu-profile',
+        data:{
+           name: profileData.name
+        }
+      }
+    });
+
 
     if (error) {
       alert("Error al registrar usuario: " + error.message);
@@ -108,10 +118,10 @@ function StudentSignUp2Screen() {
       .then(response => {
         console.log("Signup response:", response.data);
         setShowModal(true);
-      })
+    })
       .catch(error => {
         console.error("Error during signup:", error);
-      });
+    });
   }
 
   const selectCareerObject = careers.find(
