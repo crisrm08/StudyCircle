@@ -5,6 +5,7 @@ import Select from "react-select";
 import "../../css/signUpStyles/signup.css";
 import { useNavigate } from "react-router-dom";
 import { MdKeyboardArrowLeft } from "react-icons/md";
+import SignUpModal from "./SignUpModal";
 import axios from "axios";
 
 
@@ -65,6 +66,7 @@ function StudentSignUp2Screen() {
   const [subjects, setSubjects] = useState([]);
   const [topics, setTopics] = useState([]);
   const [careers, setCareers] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     axios.get("http://10.0.0.16:5000/subjects-topics")
@@ -93,8 +95,29 @@ function StudentSignUp2Screen() {
   async function signUpSuccesful(event) {
     event.preventDefault();
 
+    if (
+      studentSignUpData.career === "" ||
+      studentSignUpData.subject_weak.length === 0 ||
+      studentSignUpData.subject_strong.length === 0 ||
+      studentSignUpData.institution === "" ||
+      studentSignUpData.year === ""
+    ) {
+      alert("Por favor, completa todos los campos.");
+      return;
+    }
+
     const { email, password, ...profileData } = studentSignUpData;
-    const { data, error } = await supabase.auth.signUp({ email, password});
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: 'http://localhost:3000/edit-stu-profile',
+        data:{
+           name: profileData.name
+        }
+      }
+    });
+
 
     if (error) {
       alert("Error al registrar usuario: " + error.message);
@@ -105,11 +128,11 @@ function StudentSignUp2Screen() {
     axios.post("http://10.0.0.16:5000/student-signup", { ...profileData, email,supabase_user_id,})
       .then(response => {
         console.log("Signup response:", response.data);
-        navigate("/edit-stu-profile");
-      })
+        setShowModal(true);
+    })
       .catch(error => {
         console.error("Error during signup:", error);
-      });
+    });
   }
 
   const selectCareerObject = careers.find(
@@ -218,6 +241,12 @@ function StudentSignUp2Screen() {
           <button type="submit" onClick={signUpSuccesful}>Registrar</button>
         </form>
       </div>
+      {showModal && (
+        <SignUpModal isOpen={showModal} onClose={() => 
+          { setShowModal(false)
+            navigate("/login");
+          }}/>
+      )}
     </div>
   );
 }

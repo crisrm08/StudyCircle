@@ -7,7 +7,7 @@ import Request from "./Request";
 import "../../css/studentProfileStyles/modal.css";
 
 function Modal({ tutor }) {
-  const { image, name, institution, occupation, academicLevel, description, pricePerHour, rating } = tutor;
+  const { image, name, institution, occupation, academicLevel, description, pricePerHour, rating, specialties } = tutor;
   const [ renderRequest, setRenderRequest ] = useState(false);
   const { role } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -58,9 +58,9 @@ function Modal({ tutor }) {
       <h2 className="modal-name">{name}</h2>
       <p className="modal-occupation">{occupation} - {institution} - {academicLevel}</p>
 
-      {tutor.specialties?.length > 0 && (
+      {specialties?.length > 0 && (
         <div className="modal-specialties">
-          {tutor.specialties.map((topic, index) => (
+          {specialties.map((topic, index) => (
             <span key={index} className="specialty-pill">{topic}</span>
           ))}
         </div>

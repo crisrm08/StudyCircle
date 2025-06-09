@@ -1,0 +1,73 @@
+.sign-up-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: fit-content;
+  background: #ffffff;
+  border-radius: 25px;
+  padding: 32px 28px 24px 28px;
+  box-shadow: 0 8px 32px rgba(30, 86, 160, 0.18);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #D6E4F0;
+}
+
+.sign-up-modal img {
+  width: 110px;
+  height: 110px;
+  margin-bottom: 18px;
+}
+
+.sign-up-modal h2 {
+  font-size: 20px;
+  color: #163172;
+  margin-bottom: 18px;
+  text-align: center;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.sign-up-modal button {
+  margin-top: 10px;
+  padding: 10px 32px;
+  background-color: #1E56A0;
+  color: #f6f6f6;
+  border: none;
+  border-radius: 18px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 2px 8px rgba(30, 86, 160, 0.08);
+}
+
+.sign-up-modal button:hover {
+  background: #163172;
+  color: #D6E4F0;
+}
+
+@media (max-width: 768px) {
+  .sign-up-modal {
+    width: 90%;
+    padding: 24px;
+  }
+
+  .sign-up-modal img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .sign-up-modal h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .sign-up-modal button {
+    padding: 8px 24px;
+    font-size: 14px;
+  }
+}
+

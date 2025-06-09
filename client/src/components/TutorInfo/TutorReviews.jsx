@@ -27,6 +27,9 @@ function TutorReviews({ reviews = [] }) {
                     </div>
                   </div>
                 </div>
+                {review.topic && (
+                  <div className="review-topic">Tema: {review.topic}</div>
+                )}
                 <p>{review.text}</p>
               </div>
             ))}

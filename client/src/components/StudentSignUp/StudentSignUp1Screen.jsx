@@ -47,11 +47,31 @@ function StudentSignUp1Screen() {
         setStudentSignUpData({ ...studentSignUpData, email: typedEmail });
     }
 
-    function next(e) {
-        e.preventDefault();
-        navigate("/student-signup-2");
+    async function checkEmailExists(email) {
+        const response = await fetch(`http://10.0.0.16:5000/api/check-email?email=${encodeURIComponent(email)}`);
+        const data = await response.json();
+        console.log("Email check response:", data);
+        return data.exists;
     }
 
+    async function next(e) {
+        e.preventDefault();
+        if (studentSignUpData.name === "" || studentSignUpData.last_name === "" || studentSignUpData.email === "" || studentSignUpData.password === "") {
+            alert("Por favor, completa todos los campos.");
+        }
+        else if (!match) {
+            alert("Las contraseñas no coinciden. Por favor verifica e intenta nuevamente.");
+        }
+        else {
+            const exists = await checkEmailExists(studentSignUpData.email);
+            if (exists) {
+                alert("Este correo ya está registrado. Por favor, usa otro.");
+                return;
+            }
+            navigate("/student-signup-2");
+        }
+    }
+    
     function goBack() {
         navigate(-1);
     }
