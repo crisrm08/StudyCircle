@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { FiUser, FiMessageSquare, FiHome, FiX } from "react-icons/fi";
+import { FiUser, FiMessageSquare, FiHome, FiX, FiSettings } from "react-icons/fi";
 import { MdOutlinePayment } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import '../../css/sidebar.css';
@@ -41,7 +41,12 @@ function TutorSidebar() {
       setIsSidebarClicked(false);
     }
 
-    function goToHome(params) {
+    function goToSettings() {
+      navigate("/edit-tutor-profile");
+      setIsSidebarClicked(false);
+    }
+
+    function goToHome() {
       navigate("/tutor-home-page")
       setIsSidebarClicked(false);
     }
@@ -63,6 +68,7 @@ function TutorSidebar() {
           <nav className="nav-links">
               <h2 onClick={goToProfile}><FiUser /> Mi perfil</h2>
               <h2 onClick={goToChat}><FiMessageSquare /> Mensajes</h2>
+              <h2 onClick={goToSettings}><FiSettings /> Ajustes</h2>
               <h2 onClick={goToHome}><FiHome /> Home</h2>
               <h2 onClick={goToPaymentSettings}><MdOutlinePayment/>Cobro</h2>
           </nav>

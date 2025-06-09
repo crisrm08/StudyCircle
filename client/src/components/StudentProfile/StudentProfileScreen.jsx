@@ -20,7 +20,7 @@ function StudentProfileScreen() {
     const studentFullDescription = "Estudiante de primer año de la carrera de Ingeniería en Ciencias de la Computación en la Pontificia Universidad Católica Madre y Maestra. Me interesa mejorar mis habilidades en la asignatura de Ecuaciones Diferenciales, ya que no me fue muy bien en mi primer parcial y necesito reforzar."
 
     function goToEdit() {
-        navigate("/edit-stu-profile");
+        navigate("/edit-student-profile");
     }
     return(
         <div className="student-profile-screen">

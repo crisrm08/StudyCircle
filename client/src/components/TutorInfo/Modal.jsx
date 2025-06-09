@@ -34,7 +34,7 @@ function Modal({ tutor }) {
   };
 
   function goToEdit() {
-    navigate("/edit-ttr-profile");
+    navigate("/edit-tutor-profile");
   }
 
   function goBack() {

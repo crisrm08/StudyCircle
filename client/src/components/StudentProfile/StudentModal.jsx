@@ -21,7 +21,7 @@ function StudentModal({showAcceptButton}) {
     });
 
   function goToEdit() {
-    navigate("/edit-stu-profile");
+    navigate("/edit-student-profile");
   }
 
   function openChat() {

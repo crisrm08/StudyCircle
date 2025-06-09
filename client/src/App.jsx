@@ -36,8 +36,8 @@ function App() {
         { path: 'tutor-home-page', element: <TutorHomeScreen /> },
         { path: 'tutor-info', element: <TutorInfoScreen />},
         { path: 'student-profile', element: <StudentProfileScreen />},
-        { path: 'edit-stu-profile', element: <EditStudentProfileScreen />},
-        { path: 'edit-ttr-profile', element: <EditTutorProfileScreen />},
+        { path: 'edit-student-profile', element: <EditStudentProfileScreen />},
+        { path: 'edit-tutor-profile', element: <EditTutorProfileScreen />},
         { path: 'student-history', element: <StudentHistoryScreen />},
         { path: 'payment-method', element: <PaymentMethodScreen />},
         { path: 'tutor-payment-settings', element: <TutorPaymentScreen /> }
