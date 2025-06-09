@@ -3,8 +3,8 @@ import React, { createContext, useState } from "react";
 export const TimeContext = createContext();
 
 export function TimeProvider({ children }) {
-  const [hour, setHour] = useState("19:30");
-  const [day, setDay] = useState("Miércoles");
+  const [hour, setHour] = useState(null);
+  const [day, setDay] = useState("");
 
   return (
     <TimeContext.Provider value={{ hour, setHour, day, setDay }}>

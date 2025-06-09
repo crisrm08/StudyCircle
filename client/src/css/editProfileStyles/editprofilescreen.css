@@ -54,6 +54,12 @@
     gap: 10px;
 }
 
+.mode-selection{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .top-right-image{
     display: flex;
     flex-direction: column;

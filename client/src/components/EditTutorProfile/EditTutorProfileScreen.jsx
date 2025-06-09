@@ -182,6 +182,18 @@ function EditTutorProfileScreen() {
 
                     <label htmlFor="availability">Disponibilidad horaria</label>
                     <ScheduleSelector schedule={schedule} setSchedule={setSchedule} />
+
+                    <label htmlFor="preferred-mode">Modalidad preferida</label>
+                    <div className="mode-selection">
+                      <input type="radio" id="face-to-face" name="face-to-face" value="face-to-face"/>
+                      <label htmlFor="face-to-face">Presencial</label>
+
+                      <input type="radio" id="online" name="online" value="online"/>
+                      <label htmlFor="online">Virtual</label>
+
+                      <input type="radio" id="hybrid" name="hybrid" value="hybrid" defaultChecked/>
+                      <label htmlFor="hybrid">Híbrido</label>
+                    </div>
                 </div>
 
                 <div className="right">
