@@ -4,7 +4,7 @@ export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [role, setRole] = useState("Student");
+  const [role, setRole] = useState("Tutor");
 
 
   return (

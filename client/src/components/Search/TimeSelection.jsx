@@ -6,25 +6,24 @@ function TimeSelection() {
   const {hour, setHour, day, setDay} = useContext(TimeContext); 
  
 
-  const handleHourChange = (event) => {
+  function handleHourChange (event){
     let newHour = parseInt(event.target.value, 10);
     if (newHour < 0) newHour = 0;
     if (newHour > 23) newHour = 23;
     setHour(newHour);
   };
 
-  const handleClick = (increment) => {
-    let newHour = hour + increment;
+  function handleClick (increment){
+    let newHour = hour + parseInt(increment);
     if (newHour < 0) newHour = 23;
     if (newHour > 23) newHour = 0;
     setHour(newHour);
   };
 
-  const handleDayChange = (event) => {
+  function handleDayChange (event){
     setDay(event.target.value);
   };
 
-  
   return (
     <div className="time-selection-wrapper">
       <h1>Selecciona un día y una hora</h1>
@@ -41,6 +40,7 @@ function TimeSelection() {
             <option value="Viernes">Viernes</option>
             <option value="Sábado">Sábado</option>
             <option value="Domingo">Domingo</option>
+            <option value="Cualquiera">Cualquiera</option>
           </select>
           <p>Día seleccionado: <strong>{day}</strong></p>
         </div>
@@ -49,14 +49,10 @@ function TimeSelection() {
           <label>Hora deseada:</label>
           <div className="hour-picker">
             <button onClick={() => handleClick(-1)}>-</button>
-            {typeof hour === 'number' ? (
               <input type="number" value={hour} onChange={handleHourChange} min="0" max="23" placeholder="Cualquiera"/>
-            ) : (
-              <input type="text" value={hour} onChange={handleHourChange} placeholder="Cualquiera"/>
-            )}
             <button onClick={() => handleClick(1)}>+</button>
           </div>
-          <p>Hora seleccionada: <strong>{hour}</strong></p>
+          <p>Hora seleccionada: <strong>{hour !== null ? hour : "Cualquiera"}</strong></p>
         </div>
 
       </div>
