@@ -31,10 +31,10 @@ function TutorInfoScreen() {
 
     function goToEdit() {
       if (role === "Tutor") {
-        navigate("/edit-ttr-profile");
+        navigate("/edit-tutor-profile");
       }
       else{
-        navigate("/edit-stu-profile");
+        navigate("/edit-student-profile");
       }
     }
 

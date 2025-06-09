@@ -111,7 +111,7 @@ function StudentSignUp2Screen() {
       email,
       password,
       options: {
-        emailRedirectTo: 'http://localhost:3000/edit-stu-profile',
+        emailRedirectTo: 'http://localhost:3000/edit-student-profile',
         data:{
            name: profileData.name
         }

@@ -98,7 +98,7 @@ function TutorSignUp2Screen() {
     const navigate = useNavigate();
 
     function signUpSuccesful() {
-        navigate("/edit-ttr-profile")
+        navigate("/edit-tutor-profile");
     }
 
     function goBack() {
