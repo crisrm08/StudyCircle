@@ -95,6 +95,17 @@ function StudentSignUp2Screen() {
   async function signUpSuccesful(event) {
     event.preventDefault();
 
+    if (
+      studentSignUpData.career === "" ||
+      studentSignUpData.subject_weak.length === 0 ||
+      studentSignUpData.subject_strong.length === 0 ||
+      studentSignUpData.institution === "" ||
+      studentSignUpData.year === ""
+    ) {
+      alert("Por favor, completa todos los campos.");
+      return;
+    }
+
     const { email, password, ...profileData } = studentSignUpData;
     const { data, error } = await supabase.auth.signUp({
       email,

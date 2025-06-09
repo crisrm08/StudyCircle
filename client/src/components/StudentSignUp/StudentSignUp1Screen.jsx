@@ -56,12 +56,20 @@ function StudentSignUp1Screen() {
 
     async function next(e) {
         e.preventDefault();
-        const exists = await checkEmailExists(studentSignUpData.email);
-        if (exists) {
-            alert("Este correo ya está registrado. Por favor, usa otro.");
-            return;
+        if (studentSignUpData.name === "" || studentSignUpData.last_name === "" || studentSignUpData.email === "" || studentSignUpData.password === "") {
+            alert("Por favor, completa todos los campos.");
         }
-        navigate("/student-signup-2");
+        else if (!match) {
+            alert("Las contraseñas no coinciden. Por favor verifica e intenta nuevamente.");
+        }
+        else {
+            const exists = await checkEmailExists(studentSignUpData.email);
+            if (exists) {
+                alert("Este correo ya está registrado. Por favor, usa otro.");
+                return;
+            }
+            navigate("/student-signup-2");
+        }
     }
     
     function goBack() {
