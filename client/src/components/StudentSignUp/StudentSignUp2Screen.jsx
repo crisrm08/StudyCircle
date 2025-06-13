@@ -1,13 +1,10 @@
 import React, { useEffect, useContext, useState } from "react";
-import { supabase } from "../Supabase/supabaseClient";
 import { StudentSignUpContext } from "../../contexts/StudentSignUpContext";
 import Select from "react-select";
 import "../../css/signUpStyles/signup.css";
 import { useNavigate } from "react-router-dom";
 import { MdKeyboardArrowLeft } from "react-icons/md";
-import SignUpModal from "./SignUpModal";
 import axios from "axios";
-
 
 const enrrollingYears = [
   { value: 2025, label: "2025" },
@@ -66,7 +63,6 @@ function StudentSignUp2Screen() {
   const [subjects, setSubjects] = useState([]);
   const [topics, setTopics] = useState([]);
   const [careers, setCareers] = useState([]);
-  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     axios.get("http://10.0.0.16:5000/subjects-topics")
@@ -92,9 +88,9 @@ function StudentSignUp2Screen() {
     });
   }, []);   
 
-  async function signUpSuccesful(event) {
+  
+  async function next(event) {
     event.preventDefault();
-
     if (
       studentSignUpData.career === "" ||
       studentSignUpData.subject_weak.length === 0 ||
@@ -105,34 +101,7 @@ function StudentSignUp2Screen() {
       alert("Por favor, completa todos los campos.");
       return;
     }
-
-    const { email, password, ...profileData } = studentSignUpData;
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: 'http://localhost:3000/edit-student-profile',
-        data:{
-           name: profileData.name
-        }
-      }
-    });
-
-
-    if (error) {
-      alert("Error al registrar usuario: " + error.message);
-      return;
-    }
-
-    const supabase_user_id = data.user.id;
-    axios.post("http://10.0.0.16:5000/student-signup", { ...profileData, email,supabase_user_id,})
-      .then(response => {
-        console.log("Signup response:", response.data);
-        setShowModal(true);
-    })
-      .catch(error => {
-        console.error("Error during signup:", error);
-    });
+    navigate("/student-signup-3");
   }
 
   const selectCareerObject = careers.find(
@@ -142,7 +111,6 @@ function StudentSignUp2Screen() {
   function handleChangeCarrer(selectedOption) {
     setStudentSignUpData({ ...studentSignUpData, career: selectedOption.label });
     console.log("Selected career:", selectedOption.label);
-    
   }
 
   const groupedTopics = React.useMemo(() => {
@@ -169,7 +137,6 @@ function StudentSignUp2Screen() {
   function handleChangeYear(selectedOption) {
     setStudentSignUpData({ ...studentSignUpData, year: selectedOption.value});
   }
-
 
   function goBack() {
     navigate(-1);
@@ -238,15 +205,10 @@ function StudentSignUp2Screen() {
             styles={customStyles}
           />
 
-          <button type="submit" onClick={signUpSuccesful}>Registrar</button>
+          <button type="submit" onClick={next}>Siguente</button>
         </form>
       </div>
-      {showModal && (
-        <SignUpModal isOpen={showModal} onClose={() => 
-          { setShowModal(false)
-            navigate("/login");
-          }}/>
-      )}
+     
     </div>
   );
 }

@@ -1,32 +1,112 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import axios from "axios";
+import { StudentSignUpContext } from "../../contexts/StudentSignUpContext";
+import { supabase } from "../Supabase/supabaseClient";
+import { MdKeyboardArrowLeft } from "react-icons/md";
+import SignUpModal from "./SignUpModal";
+
 import "../../css/signUpStyles/signup.css";
 import { useNavigate } from "react-router-dom";
 
+
 function StudentSignUp3Screen() {
+  const { studentSignUpData, setStudentSignUpData } = useContext(StudentSignUpContext);
   const [idPhoto, setIdPhoto] = useState(null);
   const [selfiePhoto, setSelfiePhoto] = useState(null);
   const [declarationConfirmed, setConfirmDeclaration] = useState(false);
   const [idPreview, setIdPreview] = useState(null);
   const [selfiePreview, setSelfiePreview] = useState(null);
-
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
-  function handleSubmit (e){
+  async function signUpSuccesful(e) {
+    e.preventDefault();
+
+    const { email, password, ...profileData } = studentSignUpData;
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: 'http://localhost:3000/edit-student-profile',
+        data: {
+          name: profileData.name
+        }
+      }
+    });
+
+    if (error) {
+      alert("Error al registrar usuario: " + error.message);
+      return;
+    }
+
+    const supabase_user_id = data.user.id;
+
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("supabase_user_id", supabase_user_id);
+    formData.append("id_photo", idPhoto);
+    formData.append("selfie_photo", selfiePhoto);
+
+    Object.entries(profileData).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        formData.append(key, JSON.stringify(value));
+      } else {
+        formData.append(key, value);
+      }
+    });
+
+    axios.post("http://10.0.0.16:5000/student-signup", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    })
+      .then(response => {
+        console.log("Signup response:", response.data);
+        setShowModal(true);
+      })
+      .catch(error => {
+        console.error("Error during signup:", error);
+      });
+  }
+
+  function handlePhotoSubmit (e){
     e.preventDefault();
     if (idPhoto && selfiePhoto && declarationConfirmed) {
       console.log("ID Photo:", idPhoto);
       console.log("Selfie Photo:", selfiePhoto);
-      navigate("/student-profile");
+      signUpSuccesful(e);
     } else {
       alert("Por favor, complete todos los campos y acepte la declaración.");
     }
   };
 
+  function handleIDPhotoChange(e) {
+    const file = e.target.files[0];
+    if (file) {
+      setIdPhoto(file); 
+      setIdPreview(URL.createObjectURL(file));
+    }
+    setStudentSignUpData({ ...studentSignUpData, id_photo: file });
+  }
+
+  function handleSelfiePhotoChange(e) {
+    const file = e.target.files[0];
+    if (file) {
+      setSelfiePhoto(file);
+      setSelfiePreview(URL.createObjectURL(file));
+    }
+    setStudentSignUpData({ ...studentSignUpData, selfie_photo: file });
+  }
+
+  function goBack() {
+    navigate(-1);
+  }
+
   return (
     <div className="Student-sign-up-1">
-      <h1 className="title">StudyCircle</h1>
+       <h1 className="title" onClick={goBack}> <MdKeyboardArrowLeft size={50}/> StudyCircle </h1>
       <div className="Sign-up-form">
-        <form className="photo-form" onSubmit={handleSubmit}>
+        <form className="photo-form" onSubmit={handlePhotoSubmit}>
           <h1>Sube tus fotos</h1>
 
           <div className="photo-upload-container">
@@ -36,19 +116,7 @@ function StudentSignUp3Screen() {
                   {idPreview && ( <img src={idPreview} alt="Previsualización cédula" className="photo-preview" />)}
                 </div>
                 <label htmlFor="id-photo" className="photo-label"> Subir cédula </label>
-                <input
-                  id="id-photo"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      setIdPhoto(file);
-                      setIdPreview(URL.createObjectURL(file));
-                    }
-                  }}
-                  hidden
-                />
+                <input id="id-photo" type="file" accept="image/*" onChange={handleIDPhotoChange} hidden/>
               </div>
 
               <div className="photo-box circular">
@@ -56,19 +124,7 @@ function StudentSignUp3Screen() {
                   {selfiePreview && ( <img src={selfiePreview} alt="Previsualización selfie" className="photo-preview circular" />)}
                 </div>
                 <label htmlFor="selfie-photo" className="photo-label"> Subir selfie </label>
-                <input
-                  id="selfie-photo"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      setSelfiePhoto(file);
-                      setSelfiePreview(URL.createObjectURL(file));
-                    }
-                  }}
-                  hidden
-                />
+                <input id="selfie-photo" type="file" accept="image/*" onChange={handleSelfiePhotoChange} hidden/>
               </div>
             </div>
           </div>
@@ -89,6 +145,12 @@ function StudentSignUp3Screen() {
           <button type="submit">Enviar</button>
         </form>
       </div>
+       {showModal && (
+        <SignUpModal isOpen={showModal} onClose={() => 
+          { setShowModal(false)
+            navigate("/login");
+          }}/>
+      )}
     </div>
   );
 }
