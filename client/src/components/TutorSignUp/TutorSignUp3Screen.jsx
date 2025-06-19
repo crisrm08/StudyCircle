@@ -1,15 +1,15 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
-import { StudentSignUpContext } from "../../contexts/StudentSignUpContext";
+import { TutorSignUpContext } from "../../contexts/TutorSignUpContext";
 import { supabase } from "../Supabase/supabaseClient";
 import { MdKeyboardArrowLeft } from "react-icons/md";
-import SignUpModal from "./SignUpModal";
+import SignUpModal from "../../components/StudentSignUp/SignUpModal";
 import "../../css/signUpStyles/signup.css";
 import { useNavigate } from "react-router-dom";
 
 
-function StudentSignUp3Screen() {
-  const { studentSignUpData } = useContext(StudentSignUpContext);
+function TutorSignUp3Screen() {
+  const { tutorSignUpData, setTutorSignUpData } = useContext(TutorSignUpContext);
   const [idPhoto, setIdPhoto] = useState(null);
   const [selfiePhoto, setSelfiePhoto] = useState(null);
   const [declarationConfirmed, setConfirmDeclaration] = useState(false);
@@ -21,7 +21,7 @@ function StudentSignUp3Screen() {
   async function signUpSuccesful(e) {
     e.preventDefault();
 
-    const { email, password, id_photo, selfie_photo, ...profileData } = studentSignUpData;
+    const { email, password, id_photo, selfie_photo, ...profileData } = tutorSignUpData;
 
     const formData = new FormData();
     formData.append("email", email);
@@ -37,13 +37,13 @@ function StudentSignUp3Screen() {
     });
 
     try {
-      const response = await axios.post("http://10.0.0.16:5000/student-signup", formData);
+      const response = await axios.post("http://10.0.0.16:5000/tutor-signup", formData);
 
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: 'http://localhost:3000/edit-student-profile',
+          emailRedirectTo: 'http://localhost:3000/edit-tutor-profile',
           data: {
             name: profileData.name
           }
@@ -55,7 +55,7 @@ function StudentSignUp3Screen() {
         return;
       }
 
-      await axios.post("http://10.0.0.16:5000/student-link-supabase", {
+      await axios.post("http://10.0.0.16:5000/user-link-supabase", {
         email,
         supabase_user_id: data.user.id
       });
@@ -140,7 +140,7 @@ function StudentSignUp3Screen() {
               />
               <label htmlFor="declaration"> Declaro que la información proporcionada es verdadera</label>
             </div>
-            <p>Estas imágenes son recopiladas por motivos de seguridad, las mismas serán analizadas</p>
+            <p>Estas imágenes son recopiladas por motivos de seguridad, las mismas serán analizadas por nuestro equipo</p>
           </div>
 
           <button type="submit">Enviar</button>
@@ -156,4 +156,4 @@ function StudentSignUp3Screen() {
   );
 }
 
-export default StudentSignUp3Screen;
+export default TutorSignUp3Screen;

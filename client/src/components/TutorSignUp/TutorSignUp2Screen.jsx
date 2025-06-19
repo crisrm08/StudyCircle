@@ -1,5 +1,6 @@
-import React, { lazy, useState } from "react";
+import React, { useState, useContext } from "react";
 import Select from "react-select";
+import { TutorSignUpContext } from "../../contexts/TutorSignUpContext";
 import "../../css/signUpStyles/signup.css";
 import { useNavigate } from "react-router-dom";
 import { MdKeyboardArrowLeft } from "react-icons/md";
@@ -59,7 +60,6 @@ const groupedSubjects = [
   },
 ];
 
-
 const customStyles = {
   control: (provided, state) => ({
     ...provided,
@@ -95,10 +95,38 @@ function TutorSignUp2Screen() {
     const [academicLevel, setAcademicLevel] = useState(null);
     const [tutorOcupation, setTutorOcupation] = useState(null);
     const [strength, setStrength] = useState([]);
+    const { tutorSignUpData, setTutorSignUpData } = useContext(TutorSignUpContext);
     const navigate = useNavigate();
 
-    function signUpSuccesful() {
-        navigate("/edit-tutor-profile");
+    async function next(event) {
+      event.preventDefault();
+      if (
+        tutorSignUpData.academic_level === "" ||
+        tutorSignUpData.institution === "" ||
+        tutorSignUpData.subject_teach.length === 0 ||
+        tutorSignUpData.password === "" ||
+        tutorSignUpData.hourly_fee === ""
+      ) {
+        alert("Por favor, completa todos los campos");
+        return;
+      }
+      navigate("/tutor-sign-up-3");
+    }
+
+    function handleChangeAcademicLevel(selectedOption) {
+      setTutorSignUpData({ ...tutorSignUpData, academic_level: selectedOption.value});
+    }
+
+    function handleChangeInstitution(selectedOption) {
+      setTutorSignUpData({ ...tutorSignUpData, institution: selectedOption.target.value });
+    }
+
+    function handleChangeOcupation(selectedOption) {
+      setTutorSignUpData({ ...tutorSignUpData, occupation: selectedOption.map(item => item.value) });
+    }
+
+    function  handleChangeSubjectTeaches(selectedOption) {
+      setTutorSignUpData({ ...tutorSignUpData, subject_teach: selectedOption.map(item => item.value) });   
     }
 
     function goBack() {
@@ -132,7 +160,6 @@ function TutorSignUp2Screen() {
                         id="ocupations"
                         name="ocupations"
                         placeholder="Selecciona aquí..."
-                        isMulti
                         closeMenuOnSelect={false}
                         options={ocupations}
                         value={tutorOcupation}
@@ -156,7 +183,7 @@ function TutorSignUp2Screen() {
                     <label htmlFor="price-per-hour" style={{color:"#D6E4F0"}}>Tarifa por hora</label>
                     <input id="price-per-hour" type="number" placeholder="Ingrese su precio en DOP" style={{maxWidth: "-webkit-fill-available"}}/>
                                     
-                    <button type="submit" className="next" onClick={signUpSuccesful}>Registrar</button>
+                    <button type="submit" className="next" onClick={next}>Registrar</button>
                 </form>
         </div>
         </div>

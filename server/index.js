@@ -79,7 +79,7 @@ app.post('/student-signup', upload.fields([ { name: 'id_photo', maxCount: 1 }, {
     const params = {
       SourceImage: { Bytes: idPhotoFile.buffer },
       TargetImage: { Bytes: selfiePhotoFile.buffer },
-      SimilarityThreshold:90 
+      SimilarityThreshold: 90 
     };
 
     rekognition.compareFaces(params, async (err, data) => {

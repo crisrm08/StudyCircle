@@ -6,9 +6,10 @@ import LoginScreen from "./components/Login/LoginScreen";
 import ForgotPWDScreen from "./components/ForgotPassword/ForgotPWDScreen";
 import StudentSignUp1Screen from "./components/StudentSignUp/StudentSignUp1Screen";
 import StudentSignUp2Screen from "./components/StudentSignUp/StudentSignUp2Screen";
+import StudentSignUp3Screen from "./components/StudentSignUp/StudentSignUp3Screen";
 import TutorSignUp1Screen from "./components/TutorSignUp/TutorSignUp1Screen";
 import TutorSignUp2Screen from "./components/TutorSignUp/TutorSignUp2Screen";
-import StudentSignUp3Screen from "./components/StudentSignUp/StudentSignUp3Screen";
+import TutorSignUp3Screen from "./components/TutorSignUp/TutorSignUp3Screen";
 import ResultScreen from "./components/Results/ResultScreen";
 import ChatScreen from "./components/Chat/ChatScreen";
 import TutorHomeScreen from "./components/TutorHome/TutorHomeScreen";
@@ -33,6 +34,7 @@ function App() {
         { path: 'student-signup-3', element: <StudentSignUp3Screen /> }, 
         { path: 'tutor-signup-1', element: <TutorSignUp1Screen /> },
         { path: 'tutor-signup-2', element: <TutorSignUp2Screen /> },
+        { path: 'tutor-signup-3', element: <TutorSignUp3Screen /> },
         { path: 'results', element: <ResultScreen /> },
         { path: 'chat', element: <ChatScreen /> },
         { path: 'tutor-home-page', element: <TutorHomeScreen /> },

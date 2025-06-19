@@ -8,26 +8,29 @@ import { UserProvider } from "./contexts/UserContext";
 import { SidebarProvider } from "./contexts/SidebarContext";
 import { ActiveTabProvider } from "./contexts/ActiveTabContext";
 import { StudentSignUpProvider } from "./contexts/StudentSignUpContext";
+import { TutorSignUpProvider } from "./contexts/TutorSignUpContext";
 
 function AppProviders({ children }) {
   return (
     <AuthProvider>
       <StudentSignUpProvider>
-        <UserProvider>
-          <SidebarProvider>
-            <ActiveTabProvider>
-              <SubjectTopicProvider>
-                <TimeProvider>
-                  <ModeProvider>
-                    <MessageProvider>
-                      {children} 
-                    </MessageProvider>
-                  </ModeProvider>
-                </TimeProvider>
-              </SubjectTopicProvider>
-            </ActiveTabProvider>
-          </SidebarProvider>
-        </UserProvider>
+        <TutorSignUpProvider>
+          <UserProvider>
+            <SidebarProvider>
+              <ActiveTabProvider>
+                <SubjectTopicProvider>
+                  <TimeProvider>
+                    <ModeProvider>
+                      <MessageProvider>
+                        {children} 
+                      </MessageProvider>
+                    </ModeProvider>
+                  </TimeProvider>
+                </SubjectTopicProvider>
+              </ActiveTabProvider>
+            </SidebarProvider>
+          </UserProvider>
+        </TutorSignUpProvider>
       </StudentSignUpProvider>
     </AuthProvider>
   );
