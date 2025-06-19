@@ -14,10 +14,12 @@
   "description": "",
   "dependencies": {
     "@supabase/supabase-js": "^2.49.10",
+    "aws-sdk": "^2.1692.0",
     "axios": "^1.8.4",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "multer": "^2.0.1",
     "pg": "^8.14.1"
   },
   "devDependencies": {

@@ -13,7 +13,9 @@ export function StudentSignUpProvider({ children }) {
     subject_weak: [],
     subject_strong: [],
     institution: "",
-    year: ""
+    year: "",
+    id_photo: null,
+    selfie_photo: null,
   });
 
   return (
