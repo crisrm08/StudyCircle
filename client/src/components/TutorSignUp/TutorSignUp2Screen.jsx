@@ -1,64 +1,10 @@
-import React, { lazy, useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Select from "react-select";
+import { TutorSignUpContext } from "../../contexts/TutorSignUpContext";
 import "../../css/signUpStyles/signup.css";
 import { useNavigate } from "react-router-dom";
 import { MdKeyboardArrowLeft } from "react-icons/md";
-
-const academicLevels = [
-  { value: "secundaria", label: "Secundaria" },
-  { value: "técnico", label: "Técnico Superior" },
-  { value: "grado", label: "Grado (ingeniero)" },
-  { value: "maestría", label: "Maestría" },
-  { value: "phd", label: "Doctorado" }
-];
-
-const subjects = [
-    { value: "Cálculo", label: "Cálculo"},
-    { value: "Física", label: "Física"},
-    { value: "Química", label: "Química"},
-    { value: "Programación", label: "Progrmación"},
-    { value: "Álgebra", label: "Álgebra"}
-]
-
-const ocupations = [
-  {value: "estudiante", label: "Estudiante avanzado"},
-  {value: "profesor", label: "Profesor"},
-  {value: "Ingeniero", label: "Ingeniero"}
-]
-
-const groupedSubjects = [
-  {
-    label: "Cálculo",
-    options: [
-      { value: "limites", label: "Límites y continuidad" },
-      { value: "derivadas", label: "Derivadas y su interpretación" },
-      { value: "aplicaciones", label: "Aplicaciones de las derivadas" },
-      { value: "integrales", label: "Integrales definidas e indefinidas" },
-      { value: "tecnicas", label: "Técnicas de integración" },
-      { value: "fundamental", label: "Teorema fundamental del cálculo" },
-      { value: "series", label: "Series y secuencias" },
-      { value: "diferenciales", label: "Ecuaciones diferenciales" },
-      { value: "infinitos", label: "Teoría de los límites infinitos" },
-      { value: "multivariable", label: "Cálculo multivariable" },
-    ],
-  },
-  {
-    label: "Programación",
-    options: [
-      { value: "oop", label: "Programación Orientada a Objetos (OOP)" },
-      { value: "datastruct", label: "Estructuras de datos" },
-      { value: "algoritmos", label: "Algoritmos y complejidad computacional" },
-      { value: "bd", label: "Bases de datos" },
-      { value: "web", label: "Programación web (HTML, CSS, JavaScript)" },
-      { value: "movil", label: "Desarrollo móvil" },
-      { value: "patrones", label: "Patrones de diseño de software" },
-      { value: "lenguajes", label: "Lenguajes (Python, Java, C++)" },
-      { value: "so", label: "Sistemas operativos y gestión de memoria" },
-      { value: "testing", label: "Pruebas y depuración de código" },
-    ],
-  },
-];
-
+import axios from "axios";
 
 const customStyles = {
   control: (provided, state) => ({
@@ -67,14 +13,14 @@ const customStyles = {
     borderColor: state.isFocused ? "#1E56A0" : "#D6E4F0",
     boxShadow: "none",
     "&:hover": { borderColor: "#1E56A0" },
-    borderRadius: 25,
+    borderRadius: 8,
     minHeight: 40,
     width: "100%",
   }),
   menu: provided => ({
     ...provided,
     backgroundColor: "#F6F6F6",
-    borderRadius: 8,
+    borderRadius: 25,
     marginTop: 4,
   }),
   option: (provided, { isFocused, isSelected }) => ({
@@ -91,14 +37,78 @@ const customStyles = {
   placeholder: provided => ({ ...provided, color: "#58769c" }),
 };
 
+
 function TutorSignUp2Screen() {
-    const [academicLevel, setAcademicLevel] = useState(null);
-    const [tutorOcupation, setTutorOcupation] = useState(null);
-    const [strength, setStrength] = useState([]);
+    const [academicLevelOptions, setAcademicLevelOptions] = useState([]);
+    const [occupationOptions, setOccupationOptions] = useState([]);
+    const [subjects, setSubjects] = useState([]);
+    const [topics, setTopics] = useState([]);
+    const { tutorSignUpData, setTutorSignUpData } = useContext(TutorSignUpContext);
     const navigate = useNavigate();
 
-    function signUpSuccesful() {
-        navigate("/edit-tutor-profile");
+    useEffect(() => {
+      axios.get("http://10.0.0.16:5000/ocupations-academic-levels")
+        .then(({ data }) => {
+          setOccupationOptions(
+            (data.ocupations || []).map(ocupation => ({ value: ocupation.value, label: ocupation.label.trim() }))
+          );
+          setAcademicLevelOptions(
+            (data.academicLevels || []).map(academiclvl => ({ value: academiclvl.value, label: academiclvl.label }))
+          );
+        })
+        .catch(console.error);
+
+      axios.get("http://10.0.0.16:5000/subjects-topics")
+        .then(response => {
+          setSubjects(response.data);
+          const allTopics = response.data.flatMap(subj => subj.topics.map(t => ({ ...t, subject: subj.name })));
+          setTopics(allTopics);
+        })
+        .catch(error => {
+          console.error("Error fetching subjects: ", error);
+        });
+    }, []);
+
+    async function next(event) {
+      event.preventDefault();
+      if (
+        tutorSignUpData.academic_level === "" ||
+        tutorSignUpData.institution === "" ||
+        tutorSignUpData.occupation === "" ||
+        tutorSignUpData.subject_teach.length === 0 ||
+        tutorSignUpData.hourly_fee === ""
+      ) {
+        alert("Por favor, completa todos los campos");
+        return;
+      }
+      navigate("/tutor-signup-3");
+    }
+
+    function handleChangeAcademicLevel(selectedOption) {
+      setTutorSignUpData({ ...tutorSignUpData, academic_level: selectedOption.value })
+    }
+    function handleChangeOccupation(selectedOption) {
+      setTutorSignUpData({ ...tutorSignUpData, occupation: selectedOption.value })
+    }
+
+    function handleChangeInstitution(event) {
+      setTutorSignUpData({ ...tutorSignUpData, institution: event.target.value });
+    }
+
+    const groupedTopics = React.useMemo(() => {
+      if (!subjects || subjects.length === 0) return [];
+      return subjects.map(subj => ({
+        label: subj.name,
+        options: subj.topics.map(t => ({ value: t.id, label: t.name }))
+      }));
+    }, [subjects]);
+    
+    function handleChangeSubjectTeaches(selectedOptions) {
+      setTutorSignUpData({ ...tutorSignUpData, subject_teach: selectedOptions });   
+    }
+
+    function handleChangeFee(event) {
+      setTutorSignUpData({ ...tutorSignUpData, hourly_fee: event.target.value})
     }
 
     function goBack() {
@@ -114,49 +124,56 @@ function TutorSignUp2Screen() {
                     <div></div>
 
                     <label htmlFor="academic-level" style={{color:"#D6E4F0"}}>Nivel académico</label>
-                    <Select
-                        id="academic-level"
-                        name="academic-level"
-                        placeholder="Selecciona aquí..."
-                        options={academicLevels}
-                        value={academicLevel}
-                        onChange={setAcademicLevel}
-                        styles={customStyles}
+                     <Select
+                      id="academic-level"
+                      name="academic-level"
+                      placeholder="Selecciona aquí..."
+                      options={academicLevelOptions}
+                      value={
+                        academicLevelOptions.find(
+                          opt => String(opt.name) === String(tutorSignUpData.academic_level)
+                        ) || null
+                      }
+                      onChange={handleChangeAcademicLevel}
+                      styles={customStyles}
                     />
 
                     <label htmlFor="institution" style={{color:"#D6E4F0"}}>Institución donde trabaja o estudia</label>
-                    <input id="institution" type="text" placeholder="Escribe el nombre aquí" style={{maxWidth: "-webkit-fill-available"}}/>
+                    <input id="institution" type="text" placeholder="Escribe el nombre aquí" onChange={handleChangeInstitution} style={{maxWidth: "-webkit-fill-available"}}/>
 
                     <label htmlFor="ocupations" style={{color:"#D6E4F0"}}>Selecciona tu ocupación principal</label>
                     <Select
                         id="ocupations"
                         name="ocupations"
                         placeholder="Selecciona aquí..."
-                        isMulti
-                        closeMenuOnSelect={false}
-                        options={ocupations}
-                        value={tutorOcupation}
-                        onChange={setTutorOcupation}
+                        options={occupationOptions}
+                        value={
+                          occupationOptions.find(
+                            opt => String(opt.value) === String(tutorSignUpData.occupation)
+                          ) || null
+                        }
+                        onChange={handleChangeOccupation}
                         styles={customStyles}
-                    />
+                      />
 
                     <label htmlFor="strengths" style={{color:"#D6E4F0"}}>Temas a enseñar</label>
-                    <Select
-                        id="strengths"
-                        name="strengths"
-                        placeholder="Selecciona aquí..."
-                        isMulti
-                        closeMenuOnSelect={false}
-                        options={groupedSubjects}
-                        value={strength}
-                        onChange={setStrength}
-                        styles={customStyles}
+                     <Select
+                      id="strengths"
+                      name="strengths"
+                      placeholder="Selecciona o escribe aquí..."
+                      isMulti
+                      isSearchable={true}
+                      closeMenuOnSelect={false}
+                      options={groupedTopics}
+                      value={tutorSignUpData.subject_strong}
+                      onChange={handleChangeSubjectTeaches}
+                      styles={customStyles}
                     />
 
                     <label htmlFor="price-per-hour" style={{color:"#D6E4F0"}}>Tarifa por hora</label>
-                    <input id="price-per-hour" type="number" placeholder="Ingrese su precio en DOP" style={{maxWidth: "-webkit-fill-available"}}/>
+                    <input id="price-per-hour" type="number" placeholder="Ingrese su precio en DOP" onChange={handleChangeFee} style={{maxWidth: "-webkit-fill-available"}}/>
                                     
-                    <button type="submit" className="next" onClick={signUpSuccesful}>Registrar</button>
+                    <button type="submit" className="next" onClick={next}>Registrar</button>
                 </form>
         </div>
         </div>

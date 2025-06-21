@@ -9,7 +9,6 @@ import multer from 'multer';
 
 dotenv.config();
 
-
 AWS.config.update({
   accessKeyId: process.env.ACCESS_KEY,
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
@@ -21,6 +20,7 @@ const rekognition = new AWS.Rekognition();
 const app = express();
 const PORT = 5000;
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SERVICE_ROLE_KEY);
+const upload = multer({ storage: multer.memoryStorage() });
 
 app.use(cors());
 app.use(express.json());
@@ -47,11 +47,11 @@ app.get('/api/check-email', async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 
-  const exists = data.users.some(u => u.email === email);
+  const exists = data.users.some(user => user.email === email);
   return res.json({ exists });
 });
 
-app.post('/student-link-supabase', async (req, res) => {
+app.post('/user-link-supabase', async (req, res) => {
   const { email, supabase_user_id } = req.body;
   try {
     const result = await db.query(
@@ -68,8 +68,6 @@ app.post('/student-link-supabase', async (req, res) => {
   }
 });
 
-const upload = multer({ storage: multer.memoryStorage() });
-
 app.post('/student-signup', upload.fields([ { name: 'id_photo', maxCount: 1 }, { name: 'selfie_photo', maxCount: 1 }
 ]), async (req, res) => {
   try {
@@ -79,7 +77,7 @@ app.post('/student-signup', upload.fields([ { name: 'id_photo', maxCount: 1 }, {
     const params = {
       SourceImage: { Bytes: idPhotoFile.buffer },
       TargetImage: { Bytes: selfiePhotoFile.buffer },
-      SimilarityThreshold:90 
+      SimilarityThreshold: 90 
     };
 
     rekognition.compareFaces(params, async (err, data) => {
@@ -128,6 +126,50 @@ app.post('/student-signup', upload.fields([ { name: 'id_photo', maxCount: 1 }, {
   }
 });
 
+app.post('/tutor-signup', upload.fields([ { name: 'id_photo', maxCount: 1 }, { name: 'selfie_photo', maxCount: 1 }
+]), async (req, res) => {
+  try { 
+    const idPhotoFile = req.files['id_photo']?.[0];
+    const selfiePhotoFile = req.files['selfie_photo']?.[0];
+
+    const params = {
+      SourceImage: { Bytes: idPhotoFile.buffer },
+      TargetImage: { Bytes: selfiePhotoFile.buffer },
+      SimilarityThreshold: 90
+    };
+
+    rekognition.compareFaces(params, async (err, data) => {
+      if (err) {
+        console.error('Rekognition error:', err);
+        return res.status(500).json({ error: 'Error comparing faces.' });
+      }
+      const match = data.FaceMatches && data.FaceMatches.length > 0;
+      console.log('Face comparison result:', match);
+      if (!match) {
+        return res.status(400).json({ error: 'La imagen de la cédula y la selfie subida no coinciden' });
+      }
+      const { name, last_name, email, profile_type, academic_level, subject_teach, institution, occupation, hourly_fee, supabase_user_id } = req.body;  
+      const newTutorResult = await db.query(
+        'INSERT INTO users (name, last_name, email, profile_type, academic_level, institution, occupation, hourly_fee, supabase_user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING user_id',
+        [name, last_name, email, profile_type, academic_level, institution, occupation, hourly_fee, supabase_user_id]
+      );
+      const userId = newTutorResult.rows[0].user_id;  
+      if (Array.isArray(JSON.parse(subject_teach))) {
+        for (const topic of JSON.parse(subject_teach)) {
+          await db.query(
+            'INSERT INTO user_topics (user_id, topic_id, type) VALUES ($1, $2, $3)',
+            [userId, topic.value, 'teaches']
+          );
+        }
+      }
+      res.send("Usuario registrado exitosamente");
+    });
+  } catch (error) {
+    console.error('Error during signup:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.get('/subjects-topics', async (req, res) => {
   try {    
     const getSubjects = await db.query('SELECT * FROM subjects');
@@ -158,6 +200,26 @@ app.get('/subjects-topics', async (req, res) => {
   }
 });
 
+app.get('/ocupations-academic-levels', async (req, res) => {
+  try {
+    const getOcupations = await db.query('SELECT * FROM ocupations');
+    const getAcademicLevels = await db.query('SELECT * FROM academic_levels');
+
+    const ocupations = getOcupations.rows.map(ocupation => ({
+      value: ocupation.ocupation_id,
+      label: ocupation.ocupation_name
+    }));
+
+    const academicLevels = getAcademicLevels.rows.map(level => ({
+      value: level.academic_level_id,
+      label: level.academic_level_name
+    }));
+    res.json({ ocupations, academicLevels });
+  } catch (error) {
+    console.error('Error fetching ocupations or academic levels: ', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 app.get('/careers', async (req, res) => {
   try {
