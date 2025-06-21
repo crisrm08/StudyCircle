@@ -55,7 +55,7 @@ function StudentSignUp3Screen() {
         return;
       }
 
-      await axios.post("http://10.0.0.16:5000/student-link-supabase", {
+      await axios.post("http://10.0.0.16:5000/user-link-supabase", {
         email,
         supabase_user_id: data.user.id
       });
