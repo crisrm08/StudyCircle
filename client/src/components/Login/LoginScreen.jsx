@@ -5,7 +5,6 @@ import { LuEyeClosed } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
 import { useNavigate } from 'react-router-dom';
 import "../../css/loginStyles/loginscreen.css";
-import { supabase } from "../Supabase/supabaseClient";
 
 function LoginScreen() {
 
