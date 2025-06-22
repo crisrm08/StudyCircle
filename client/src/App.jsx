@@ -3,6 +3,7 @@ import AppProviders from "./AppProviders";
 import { createBrowserRouter, RouterProvider  } from "react-router-dom";
 import SearchScreen from "./components/Search/SearchScreen";
 import LoginScreen from "./components/Login/LoginScreen";
+import AuthListener from "./components/Login/AuthListener";
 import ForgotPWDScreen from "./components/ForgotPassword/ForgotPWDScreen";
 import StudentSignUp1Screen from "./components/StudentSignUp/StudentSignUp1Screen";
 import StudentSignUp2Screen from "./components/StudentSignUp/StudentSignUp2Screen";
@@ -50,6 +51,7 @@ function App() {
   ]);
   return (
     <AppProviders>
+        <AuthListener/>
         <RouterProvider router={router} />
     </AppProviders>
   );
