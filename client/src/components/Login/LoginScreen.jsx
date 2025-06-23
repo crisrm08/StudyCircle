@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { supabase } from "../Supabase/supabaseClient";
 import { UserContext } from "../../contexts/UserContext";
 import { LuEyeClosed } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
@@ -14,6 +15,14 @@ function LoginScreen() {
     function handleChange(event){
         setUser(event.target.value);
     }
+    
+    async function handleGoogle() {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: "google",
+         options: { redirectTo: `${window.location.origin}/pick-role` }
+        });
+        if (error) console.error("OAuth error:", error.message);
+    }
 
     function logIntoStudent() {
         if (user === "estudiante") {
@@ -24,7 +33,7 @@ function LoginScreen() {
         }
     }
 
-    function studentSignUp(){
+    function studentSignUp() {
         navigate("/student-signup-1");
     }
 
@@ -44,9 +53,9 @@ function LoginScreen() {
 
                 <div className="login-forgotPWD-form">
                     <h2>Inicia sesión en tu cuenta</h2>
-                    <h3>Inicia sesión con tu cuenta de google</h3>
+                    <h3>Inicia sesión o Regístrate con tu cuenta de google</h3>
 
-                    <img src="images/googleLogo.webp" alt="google logo" />
+                    <img src="images/googleLogo.webp" alt="google logo" onClick={handleGoogle} />
                     <div className="separator2"> <span>O</span> </div>
                     <div className="inputs-container">
                         <div className="input-container">

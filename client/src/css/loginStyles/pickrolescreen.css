@@ -1,0 +1,88 @@
+.pick-role-screen{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 35px 20px;
+}
+
+.pick-role-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+}
+
+.pick-role-content h2 {
+    color: #163172;
+    font-size: 1.8rem;
+    background-color: #F6F6F6;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+
+.options-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 200px
+}
+
+.options-container button {
+    background-color: #D6E4F0;
+    border: 2px solid #1E56A0;
+    border-radius: 15px;
+    padding: 20px;
+    width: 260px;
+    height: 270px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1E56A0;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    cursor: pointer;
+}
+
+.options-container button:hover {
+    background-color: #B0CDEB;
+    transform: scale(1.03);
+}
+
+.pick-role-content > button {
+    background-color: #1E56A0;
+    color: #F6F6F6;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.pick-role-content > button:hover {
+    background-color: #163172;
+}
+
+
+@media screen and (max-width: 768px) {
+    .pick-role-content{
+        gap: 35px;
+    }
+
+    .options-container{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .pick-role-content > button{
+        margin-bottom: 10px;
+    }
+}

@@ -18,7 +18,6 @@ function SubjectSelection() {
                 if (response.data.length > 0) {
                     setTopics(response.data[2].topics);
                     setSubject(response.data[2].name); 
-                    console.log("Fetched topics for first subject: " + topics);
                 }
             })
             .catch(error => {

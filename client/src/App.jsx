@@ -1,8 +1,11 @@
 import React from "react";
 import AppProviders from "./AppProviders";
+import RootLayout from "./components/RootLayout";
 import { createBrowserRouter, RouterProvider  } from "react-router-dom";
 import SearchScreen from "./components/Search/SearchScreen";
 import LoginScreen from "./components/Login/LoginScreen";
+import AuthListener from "./components/Login/AuthListener";
+import PickRoleScreen from "./components/Login/PickRoleScreen";
 import ForgotPWDScreen from "./components/ForgotPassword/ForgotPWDScreen";
 import StudentSignUp1Screen from "./components/StudentSignUp/StudentSignUp1Screen";
 import StudentSignUp2Screen from "./components/StudentSignUp/StudentSignUp2Screen";
@@ -25,10 +28,12 @@ function App() {
   const router = createBrowserRouter([
     {
       path: '/',
+      element: <RootLayout />,
       children: [
         { index: true, element: <SearchScreen /> },        
         { path: 'login', element: <LoginScreen /> },
         { path: 'forgot-pwd', element: <ForgotPWDScreen />},
+        { path: 'pick-role', element: <PickRoleScreen/>},
         { path: 'student-signup-1', element: <StudentSignUp1Screen /> },
         { path: 'student-signup-2', element: <StudentSignUp2Screen /> },
         { path: 'student-signup-3', element: <StudentSignUp3Screen /> }, 
