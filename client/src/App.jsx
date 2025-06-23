@@ -1,5 +1,6 @@
 import React from "react";
 import AppProviders from "./AppProviders";
+import RootLayout from "./components/RootLayout";
 import { createBrowserRouter, RouterProvider  } from "react-router-dom";
 import SearchScreen from "./components/Search/SearchScreen";
 import LoginScreen from "./components/Login/LoginScreen";
@@ -27,6 +28,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: '/',
+      element: <RootLayout />,
       children: [
         { index: true, element: <SearchScreen /> },        
         { path: 'login', element: <LoginScreen /> },
@@ -53,9 +55,7 @@ function App() {
   ]);
   return (
     <AppProviders>
-        <RouterProvider router={router}>
-          <AuthListener/>
-        </RouterProvider>
+        <RouterProvider router={router} />
     </AppProviders>
   );
 }

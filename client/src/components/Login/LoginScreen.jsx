@@ -17,7 +17,11 @@ function LoginScreen() {
     }
     
     async function handleGoogle() {
-        await supabase.auth.signInWithOAuth({ provider: 'google'});
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: "google",
+         options: { redirectTo: `${window.location.origin}/pick-role` }
+        });
+        if (error) console.error("OAuth error:", error.message);
     }
 
     function logIntoStudent() {
@@ -29,7 +33,7 @@ function LoginScreen() {
         }
     }
 
-    function studentSignUp(){
+    function studentSignUp() {
         navigate("/student-signup-1");
     }
 

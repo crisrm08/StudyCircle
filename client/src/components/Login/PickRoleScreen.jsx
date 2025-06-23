@@ -10,14 +10,16 @@ function PickRoleScreen() {
   const navigate = useNavigate();
 
   async function finishProfile(){
-    const session = supabase.auth.getSession();
-    const sbId = (await session).data.session.user.id;
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
     await supabase.from("users").insert({
-      supabase_user_id: sbId,
+      supabase_user_id: session.user.id,
       profile_type: role,
     });
-    navigate(role === "estudiante" ? "/edit-stu-profile" : "/edit-tutor-profile");
+
+    navigate( role === "estudiante" ? "/edit-student-profile": "/edit-tutor-profile");
   };
 
   return (
