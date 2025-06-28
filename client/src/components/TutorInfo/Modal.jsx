@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../contexts/AuthContext";
 import { MdEdit } from "react-icons/md";
 import { FaAngleLeft } from "react-icons/fa";
 import Request from "./Request";
@@ -9,7 +8,7 @@ import "../../css/studentProfileStyles/modal.css";
 function Modal({ tutor }) {
   const { image, name, institution, occupation, academicLevel, description, pricePerHour, rating, specialties } = tutor;
   const [ renderRequest, setRenderRequest ] = useState(false);
-  const { role } = useContext(AuthContext);
+  {/*const { role } = useContext(AuthContext);*/}
   const navigate = useNavigate();
 
   const renderStars = () => {
@@ -53,7 +52,7 @@ function Modal({ tutor }) {
     <div className="modal-content">
 
       <img src={image} alt={`Foto de ${name}`} className="modal-image" />
-      {role === "Tutor" && ( <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>)}
+      {/*{role === "Tutor" && ( <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>)}*/}
      
       <h2 className="modal-name">{name}</h2>
       <p className="modal-occupation">{occupation} - {institution} - {academicLevel}</p>
@@ -71,8 +70,8 @@ function Modal({ tutor }) {
       <p className="modal-description">{description}</p>
       <p className="modal-price"> <strong>Precio por hora:</strong> RD${pricePerHour} </p>
       <div className="modal-button-container">
-        {role === "Student" && ( <button className="back-button" style={{marginTop: 15}} onClick={goBack}><FaAngleLeft/> Volver</button>)}
-        {role === "Student" && ( <button className="tutor-button" style={{marginTop: 15}} onClick={openRequestModal}> Solicitar tutoría</button>)}
+        {/*{role === "Student" && ( <button className="back-button" style={{marginTop: 15}} onClick={goBack}><FaAngleLeft/> Volver</button>)}
+        {role === "Student" && ( <button className="tutor-button" style={{marginTop: 15}} onClick={openRequestModal}> Solicitar tutoría</button>)} */}
       </div>
 
       {renderRequest === true && (<Request onClose={closeRequestModal}/>)}

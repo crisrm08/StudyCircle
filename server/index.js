@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import { createClient } from "@supabase/supabase-js";
 import AWS from 'aws-sdk';
 import multer from 'multer';
+import jwt from "jsonwebtoken";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ const rekognition = new AWS.Rekognition();
 
 const app = express();
 const PORT = 5000;
+const router = express.Router();
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SERVICE_ROLE_KEY);
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -35,6 +37,31 @@ const db = new pg.Client({
 });
 
 db.connect();
+
+app.post("/api/login", async (req, res) => {
+  try {
+    const auth = req.headers.authorization;
+    if (!auth) return res.status(401).send({ error: "No auth header" });
+    const token = auth.replace("Bearer ", "");
+
+    const { data: { user }, error: authErr } = await supabase.auth.getUser(token);
+    if (authErr) return res.status(401).send({ error: authErr.message });
+
+    const { data: profile, error: profErr } = await supabase
+      .from("users")
+      .select("*")
+      .eq("supabase_user_id", user.id)
+      .maybeSingle();
+    if (profErr) return res.status(500).send({ error: profErr.message });
+    if (!profile) return res.status(404).send({ error: "Perfil no encontrado" });
+
+    res.json(profile);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ error: "Error interno" });
+  }
+});
 
 app.get('/api/check-email', async (req, res) => {
   const { email } = req.query;
@@ -193,6 +220,7 @@ app.get('/subjects-topics', async (req, res) => {
       ...subject,
       topics: topicsBySubject[subject.id] || []
     }));
+    
     res.json(subjectsWithTopics);
   } catch (error) {
     console.error('Error fetching subjects: ', error);
@@ -214,6 +242,7 @@ app.get('/ocupations-academic-levels', async (req, res) => {
       value: level.academic_level_id,
       label: level.academic_level_name
     }));
+    
     res.json({ ocupations, academicLevels });
   } catch (error) {
     console.error('Error fetching ocupations or academic levels: ', error);

@@ -1,34 +1,48 @@
 import { useState } from "react";
 import { supabase } from "../Supabase/supabaseClient";
-import { useNavigate } from "react-router-dom";
 import { PiStudent } from "react-icons/pi";
 import { FaChalkboardTeacher } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import "../../css/loginStyles/pickrolescreen.css";
 
 function PickRoleScreen() {
   const [role, setRole] = useState(null); 
   const navigate = useNavigate();
 
-  async function finishProfile(){
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
+  async function finishProfile() {
+    const { data: { session } } = await supabase.auth.getSession();
 
-    await supabase.from("users").insert({
-      supabase_user_id: session.user.id,
-      profile_type: role,
-    });
+    const { data: existing, error: selectError } = await supabase
+      .from("users")
+      .select("id")
+      .eq("supabase_user_id", session.user.id)
+      .maybeSingle();
 
-    navigate( role === "estudiante" ? "/edit-student-profile": "/edit-tutor-profile");
-  };
+    if (!existing) {
+      const { error: insertError } = await supabase.from("users").insert({
+        supabase_user_id: session.user.id,
+        profile_type: role,
+        email: session.user.email, 
+      });
+      if (insertError) {
+        alert("Error creando perfil: " + insertError.message);
+        return;
+      }
+    }
 
+    if (role === "student") {
+      navigate("/edit-student-profile");
+    } else {
+      navigate("/edit-tutor-profile");
+    }
+  }
   return (
     <div className="pick-role-screen">
       <h1 className="title title-mobile" style={{color:"#163172"}}>StudyCircle</h1>
       <div className="pick-role-content">
         <h2>Selecciona tu rol</h2>
         <div className="options-container">
-            <button onClick={() => setRole("estudiante")}>
+            <button onClick={() => setRole("student")}>
               <PiStudent size={250}/>
               Estudiante
             </button>

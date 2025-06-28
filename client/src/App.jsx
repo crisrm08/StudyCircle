@@ -1,10 +1,9 @@
 import React from "react";
 import AppProviders from "./AppProviders";
-import RootLayout from "./components/RootLayout";
 import { createBrowserRouter, RouterProvider  } from "react-router-dom";
+import RootLayout from "./components/RootLayout";
 import SearchScreen from "./components/Search/SearchScreen";
 import LoginScreen from "./components/Login/LoginScreen";
-import AuthListener from "./components/Login/AuthListener";
 import PickRoleScreen from "./components/Login/PickRoleScreen";
 import ForgotPWDScreen from "./components/ForgotPassword/ForgotPWDScreen";
 import StudentSignUp1Screen from "./components/StudentSignUp/StudentSignUp1Screen";
@@ -54,9 +53,10 @@ function App() {
     }
   ]);
   return (
-    <AppProviders>
-        <RouterProvider router={router} />
-    </AppProviders>
+    <RouterProvider router={router}>
+      <AppProviders>
+      </AppProviders>
+    </RouterProvider>
   );
 }
 

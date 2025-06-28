@@ -1,19 +1,46 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { supabase } from "../Supabase/supabaseClient";
-import { UserContext } from "../../contexts/UserContext";
 import { LuEyeClosed } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
 import { useNavigate } from 'react-router-dom';
+import { useUser } from "../../contexts/UserContext";
+import axios from "axios";
 import "../../css/loginStyles/loginscreen.css";
 
 function LoginScreen() {
 
-    const { user, setUser } = useContext(UserContext);
+    const { user, setUser } = useUser();
     const navigate = useNavigate();  
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [visible, setVisible] = useState(false);
 
-    function handleChange(event){
-        setUser(event.target.value);
+    function handleEmailChange(event){
+        setEmail(event.target.value);
+    }
+
+    function handlePasswordChange(event) {
+        setPassword(event.target.value);
+    }
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+        console.log("sent email: " + email);
+        console.log("sent password: " + password);
+        
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) return alert("Login falló: " + error.message);
+
+        const token = data.session.access_token;
+        const response = await axios.post("http://10.0.0.16:5000/api/login", {}, { headers: { Authorization: `Bearer ${token}` } });
+        const user = response.data;
+        setUser(user);
+
+        if (user.profile_type === "student") {
+            navigate("/");              
+        } else {
+            navigate("/tutor-home-page"); 
+        }
     }
     
     async function handleGoogle() {
@@ -22,15 +49,6 @@ function LoginScreen() {
          options: { redirectTo: `${window.location.origin}/pick-role` }
         });
         if (error) console.error("OAuth error:", error.message);
-    }
-
-    function logIntoStudent() {
-        if (user === "estudiante") {
-            navigate("/");
-        }
-        if (user === "tutor") {
-            navigate("/tutor-home-page");
-        }
     }
 
     function studentSignUp() {
@@ -48,7 +66,7 @@ function LoginScreen() {
     return (
         <div className="Log-Sign-Frgt">
 
-            <form className="login-forgotPWD-screen" onSubmit={logIntoStudent}>
+            <form className="login-forgotPWD-screen" onSubmit={handleSubmit}>
                 <h1 className="title title-mobile">StudyCircle</h1>
 
                 <div className="login-forgotPWD-form">
@@ -59,12 +77,12 @@ function LoginScreen() {
                     <div className="separator2"> <span>O</span> </div>
                     <div className="inputs-container">
                         <div className="input-container">
-                            <input id="user" type="text" placeholder="Ingresa tu usuario 👩🏻‍💻" onChange={handleChange} />
+                            <input id="user" type="text" placeholder="Ingresa tu email 👩🏻‍💻" onChange={handleEmailChange} />
                         </div>
 
                         <div className="input-container">
                              <div className="input-with-icon">
-                                <input id="password" type={visible ? "text" : "password"} placeholder="Ingresa tu contraseña 🔐"/>
+                                <input id="password" type={visible ? "text" : "password"} placeholder="Ingresa tu contraseña 🔐" onChange={handlePasswordChange}/>
                                 <button
                                     type="button"
                                     className="eye-toggle"

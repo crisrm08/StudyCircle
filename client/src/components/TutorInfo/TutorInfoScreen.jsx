@@ -1,6 +1,5 @@
 import React, {useContext, useState} from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../contexts/AuthContext";
 import Header from "../Common/Header";
 import Modal from "./Modal";
 import TutorReviews from "./TutorReviews";
@@ -13,7 +12,7 @@ import "../../css/tutorInfoStyles/tutorinfoscreen.css";
 function TutorInfoScreen() {
     const navigate = useNavigate();
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
-    const { role } = useContext(AuthContext);
+    {/* const { role } = useContext(AuthContext); */}
   
     const tutor = {
             id: 1,
@@ -30,12 +29,13 @@ function TutorInfoScreen() {
         };
 
     function goToEdit() {
-      if (role === "Tutor") {
+      {/*if (role === "Tutor") {
         navigate("/edit-tutor-profile");
       }
       else{
         navigate("/edit-student-profile");
-      }
+      } */}
+      navigate("/edit-tutor-profile");
     }
 
     return(
@@ -49,7 +49,7 @@ function TutorInfoScreen() {
             <div className="right-section">
               <div className="about-tutor">
                 <div className="about-tutor__scroll">
-                  {role === "Tutor" && (<MdEdit className="edit-button" size={30} onClick={goToEdit}/>)}
+                  {/*{role === "Tutor" && (<MdEdit className="edit-button" size={30} onClick={goToEdit}/>)}*/}
                   <h2>Sobre {tutor.name}:</h2>
                   <hr/>
                   <p>{tutor.fullDescription}</p>
@@ -72,9 +72,10 @@ function TutorInfoScreen() {
                   className="overlay"
                   onClick={() => setIsSidebarClicked(false)}
                 />
-                {role === "Tutor"
+                {/*{role === "Tutor"
                   ? <TutorSidebar />
-                  : <StudentSidebar />}
+                  : <StudentSidebar />}*/}
+                 <TutorSidebar />
               </>
           )}
       </div>
