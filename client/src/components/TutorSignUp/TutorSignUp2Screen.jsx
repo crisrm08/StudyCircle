@@ -131,7 +131,7 @@ function TutorSignUp2Screen() {
                       options={academicLevelOptions}
                       value={
                         academicLevelOptions.find(
-                          opt => String(opt.name) === String(tutorSignUpData.academic_level)
+                          opt => String(opt.value) === String(tutorSignUpData.academic_level)
                         ) || null
                       }
                       onChange={handleChangeAcademicLevel}

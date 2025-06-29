@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef } from "react";
+import { supabase } from "../Supabase/supabaseClient";
 import { FiUser, FiMessageSquare, FiHome, FiX, FiSettings } from "react-icons/fi";
 import { MdOutlinePayment } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
@@ -26,8 +27,8 @@ function TutorSidebar() {
         };
     }, [isSidebarClicked, setIsSidebarClicked]);
 
-    function logOut() {
-      navigate("/login");
+    async function logOut() {
+      await supabase.auth.signOut();
       setIsSidebarClicked(false);
     }
 

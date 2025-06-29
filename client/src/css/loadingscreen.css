@@ -1,0 +1,12 @@
+.loading-screen{
+    background-color: #1E56A0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-screen h2{
+    color: #F6F6F6;
+}

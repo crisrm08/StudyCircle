@@ -1,5 +1,4 @@
 import React from "react";
-import { AuthProvider } from "./contexts/AuthContext";
 import { SubjectTopicProvider } from "./contexts/SubjectTopicContext";
 import { TimeProvider } from "./contexts/TimeContext";
 import { ModeProvider } from "./contexts/ModeContext";
@@ -12,7 +11,6 @@ import { TutorSignUpProvider } from "./contexts/TutorSignUpContext";
 
 function AppProviders({ children }) {
   return (
-    <AuthProvider>
       <StudentSignUpProvider>
         <TutorSignUpProvider>
           <UserProvider>
@@ -32,7 +30,6 @@ function AppProviders({ children }) {
           </UserProvider>
         </TutorSignUpProvider>
       </StudentSignUpProvider>
-    </AuthProvider>
   );
 }
 
