@@ -2,12 +2,13 @@ import React, {useState}from "react";
 import { useNavigate } from "react-router-dom";
 import { MdEdit } from "react-icons/md";
 import { FaAngleLeft } from "react-icons/fa";
+import { useUser } from "../../contexts/UserContext";
 import "../../css/studentProfileStyles/modal.css";
 
-function StudentModal({showAcceptButton}) {
-  console.log("values " + showAcceptButton);
+function StudentModal() {
   
   const navigate = useNavigate();
+  const { user } = useUser();
   const [student] = useState({
         id: 1,
         image: 'https://randomuser.me/api/portraits/men/12.jpg',
@@ -18,7 +19,7 @@ function StudentModal({showAcceptButton}) {
         weaknesses: ['Ecuaciones diferenciales', 'Purebas y depuración de código'],
         rating: 3.5,
         description: 'Estudiante de primer año de la carrera de Ingeniería en Ciencias de la Computación'
-    });
+  });
 
   function goToEdit() {
     navigate("/edit-student-profile");
@@ -59,14 +60,14 @@ function StudentModal({showAcceptButton}) {
       <img
         src={student.image}
         alt={`Foto de ${student.name}`}
-        style={showAcceptButton
+        style={user.profile_type === "tutor"
           ? { width: 100, height: 100 }
           : undefined
         }
         className="modal-image"
     />
 
-      {showAcceptButton === "Student" && <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>}
+      {user.profile_type === "student" && <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>}
       
       <h2 className="modal-name">{student.name}</h2>
       <p className="modal-occupation">{student.institution} - {student.degree}</p>
@@ -92,8 +93,8 @@ function StudentModal({showAcceptButton}) {
       <div className="modal-rating"> {renderStars()} <span className="rating-number">({student.rating.toFixed(1)})</span> </div>
       <p style={{marginBottom:'0px'}} className="modal-description">{student.description}</p>
       <div className="modal-button-container">
-        {showAcceptButton === "Tutor" && ( <button className="back-button" style={{marginTop: 15}} onClick={backToHome}><FaAngleLeft/> Volver</button>)}
-        {showAcceptButton === "Tutor" && ( <button className="tutor-button" style={{marginTop: 15}} onClick={openChat}> Aceptar tutoría</button>)}
+        {user.profile_type === "tutor" && ( <button className="back-button" style={{marginTop: 15}} onClick={backToHome}><FaAngleLeft/> Volver</button>)}
+        {user.profile_type === "tutor" && ( <button className="tutor-button" style={{marginTop: 15}} onClick={openChat}> Aceptar tutoría</button>)}
       </div>
     </div>
   )
