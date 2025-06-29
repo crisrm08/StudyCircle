@@ -1,7 +1,8 @@
 import React from "react";
-import AppProviders from "./AppProviders";
 import { createBrowserRouter, RouterProvider  } from "react-router-dom";
+import { useUser } from "./contexts/UserContext";
 import RootLayout from "./components/RootLayout";
+import LoadingScreen from "./components/Common/LoadingScreen";
 import SearchScreen from "./components/Search/SearchScreen";
 import LoginScreen from "./components/Login/LoginScreen";
 import PickRoleScreen from "./components/Login/PickRoleScreen";
@@ -23,7 +24,6 @@ import StudentHistoryScreen from "./components/History/StudentHistoryScreen";
 import PaymentMethodScreen from "./components/PaymentMethod/PaymentMethodScreen";
 import TutorPaymentScreen from "./components/TutorPayment/TutorPaymentScreen";
 
-function App() {
   const router = createBrowserRouter([
     {
       path: '/',
@@ -32,7 +32,7 @@ function App() {
         { index: true, element: <SearchScreen /> },        
         { path: 'login', element: <LoginScreen /> },
         { path: 'forgot-pwd', element: <ForgotPWDScreen />},
-        { path: 'pick-role', element: <PickRoleScreen/>},
+        { path: 'pick-role', element: <PickRoleScreen />},
         { path: 'student-signup-1', element: <StudentSignUp1Screen /> },
         { path: 'student-signup-2', element: <StudentSignUp2Screen /> },
         { path: 'student-signup-3', element: <StudentSignUp3Screen /> }, 
@@ -52,12 +52,11 @@ function App() {
       ]
     }
   ]);
-  return (
-    <RouterProvider router={router}>
-      <AppProviders>
-      </AppProviders>
-    </RouterProvider>
-  );
+
+function App() {
+  return(
+    <RouterProvider router={router} />
+  ) 
 }
 
 export default App;
