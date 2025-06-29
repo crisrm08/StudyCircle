@@ -3,11 +3,15 @@ import { supabase } from "../Supabase/supabaseClient";
 import { PiStudent } from "react-icons/pi";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../contexts/UserContext";
+import LoadingScreen from "../Common/LoadingScreen";
 import "../../css/loginStyles/pickrolescreen.css";
 
 function PickRoleScreen() {
   const [role, setRole] = useState(null); 
   const navigate = useNavigate();
+  const { loading } = useUser();
+  if (loading) return <LoadingScreen/>
 
   async function finishProfile() {
     const { data: { session } } = await supabase.auth.getSession();

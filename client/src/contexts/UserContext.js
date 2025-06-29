@@ -55,7 +55,7 @@ export function UserProvider({ children }) {
       } else {
         const editProfileRoutes = ["/edit-tutor-profile", "/edit-student-profile"];
         if (
-          ["/login", "/student-signup-1", "/tutor-signup-1", "/pick-role"].includes(location.pathname)
+          ["/login", "/student-signup-3", "/tutor-signup-3", "/pick-role"].includes(location.pathname)
           && !editProfileRoutes.includes(location.pathname)
         ) {
           if (profile.profile_type === "student") {

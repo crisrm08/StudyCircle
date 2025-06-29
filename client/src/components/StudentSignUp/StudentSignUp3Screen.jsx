@@ -43,7 +43,7 @@ function StudentSignUp3Screen() {
         email,
         password,
         options: {
-          emailRedirectTo: 'http://localhost:3000/edit-student-profile',
+          emailRedirectTo: 'http://10.0.0.16:3000/edit-student-profile',
           data: {
             name: profileData.name
           }

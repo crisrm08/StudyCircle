@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { supabase } from "../Supabase/supabaseClient";
+import { useUser } from "../../contexts/UserContext";
 import { LuEyeClosed } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
 import { useNavigate } from 'react-router-dom';
-import { useUser } from "../../contexts/UserContext";
 import axios from "axios";
 import "../../css/loginStyles/loginscreen.css";
 
 function LoginScreen() {
-
     const { user, setUser } = useUser();
     const navigate = useNavigate();  
     const [email, setEmail] = useState("");

@@ -1,6 +1,6 @@
 import React from "react";
+import AppProviders from "./AppProviders";
 import { createBrowserRouter, RouterProvider  } from "react-router-dom";
-import { useUser } from "./contexts/UserContext";
 import RootLayout from "./components/RootLayout";
 import LoadingScreen from "./components/Common/LoadingScreen";
 import SearchScreen from "./components/Search/SearchScreen";
@@ -24,6 +24,7 @@ import StudentHistoryScreen from "./components/History/StudentHistoryScreen";
 import PaymentMethodScreen from "./components/PaymentMethod/PaymentMethodScreen";
 import TutorPaymentScreen from "./components/TutorPayment/TutorPaymentScreen";
 
+function App() {
   const router = createBrowserRouter([
     {
       path: '/',
@@ -52,11 +53,12 @@ import TutorPaymentScreen from "./components/TutorPayment/TutorPaymentScreen";
       ]
     }
   ]);
-
-function App() {
-  return(
-    <RouterProvider router={router} />
-  ) 
+  return (
+    <RouterProvider router={router}>
+      <AppProviders>
+      </AppProviders>
+    </RouterProvider>
+  );
 }
 
 export default App;

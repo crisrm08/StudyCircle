@@ -1,18 +1,10 @@
-import { Outlet } from 'react-router-dom';
-import AppProviders from '../AppProviders';
-import { useUser } from '../contexts/UserContext';
-import LoadingScreen from './Common/LoadingScreen';
+import AppProviders from "../AppProviders"; 
+import { Outlet } from "react-router-dom";
 
 export default function RootLayout() {
   return (
     <AppProviders>
-      <InnerRoot />
+      <Outlet />
     </AppProviders>
   );
-}
-
-function InnerRoot() {
-  const { loading } = useUser();
-  if (loading) return <LoadingScreen />;
-  return <Outlet />;
 }
