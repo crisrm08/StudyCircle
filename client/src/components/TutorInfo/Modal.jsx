@@ -3,15 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { MdEdit } from "react-icons/md";
 import { FaAngleLeft } from "react-icons/fa";
 import Request from "./Request";
+import { useUser } from "../../contexts/UserContext";
 import "../../css/studentProfileStyles/modal.css";
 
 function Modal({ tutor }) {
   const { image, name, institution, occupation, academicLevel, description, pricePerHour, rating, specialties } = tutor;
   const [ renderRequest, setRenderRequest ] = useState(false);
-  {/*const { role } = useContext(AuthContext);*/}
+  const { user } = useUser();
   const navigate = useNavigate();
 
-  const renderStars = () => {
+  function renderStars(){
     const filledStars = Math.floor(rating);
     const hasHalfStar = rating - filledStars >= 0.5;
     const emptyStars = 5 - filledStars - (hasHalfStar ? 1 : 0);
@@ -47,12 +48,12 @@ function Modal({ tutor }) {
   function closeRequestModal() {
     setRenderRequest(false);
   }
-
+ 
   return (
     <div className="modal-content">
 
       <img src={image} alt={`Foto de ${name}`} className="modal-image" />
-      {/*{role === "Tutor" && ( <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>)}*/}
+      {user.profile_type === "tutor" && ( <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>)}
      
       <h2 className="modal-name">{name}</h2>
       <p className="modal-occupation">{occupation} - {institution} - {academicLevel}</p>
@@ -70,8 +71,8 @@ function Modal({ tutor }) {
       <p className="modal-description">{description}</p>
       <p className="modal-price"> <strong>Precio por hora:</strong> RD${pricePerHour} </p>
       <div className="modal-button-container">
-        {/*{role === "Student" && ( <button className="back-button" style={{marginTop: 15}} onClick={goBack}><FaAngleLeft/> Volver</button>)}
-        {role === "Student" && ( <button className="tutor-button" style={{marginTop: 15}} onClick={openRequestModal}> Solicitar tutoría</button>)} */}
+        {user.profile_type === "student" && ( <button className="back-button" style={{marginTop: 15}} onClick={goBack}><FaAngleLeft/> Volver</button>)}
+        {user.profile_type === "student" && ( <button className="tutor-button" style={{marginTop: 15}} onClick={openRequestModal}> Solicitar tutoría</button>)}
       </div>
 
       {renderRequest === true && (<Request onClose={closeRequestModal}/>)}

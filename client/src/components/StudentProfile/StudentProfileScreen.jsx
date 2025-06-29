@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../contexts/UserContext";
 import Header from "../Common/Header";
 import StudentModal from "./StudentModal";
 import StudentSidebar from "../Common/StudentSidebar";
@@ -11,10 +12,8 @@ import "../../css/studentProfileStyles/studentprofile.css";
 
 function StudentProfileScreen() {
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
-    {/*const { role } = useContext(AuthContext); */}
-    
+    const { user } = useUser();
     const navigate = useNavigate();
-
     const studentName = "Elvis García";
     const studentFullDescription = "Estudiante de primer año de la carrera de Ingeniería en Ciencias de la Computación en la Pontificia Universidad Católica Madre y Maestra. Me interesa mejorar mis habilidades en la asignatura de Ecuaciones Diferenciales, ya que no me fue muy bien en mi primer parcial y necesito reforzar."
 
@@ -28,7 +27,7 @@ function StudentProfileScreen() {
                 <div className="right-section">
                     <div className="about-student">
                         <div className="about-student__scroll">
-                           {/* {role === "Student" && <MdEdit className="edit-button" size={30} onClick={goToEdit}/> } */}
+                           {user.profile_type === "student" && <MdEdit className="edit-button" size={30} onClick={goToEdit}/> } 
                             <h2>Sobre {studentName}:</h2>
                             <hr/>
                             <p>{studentFullDescription}</p>
@@ -43,7 +42,7 @@ function StudentProfileScreen() {
                     />
                 </div>
                 <div className="student-profile-card">
-                    {/*<StudentModal showAcceptButton={role}/>*/}
+                    <StudentModal />
                 </div>
             </div>
             {isSidebarClicked && (
@@ -52,11 +51,10 @@ function StudentProfileScreen() {
                   className="overlay"
                   onClick={() => setIsSidebarClicked(false)}
                 />
-                {/*{role === "tutor"
+                {user.profile_type === "tutor"
                   ? <TutorSidebar />
-                  : <StudentSidebar />}*/}
-                  <StudentSidebar />
-                  
+                  : <StudentSidebar />
+                } 
               </>
             )}
         </div>
