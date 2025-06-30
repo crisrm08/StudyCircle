@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
+import LoadingScreen from "../Common/LoadingScreen";
 import { StudentSignUpContext } from "../../contexts/StudentSignUpContext";
 import { supabase } from "../Supabase/supabaseClient";
 import { MdKeyboardArrowLeft } from "react-icons/md";
@@ -16,13 +17,14 @@ function StudentSignUp3Screen() {
   const [idPreview, setIdPreview] = useState(null);
   const [selfiePreview, setSelfiePreview] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [ loading, setLoading ] = useState(false);
   const navigate = useNavigate();
 
   async function signUpSuccesful(e) {
     e.preventDefault();
+    setLoading(true);
 
     const { email, password, id_photo, selfie_photo, ...profileData } = studentSignUpData;
-
     const formData = new FormData();
     formData.append("email", email);
     formData.append("id_photo", idPhoto);
@@ -51,6 +53,7 @@ function StudentSignUp3Screen() {
       });
 
       if (error) {
+        setLoading(false);
         alert("Error al registrar usuario: " + error.message);
         return;
       }
@@ -63,12 +66,15 @@ function StudentSignUp3Screen() {
       setShowModal(true);
 
     } catch (error) {
+      setLoading(false);
       if (error.response && error.response.status === 400) {
         alert(error.response.data.error || "Las imágenes no coinciden. Intenta de nuevo.");
       } else {
         alert("Error durante el registro. Intenta de nuevo.");
       }
       console.error("Error during signup:", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -105,7 +111,8 @@ function StudentSignUp3Screen() {
 
   return (
     <div className="Student-sign-up-1">
-       <h1 className="title" onClick={goBack}> <MdKeyboardArrowLeft size={50}/> StudyCircle </h1>
+      {loading && <LoadingScreen />}
+      <h1 className="title" onClick={goBack}> <MdKeyboardArrowLeft size={50}/> StudyCircle </h1>
       <div className="Sign-up-form">
         <form className="photo-form" onSubmit={handlePhotoSubmit}>
           <h1>Sube tus fotos</h1>
@@ -146,7 +153,7 @@ function StudentSignUp3Screen() {
           <button type="submit">Enviar</button>
         </form>
       </div>
-       {showModal && (
+      {showModal && (
         <SignUpModal isOpen={showModal} onClose={() => 
           { setShowModal(false)
             navigate("/login");
