@@ -67,28 +67,42 @@ export function UserProvider({ children }) {
       }
     });
 
-    const { data: sub } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === "SIGNED_IN" && session) {
-        setLoading(true);
-        const profile = await fetchUserProfile(session);
-        setLoading(false);
+    const { data: sub } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === "SIGNED_IN" && session) {
 
-        if (!profile) {
-          navigate("/pick-role");
-        } else {
-          if (profile.profile_type === "student") {
+          const entryPages = [
+            "/login",
+            "/student-signup-3",
+            "/tutor-signup-3",
+            "/pick-role",
+          ];
+          
+          if (!entryPages.includes(location.pathname)) {
+            return;  
+          }
+
+          setLoading(true);
+          const profile = await fetchUserProfile(session);
+          setLoading(false);
+
+          if (!profile) {
+            navigate("/pick-role");
+          } else if (profile.profile_type === "student") {
             navigate("/");
           } else {
             navigate("/tutor-home-page");
           }
         }
+
+        if (event === "SIGNED_OUT") {
+          setUser(null);
+          setLoading(false);
+          navigate("/login");
+        }
       }
-      if (event === "SIGNED_OUT") {
-        setUser(null);
-        setLoading(false);
-        navigate("/login");
-      }
-    });
+    );
+
 
     return () => {
       ignore = true;
