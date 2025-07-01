@@ -26,7 +26,6 @@ const upload = multer({ storage: multer.memoryStorage() });
 app.use(cors());
 app.use(express.json());
 
-
 app.post("/api/login", async (req, res) => {
   try {
     const auth = req.headers.authorization;
@@ -112,7 +111,7 @@ app.post('/student-signup', upload.fields([
         return res.status(400).json({ error: 'La imagen de la cédula y la selfie subida no coinciden' });
       }
       const { name, last_name, email, profile_type, career, subject_weak, subject_strong, institution, year, supabase_user_id } = req.body;
-      // Insert user
+     
       const { data: newStudent, error: insertErr } = await supabase
         .from('users')
         .insert({
@@ -131,14 +130,14 @@ app.post('/student-signup', upload.fields([
         return res.status(500).json({ error: insertErr.message });
       }
       const userId = newStudent.user_id;
-      // Insert weak topics
+ 
       const weakTopics = Array.isArray(JSON.parse(subject_weak)) ? JSON.parse(subject_weak) : [];
       if (weakTopics.length > 0) {
         const weakRows = weakTopics.map(topic => ({ user_id: userId, topic_id: topic.value, type: 'weak' }));
         const { error: weakErr } = await supabase.from('user_topics').insert(weakRows);
         if (weakErr) return res.status(500).json({ error: weakErr.message });
       }
-      // Insert strong topics
+ 
       const strongTopics = Array.isArray(JSON.parse(subject_strong)) ? JSON.parse(subject_strong) : [];
       if (strongTopics.length > 0) {
         const strongRows = strongTopics.map(topic => ({ user_id: userId, topic_id: topic.value, type: 'strong' }));
