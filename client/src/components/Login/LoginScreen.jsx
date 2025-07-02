@@ -31,7 +31,7 @@ function LoginScreen() {
         if (error) return alert("Login falló: " + error.message);
 
         const token = data.session.access_token;
-        const response = await axios.post("http://10.0.0.16:5000/api/login", {}, { headers: { Authorization: `Bearer ${token}` } });
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/login`, {}, { headers: { Authorization: `Bearer ${token}` } });
         const user = response.data;
         setUser(user);
 

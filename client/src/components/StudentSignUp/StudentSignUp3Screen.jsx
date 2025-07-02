@@ -39,13 +39,13 @@ function StudentSignUp3Screen() {
     });
 
     try {
-      const response = await axios.post("http://10.0.0.16:5000/student-signup", formData);
-
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/student-signup`, formData);
+      const origin = window.location.origin; 
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: 'http://10.0.0.16:3000/edit-student-profile',
+          emailRedirectTo: `${origin}/edit-student-profile`,
           data: {
             name: profileData.name
           }
@@ -58,7 +58,7 @@ function StudentSignUp3Screen() {
         return;
       }
 
-      await axios.post("http://10.0.0.16:5000/user-link-supabase", {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/user-link-supabase`, {
         email,
         supabase_user_id: data.user.id
       });
@@ -111,53 +111,58 @@ function StudentSignUp3Screen() {
 
   return (
     <div className="Student-sign-up-1">
-      {loading && <LoadingScreen />}
-      <h1 className="title" onClick={goBack}> <MdKeyboardArrowLeft size={50}/> StudyCircle </h1>
-      <div className="Sign-up-form">
-        <form className="photo-form" onSubmit={handlePhotoSubmit}>
-          <h1>Sube tus fotos</h1>
+      {loading === true ? (
+        <LoadingScreen />
+      ) : (
+        <>
+          <h1 className="title" onClick={goBack}> <MdKeyboardArrowLeft size={50}/> StudyCircle </h1>
+          <div className="Sign-up-form">
+            <form className="photo-form" onSubmit={handlePhotoSubmit}>
+              <h1>Sube tus fotos</h1>
 
-          <div className="photo-upload-container">
-            <div className="upload-section">
-              <div className="photo-box">
-                <div className="photo-preview-container">
-                  {idPreview && ( <img src={idPreview} alt="Previsualización cédula" className="photo-preview" />)}
+              <div className="photo-upload-container">
+                <div className="upload-section">
+                  <div className="photo-box">
+                    <div className="photo-preview-container">
+                      {idPreview && ( <img src={idPreview} alt="Previsualización cédula" className="photo-preview" />)}
+                    </div>
+                    <label htmlFor="id-photo" className="photo-label"> Subir cédula </label>
+                    <input id="id-photo" name="id_photo" type="file" accept="image/*" onChange={handleIDPhotoChange} hidden/>
+                  </div>
+
+                  <div className="photo-box circular">
+                    <div className="photo-preview-container">
+                      {selfiePreview && ( <img src={selfiePreview} alt="Previsualización selfie" className="photo-preview circular" />)}
+                    </div>
+                    <label htmlFor="selfie-photo" className="photo-label"> Subir selfie </label>
+                    <input id="selfie-photo" name="selfie_photo" type="file" accept="image/*" onChange={handleSelfiePhotoChange} hidden/>
+                  </div>
                 </div>
-                <label htmlFor="id-photo" className="photo-label"> Subir cédula </label>
-                <input id="id-photo" name="id_photo" type="file" accept="image/*" onChange={handleIDPhotoChange} hidden/>
               </div>
 
-              <div className="photo-box circular">
-                <div className="photo-preview-container">
-                  {selfiePreview && ( <img src={selfiePreview} alt="Previsualización selfie" className="photo-preview circular" />)}
+              <div className="declaration-container">
+                <div className="declaration-checkbox">
+                  <input
+                    id="declaration"
+                    type="checkbox"
+                    checked={declarationConfirmed}
+                    onChange={(e) => { setConfirmDeclaration(e.target.checked);}}
+                  />
+                  <label htmlFor="declaration"> Declaro que la información proporcionada es verdadera</label>
                 </div>
-                <label htmlFor="selfie-photo" className="photo-label"> Subir selfie </label>
-                <input id="selfie-photo" name="selfie_photo" type="file" accept="image/*" onChange={handleSelfiePhotoChange} hidden/>
+                <p>Estas imágenes son recopiladas por motivos de seguridad, las mismas serán analizadas</p>
               </div>
-            </div>
-          </div>
 
-          <div className="declaration-container">
-            <div className="declaration-checkbox">
-              <input
-                id="declaration"
-                type="checkbox"
-                checked={declarationConfirmed}
-                onChange={(e) => { setConfirmDeclaration(e.target.checked);}}
-              />
-              <label htmlFor="declaration"> Declaro que la información proporcionada es verdadera</label>
-            </div>
-            <p>Estas imágenes son recopiladas por motivos de seguridad, las mismas serán analizadas</p>
+              <button type="submit">Enviar</button>
+            </form>
           </div>
-
-          <button type="submit">Enviar</button>
-        </form>
-      </div>
-      {showModal && (
-        <SignUpModal isOpen={showModal} onClose={() => 
-          { setShowModal(false)
-            navigate("/login");
-          }}/>
+          {showModal && (
+            <SignUpModal isOpen={showModal} onClose={() => 
+              { setShowModal(false)
+                navigate("/login");
+              }}/>
+          )}
+        </>
       )}
     </div>
   );

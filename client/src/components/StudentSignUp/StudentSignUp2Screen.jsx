@@ -65,7 +65,7 @@ function StudentSignUp2Screen() {
   const [careers, setCareers] = useState([]);
 
   useEffect(() => {
-    axios.get("http://10.0.0.16:5000/subjects-topics")
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/subjects-topics`)
       .then(response => {
         setSubjects(response.data);
         const allTopics = response.data.flatMap(subj => subj.topics.map(t => ({ ...t, subject: subj.name })));
@@ -75,7 +75,7 @@ function StudentSignUp2Screen() {
         console.error("Error fetching subjects: ", error);
     });
 
-    axios.get("http://10.0.0.16:5000/careers")
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/careers`)
       .then(response => {
         const fetchedCareers = response.data.map(career => ({
           value: career.id,

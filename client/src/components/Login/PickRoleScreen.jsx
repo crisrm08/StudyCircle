@@ -27,6 +27,7 @@ function PickRoleScreen() {
         supabase_user_id: session.user.id,
         profile_type: role,
         email: session.user.email, 
+        uses_google: true,
       });
       if (insertError) {
         alert("Error creando perfil: " + insertError.message);

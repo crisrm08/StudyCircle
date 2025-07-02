@@ -47,7 +47,7 @@ function TutorSignUp2Screen() {
     const navigate = useNavigate();
 
     useEffect(() => {
-      axios.get("http://10.0.0.16:5000/ocupations-academic-levels")
+      axios.get(`${process.env.REACT_APP_BACKEND_URL}/ocupations-academic-levels`)
         .then(({ data }) => {
           setOccupationOptions(
             (data.ocupations || []).map(ocupation => ({ value: ocupation.value, label: ocupation.label.trim() }))
@@ -58,7 +58,7 @@ function TutorSignUp2Screen() {
         })
         .catch(console.error);
 
-      axios.get("http://10.0.0.16:5000/subjects-topics")
+      axios.get(`${process.env.REACT_APP_BACKEND_URL}/subjects-topics`)
         .then(response => {
           setSubjects(response.data);
           const allTopics = response.data.flatMap(subj => subj.topics.map(t => ({ ...t, subject: subj.name })));
