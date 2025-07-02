@@ -14,7 +14,7 @@ export function UserProvider({ children }) {
   async function fetchUserProfile(session) {
     try {
       const response = await axios.post(
-        "http://10.0.0.16:5000/api/login",
+        `${process.env.REACT_APP_BACKEND_URL}/api/login`,
         {},
         { headers: { Authorization: `Bearer ${session.access_token}` } }
       );

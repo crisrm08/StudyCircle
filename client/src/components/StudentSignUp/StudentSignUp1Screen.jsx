@@ -48,7 +48,7 @@ function StudentSignUp1Screen() {
     }
 
     async function checkEmailExists(email) {
-        const response = await fetch(`http://10.0.0.16:5000/api/check-email?email=${encodeURIComponent(email)}`);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/check-email?email=${encodeURIComponent(email)}`);
         const data = await response.json();
         console.log("Email check response:", data);
         return data.exists;
