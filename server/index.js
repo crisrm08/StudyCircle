@@ -93,25 +93,41 @@ app.post('/student-signup', upload.fields([
   { name: 'selfie_photo', maxCount: 1 }
 ]), async (req, res) => {
   try {
+    console.log("Signup request recibido");
+
     const idPhotoFile = req.files['id_photo']?.[0];
     const selfiePhotoFile = req.files['selfie_photo']?.[0];
+
+    if (!idPhotoFile || !selfiePhotoFile) {
+      console.error("Missing image files", { idPhotoFile, selfiePhotoFile });
+      return res.status(400).json({ error: "Both ID and selfie photos are required." });
+    }
+
     const params = {
       SourceImage: { Bytes: idPhotoFile.buffer },
       TargetImage: { Bytes: selfiePhotoFile.buffer },
       SimilarityThreshold: 90
     };
+
     rekognition.compareFaces(params, async (err, data) => {
       if (err) {
-        console.error('Rekognition error:', err);
-        return res.status(500).json({ error: 'Error comparing faces.' });
+        console.error('Error de AWS Rekognition:', err);
+        return res.status(500).json({ error: 'Error comparing faces', details: err.message });
       }
+
       const match = data.FaceMatches && data.FaceMatches.length > 0;
       console.log('Face comparison result:', match);
+
       if (!match) {
-        return res.status(400).json({ error: 'La imagen de la cédula y la selfie subida no coinciden' });
+        return res.status(400).json({ error: 'Las imágenes no coinciden.' });
       }
+
       const { name, last_name, email, profile_type, career, subject_weak, subject_strong, institution, year, supabase_user_id } = req.body;
-     
+
+      console.log("Form data received:", {
+        name, last_name, email, profile_type, career, institution, year, supabase_user_id
+      });
+
       const { data: newStudent, error: insertErr } = await supabase
         .from('users')
         .insert({
@@ -126,31 +142,60 @@ app.post('/student-signup', upload.fields([
         })
         .select('user_id')
         .maybeSingle();
+
       if (insertErr) {
+        console.error("Error insertando user:", insertErr);
         return res.status(500).json({ error: insertErr.message });
       }
+
       const userId = newStudent.user_id;
- 
-      const weakTopics = Array.isArray(JSON.parse(subject_weak)) ? JSON.parse(subject_weak) : [];
-      if (weakTopics.length > 0) {
+      console.log("User inserted with ID:", userId);
+
+      let weakTopics;
+      try {
+        weakTopics = JSON.parse(subject_weak);
+      } catch (e) {
+        console.error("Error parsing subject_weak:", e);
+        return res.status(400).json({ error: "Invalid subject_weak format" });
+      }
+
+      if (Array.isArray(weakTopics) && weakTopics.length > 0) {
         const weakRows = weakTopics.map(topic => ({ user_id: userId, topic_id: topic.value, type: 'weak' }));
         const { error: weakErr } = await supabase.from('user_topics').insert(weakRows);
-        if (weakErr) return res.status(500).json({ error: weakErr.message });
+        if (weakErr) {
+          console.error("Error inserting weak topics:", weakErr);
+          return res.status(500).json({ error: weakErr.message });
+        }
+        console.log("Weak topics inserted");
       }
- 
-      const strongTopics = Array.isArray(JSON.parse(subject_strong)) ? JSON.parse(subject_strong) : [];
-      if (strongTopics.length > 0) {
+
+      let strongTopics;
+      try {
+        strongTopics = JSON.parse(subject_strong);
+      } catch (e) {
+        console.error("Error parsing subject_strong:", e);
+        return res.status(400).json({ error: "Invalid subject_strong format" });
+      }
+
+      if (Array.isArray(strongTopics) && strongTopics.length > 0) {
         const strongRows = strongTopics.map(topic => ({ user_id: userId, topic_id: topic.value, type: 'strong' }));
         const { error: strongErr } = await supabase.from('user_topics').insert(strongRows);
-        if (strongErr) return res.status(500).json({ error: strongErr.message });
+        if (strongErr) {
+          console.error("Error inserting strong topics:", strongErr);
+          return res.status(500).json({ error: strongErr.message });
+        }
+        console.log("Strong topics inserted");
       }
+
+      console.log("Signup completed for user:", email);
       res.send("Usuario registrado exitosamente");
     });
   } catch (error) {
-    console.error('Error during signup:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Error during signup (outer catch):', error);
+    res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 });
+
 
 app.post('/tutor-signup', upload.fields([
   { name: 'id_photo', maxCount: 1 },
