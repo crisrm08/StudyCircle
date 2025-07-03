@@ -88,13 +88,16 @@ app.post('/user-link-supabase', async (req, res) => {
   }
 });
 
+function isValidImage(file) {
+  return file && ['image/jpeg', 'image/png'].includes(file.mimetype);
+}
+
 app.post('/student-signup', upload.fields([
   { name: 'id_photo', maxCount: 1 },
   { name: 'selfie_photo', maxCount: 1 }
 ]), async (req, res) => {
   try {
     console.log("Signup request recibido");
-
     const idPhotoFile = req.files['id_photo']?.[0];
     const selfiePhotoFile = req.files['selfie_photo']?.[0];
 
@@ -102,6 +105,17 @@ app.post('/student-signup', upload.fields([
       console.error("Missing image files", { idPhotoFile, selfiePhotoFile });
       return res.status(400).json({ error: "Both ID and selfie photos are required." });
     }
+
+    console.log("type of selfie:" + selfiePhotoFile.mimetype)
+    if (!isValidImage(idPhotoFile) || !isValidImage(selfiePhotoFile)) {
+      console.error('❌ Invalid image format:', {
+        idPhoto: idPhotoFile?.mimetype,
+        selfie: selfiePhotoFile?.mimetype
+      });
+      return res.status(400).json({
+        error: 'Formato de imagen inválido. Solo se permiten archivos .jpg o .png'
+      });
+    } 
 
     const params = {
       SourceImage: { Bytes: idPhotoFile.buffer },
@@ -196,7 +210,6 @@ app.post('/student-signup', upload.fields([
   }
 });
 
-
 app.post('/tutor-signup', upload.fields([
   { name: 'id_photo', maxCount: 1 },
   { name: 'selfie_photo', maxCount: 1 }
@@ -204,11 +217,23 @@ app.post('/tutor-signup', upload.fields([
   try {
     const idPhotoFile = req.files['id_photo']?.[0];
     const selfiePhotoFile = req.files['selfie_photo']?.[0];
+
+     if (!isValidImage(idPhotoFile) || !isValidImage(selfiePhotoFile)) {
+      console.error('❌ Invalid image format:', {
+        idPhoto: idPhotoFile?.mimetype,
+        selfie: selfiePhotoFile?.mimetype
+      });
+      return res.status(400).json({
+        error: 'Formato de imagen inválido. Solo se permiten archivos .jpg o .png'
+      });
+    }
+
     const params = {
       SourceImage: { Bytes: idPhotoFile.buffer },
       TargetImage: { Bytes: selfiePhotoFile.buffer },
       SimilarityThreshold: 90
     };
+
     rekognition.compareFaces(params, async (err, data) => {
       if (err) {
         console.error('Rekognition error:', err);
@@ -220,7 +245,7 @@ app.post('/tutor-signup', upload.fields([
         return res.status(400).json({ error: 'La imagen de la cédula y la selfie subida no coinciden' });
       }
       const { name, last_name, email, profile_type, academic_level, subject_teach, institution, occupation, hourly_fee, supabase_user_id } = req.body;
-      // Insert tutor
+    
       const { data: newTutor, error: insertErr } = await supabase
         .from('users')
         .insert({
@@ -240,7 +265,7 @@ app.post('/tutor-signup', upload.fields([
         return res.status(500).json({ error: insertErr.message });
       }
       const userId = newTutor.user_id;
-      // Insert teaches topics
+     
       const teachTopics = Array.isArray(JSON.parse(subject_teach)) ? JSON.parse(subject_teach) : [];
       if (teachTopics.length > 0) {
         const teachRows = teachTopics.map(topic => ({ user_id: userId, topic_id: topic.value, type: 'teaches' }));

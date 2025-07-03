@@ -39,7 +39,7 @@ function StudentSignUp3Screen() {
     });
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/student-signup`, formData);
+      const response = await axios.post("http://10.0.0.16:5000/student-signup", formData);
       const origin = window.location.origin; 
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -127,7 +127,7 @@ function StudentSignUp3Screen() {
                       {idPreview && ( <img src={idPreview} alt="Previsualización cédula" className="photo-preview" />)}
                     </div>
                     <label htmlFor="id-photo" className="photo-label"> Subir cédula </label>
-                    <input id="id-photo" name="id_photo" type="file" accept="image/*" onChange={handleIDPhotoChange} hidden/>
+                    <input id="id-photo" name="id_photo" type="file" accept="image/jpeg, image/png" onChange={handleIDPhotoChange} hidden/>
                   </div>
 
                   <div className="photo-box circular">
@@ -135,7 +135,7 @@ function StudentSignUp3Screen() {
                       {selfiePreview && ( <img src={selfiePreview} alt="Previsualización selfie" className="photo-preview circular" />)}
                     </div>
                     <label htmlFor="selfie-photo" className="photo-label"> Subir selfie </label>
-                    <input id="selfie-photo" name="selfie_photo" type="file" accept="image/*" onChange={handleSelfiePhotoChange} hidden/>
+                    <input id="selfie-photo" name="selfie_photo" type="file" accept="image/jpeg, image/png" onChange={handleSelfiePhotoChange} hidden/>
                   </div>
                 </div>
               </div>
