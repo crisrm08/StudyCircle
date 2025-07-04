@@ -1,58 +1,12 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import ScheduleSelector from "./ScheduleSelector";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import TutorSidebar from "../Common/TutorSidebar";
 import Header from "../Common/Header";
 import Select from "react-select";
+import axios from "axios";
 import "../../css/editProfileStyles/editprofilescreen.css";
-
-const ocupations = [
-  {value: "estudiante", label: "Estudiante avanzado"},
-  {value: "profesor", label: "Profesor"},
-  {value: "Ingeniero", label: "Ingeniero"}
-]
-
-const academicLevels = [
-  { value: "secundaria", label: "Secundaria" },
-  { value: "técnico", label: "Técnico Superior" },
-  { value: "grado", label: "Grado (ingeniero)" },
-  { value: "maestría", label: "Maestría" },
-  { value: "phd", label: "Doctorado (PhD)" }
-];
-
-const groupedSubjects = [
-  {
-    label: "Cálculo",
-    options: [
-      { value: "limites", label: "Límites y continuidad" },
-      { value: "derivadas", label: "Derivadas y su interpretación" },
-      { value: "aplicaciones", label: "Aplicaciones de las derivadas" },
-      { value: "integrales", label: "Integrales definidas e indefinidas" },
-      { value: "tecnicas", label: "Técnicas de integración" },
-      { value: "fundamental", label: "Teorema fundamental del cálculo" },
-      { value: "series", label: "Series y secuencias" },
-      { value: "diferenciales", label: "Ecuaciones diferenciales" },
-      { value: "infinitos", label: "Teoría de los límites infinitos" },
-      { value: "multivariable", label: "Cálculo multivariable" },
-    ],
-  },
-  {
-    label: "Programación",
-    options: [
-      { value: "oop", label: "Programación Orientada a Objetos (OOP)" },
-      { value: "datastruct", label: "Estructuras de datos" },
-      { value: "algoritmos", label: "Algoritmos y complejidad computacional" },
-      { value: "bd", label: "Bases de datos" },
-      { value: "web", label: "Programación web (HTML, CSS, JavaScript)" },
-      { value: "movil", label: "Desarrollo móvil" },
-      { value: "patrones", label: "Patrones de diseño de software" },
-      { value: "lenguajes", label: "Lenguajes (Python, Java, C++)" },
-      { value: "so", label: "Sistemas operativos y gestión de memoria" },
-      { value: "testing", label: "Pruebas y depuración de código" },
-    ],
-  },
-];
 
 const customStyles = {
   control: (provided, state) => ({
@@ -96,6 +50,7 @@ function EditTutorProfileScreen() {
         Lunes: { from: "16:00", to: "18:00" },
         Miércoles: { from: "19:00", to: "22:00" }
     });
+    const [groupedSubjects, setGroupedSubjects] = useState([]);
     const [ currentFullDescription ] = useState("Docente egresado de la Universidad Autónoma de Santo Domingo de la carrera de Física. Cuento con más de 10 años de experiencia dedicados a la docencia de estudiantes universitarios en el Insituto Tecnológico de Santo Domingo.");
     const [ currentBriefDescription ] = useState("Apasionado por la enseñanza de matemáticas y física. Vamos a resolver tus dudas juntos.");
     const teachedTopicsInitialValues = [
@@ -103,6 +58,8 @@ function EditTutorProfileScreen() {
       { value: "pndas y sonido",    label: "Ondas y Sonido" },
       { value: "física nuclear", label: "Física Nuclear" }
     ];
+    const [academicLevelOptions, setAcademicLevelOptions] = useState([]);
+    const [occupationOptions, setOccupationOptions] = useState([]);
     const [teachedTopics, setTeachedTopics] = useState(teachedTopicsInitialValues);
     const currentImageUrl = "https://randomuser.me/api/portraits/men/32.jpg";
     const [preview, setPreview] = useState(currentImageUrl);
@@ -111,6 +68,29 @@ function EditTutorProfileScreen() {
 
     const navigate = useNavigate();
     const fileInputRef = useRef();
+
+     useEffect(() => {
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/subjects-topics`)
+            .then(res => {
+                setGroupedSubjects(res.data.map(subject => ({
+                    label: subject.name,
+                    options: subject.topics.map(topic => ({ value: topic.name, label: topic.name }))
+                })));
+            })
+            .catch(err => {
+                console.error("Error fetching subjects/topics:", err);
+            });
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/ocupations-academic-levels`)
+            .then(({data}) => {
+              setOccupationOptions(
+                (data.ocupations || []).map(ocupation => ({value: ocupation.value, label: ocupation.label.trim() }))
+              );
+              setAcademicLevelOptions(
+                (data.academicLevels || []).map(academiclvl => ({value: academiclvl.value, label: academiclvl.label }))
+              );
+            })
+            .catch(console.error);
+    }, []);
 
     function handleImageClick(){
       fileInputRef.current.click();
@@ -147,7 +127,7 @@ function EditTutorProfileScreen() {
                         id="ocupation"
                         name="ocupation"
                         placeholder={currentOcupation}
-                        options={ocupations}
+                        options={occupationOptions}
                         value={currentOcupation}
                         onChange={setCurrentOcupation}
                         styles={customStyles}
@@ -161,7 +141,7 @@ function EditTutorProfileScreen() {
                         id="academic-level"
                         name="academic-level"
                         placeholder={currentAcademicLevel}
-                        options={academicLevels}
+                        options={academicLevelOptions}
                         value={currentAcademicLevel}
                         onChange={setCurrentAcademicLevel}
                         styles={customStyles}
