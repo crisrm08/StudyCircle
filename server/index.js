@@ -196,7 +196,6 @@ app.post('/student-signup', upload.fields([
   }
 });
 
-
 app.post('/tutor-signup', upload.fields([
   { name: 'id_photo', maxCount: 1 },
   { name: 'selfie_photo', maxCount: 1 }
@@ -281,6 +280,34 @@ app.get('/subjects-topics', async (req, res) => {
   } catch (error) {
     console.error('Error fetching subjects: ', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/user-topics', async (req, res) => {
+  try {
+    const user_id = req.query.user_id;
+    const { data, error } = await supabase
+      .from('user_topics')
+      .select('type, topics(topic_name)')
+      .eq('user_id', user_id);
+
+    if (error) {
+      console.error("Error fetching user topics:", error);
+      return res.status(500).json({ error: error.message });
+    }
+
+    const result = { weak: [], strong: [], teaches: []};
+
+    data.forEach(d => {
+      if (d.type === 'weak' && d.topics) result.weak.push(d.topics.topic_name);
+      if (d.type === 'strong' && d.topics) result.strong.push(d.topics.topic_name);
+      if (d.type === 'teaches' && d.topics) result.teaches.push(d.topics.topic_name);
+    });
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    console.error("Unexpected error:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

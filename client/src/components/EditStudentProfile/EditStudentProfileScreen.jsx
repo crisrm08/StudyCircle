@@ -1,5 +1,6 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../contexts/UserContext";
 import StudentSidebar from "../Common/StudentSidebar";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import Header from "../Common/Header";
@@ -7,19 +8,54 @@ import Select from "react-select";
 import axios from "axios";
 import "../../css/editProfileStyles/editprofilescreen.css";
 
+const customStyles = {
+  control: (provided, state) => ({
+      ...provided,
+      backgroundColor: "#F6F6F6",
+      borderColor: state.isFocused ? "#1E56A0" : "#D6E4F0",
+      boxShadow: "none",
+      "&:hover": { borderColor: "#1E56A0" },
+      borderRadius: 8,
+      minHeight: 40,
+      width: "100%",
+  }),
+  menu: provided => ({
+      ...provided,
+      backgroundColor: "#F6F6F6",
+      borderRadius: 25,
+      marginTop: 4,
+  }),
+  option: (provided, { isFocused, isSelected }) => ({
+      ...provided,
+      backgroundColor: isSelected
+          ? "#1E56A0"
+          : isFocused
+          ? "#D6E4F0"
+          : "transparent",
+      color: isSelected ? "#FFFFFF" : "#163172",
+      cursor: "pointer",
+  }),
+  singleValue: provided => ({ ...provided, color: "#163172" }),
+  placeholder: provided => ({ ...provided, color: "#58769c" }),
+};
+
 function EditStudentProfileScreen() {
+    const { user, setUser } = useUser();
+    const { userStrongTopics } = useUser();
+    const { userWeakTopics } = useUser();
     const [engineeringOptions, setEngineeringOptions] = useState([]);
     const [groupedSubjects, setGroupedSubjects] = useState([]);
-    const [degree, setDegree] = useState(null);
+    const [career, setCareer] = useState(user?.career || "");
     const [weakness, setWeakness] = useState([]);
     const [strength, setStrength] = useState([]);
-    const [currentName] = useState("Elvis");
-    const [currentLastName] = useState("García");
-    const [currentInstitution] = useState("INTEC");
-    const [fullDescription] = useState("Estudiante de primer año de la carrera de Ingeniería en Ciencias de la Computación en la Pontificia Universidad Católica Madre y Maestra. Me interesa mejorar mis habilidades en la asignatura de Ecuaciones Diferenciales, ya que no me fue muy bien en mi primer parcial y necesito reforzar.");
-    const [briefDescription] = useState("Estudiante de primer año de la carrera de Ingeniería en Ciencias de la Computación");
+    const [currentName] = useState(user?.name || "");
+    const [currentLastName] = useState(user?.last_name || "");
+    const [currentInstitution] = useState(user?.institution || "");
+    const [fullDescription] = useState(user?.full_description || "");
+    const [briefDescription] = useState(user?.short_description || "");
     const currentImageUrl = "https://randomuser.me/api/portraits/men/12.jpg";
     const [preview, setPreview] = useState(currentImageUrl);
+    const [selectedFile, setSelectedFile] = useState(null);
     const [showToast, setShowToast] = useState(false);
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
     const navigate = useNavigate();
@@ -41,42 +77,27 @@ function EditStudentProfileScreen() {
                 })));
             })
             .catch(err => {
-                console.error("Error fetching subjects/topics:", err);
+   
             });
     }, []);
 
-    const customStyles = {
-        control: (provided, state) => ({
-            ...provided,
-            backgroundColor: "#F6F6F6",
-            borderColor: state.isFocused ? "#1E56A0" : "#D6E4F0",
-            boxShadow: "none",
-            "&:hover": { borderColor: "#1E56A0" },
-            borderRadius: 8,
-            minHeight: 40,
-            width: "100%",
-        }),
-        menu: provided => ({
-            ...provided,
-            backgroundColor: "#F6F6F6",
-            borderRadius: 25,
-            marginTop: 4,
-        }),
-        option: (provided, { isFocused, isSelected }) => ({
-            ...provided,
-            backgroundColor: isSelected
-                ? "#1E56A0"
-                : isFocused
-                ? "#D6E4F0"
-                : "transparent",
-            color: isSelected ? "#FFFFFF" : "#163172",
-            cursor: "pointer",
-        }),
-        singleValue: provided => ({ ...provided, color: "#163172" }),
-        placeholder: provided => ({ ...provided, color: "#58769c" }),
-    };
+    useEffect(() => {
+        if (groupedSubjects.length > 0 && userStrongTopics) {
+            const allOptions = groupedSubjects.flatMap(group => group.options);
+            setStrength(userStrongTopics.map(topicName => allOptions.find(opt => opt.value === topicName || opt.label === topicName))
+                    .filter(Boolean)
+            );
+        }
+        if (groupedSubjects.length > 0 && userWeakTopics) {
+            const allOptions = groupedSubjects.flatMap(group => group.options);
+            setWeakness(
+                userWeakTopics.map(topicName => allOptions.find(opt => opt.value === topicName || opt.label === topicName))
+                    .filter(Boolean)
+            );
+        }
+    }, [groupedSubjects, userStrongTopics, userWeakTopics]);
 
-    const handleImageClick = () => {
+    function handleImageClick() {
         fileInputRef.current.click();
     };
 
@@ -85,11 +106,13 @@ function EditStudentProfileScreen() {
         if (file) {
             const imageUrl = URL.createObjectURL(file);
             setPreview(imageUrl);
+            setSelectedFile(file); 
         }
     }
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
+        axios.post("http")
         setShowToast(true);
         setTimeout(() => {
             navigate("/student-profile");
@@ -112,10 +135,10 @@ function EditStudentProfileScreen() {
                     <Select
                         id="engineering-degree"
                         name="engineering-degree"
-                        placeholder="Ingeniería en Ciencias de la Computación"
+                        placeholder={career}
                         options={engineeringOptions}
-                        value={degree}
-                        onChange={setDegree}
+                        value={career}
+                        onChange={setCareer}
                         styles={customStyles}
                     />
                     <label htmlFor="strengths">Destrezas</label>

@@ -2,25 +2,35 @@ import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { supabase } from "../components/Supabase/supabaseClient";
 import { useNavigate, useLocation } from "react-router-dom";
+import { use } from "react";
 
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [userStrongTopics, setUserStrongTopics] = useState("");
+  const [userWeakTopics, setUserWeakTopics] = useState("");
+  const [userTeachedTopics, setUserTeachedTopics] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
   async function fetchUserProfile(session) {
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/api/login`,
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/login`,
         {},
         { headers: { Authorization: `Bearer ${session.access_token}` } }
       );
       setUser(response.data);
-      console.log(user);
-      
+      console.log(response.data);
+
+      const topicsResponse = await axios.get("http://localhost:5000/user-topics",
+        { params: { user_id: response.data.user_id } }
+      );
+      setUserStrongTopics(topicsResponse.data.strong);
+      setUserWeakTopics(topicsResponse.data.weak);
+      setUserTeachedTopics(topicsResponse.data.teaches); 
+                
       return response.data;
     } catch (err) {
       if (err.response && err.response.status === 404) {
@@ -111,7 +121,17 @@ export function UserProvider({ children }) {
   }, [navigate, location.pathname]);
 
   return (
-    <UserContext.Provider value={{ user, setUser, loading }}>
+    <UserContext.Provider value={{
+      user,
+      setUser,
+      loading,
+      userStrongTopics,
+      userWeakTopics,
+      userTeachedTopics,
+      setUserStrongTopics,
+      setUserWeakTopics,
+      setUserTeachedTopics
+    }}>
       {children}
     </UserContext.Provider>
   );
