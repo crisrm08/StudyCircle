@@ -11,9 +11,14 @@ export function UserProvider({ children }) {
   const [userStrongTopics, setUserStrongTopics] = useState("");
   const [userWeakTopics, setUserWeakTopics] = useState("");
   const [userTeachedTopics, setUserTeachedTopics] = useState("");
+  const [ocupations, setOcupations] = useState([]);
+  const [academicLevels, setAcademicLevels] = useState([]);
+  const [userOcupationName, setUserOcupationName] = useState("");
+  const [userAcademicLevelName, setUserAcademicLevelName] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+  
 
   async function fetchUserProfile(session) {
     try {
@@ -120,6 +125,25 @@ export function UserProvider({ children }) {
     };
   }, [navigate, location.pathname]);
 
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/ocupations-academic-levels`)
+      .then(res => {
+        setOcupations(res.data.ocupations);
+        setAcademicLevels(res.data.academicLevels);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (user && ocupations.length > 0) {
+      const name = ocupations.find(o => Number(o.value) === Number(user.occupation))?.label || "";
+      setUserOcupationName(name);
+    }
+    if (user && academicLevels.length > 0) {
+      const name = academicLevels.find(a => Number(a.value) === Number(user.academic_level))?.label || "";
+      setUserAcademicLevelName(name);
+    }
+  }, [user, ocupations, academicLevels]);
+
   return (
     <UserContext.Provider value={{
       user,
@@ -130,7 +154,9 @@ export function UserProvider({ children }) {
       userTeachedTopics,
       setUserStrongTopics,
       setUserWeakTopics,
-      setUserTeachedTopics
+      setUserTeachedTopics,
+      userOcupationName, 
+      userAcademicLevelName
     }}>
       {children}
     </UserContext.Provider>

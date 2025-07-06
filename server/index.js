@@ -196,6 +196,8 @@ app.post('/student-signup', upload.fields([
   }
 });
 
+app.post('student-update')
+
 app.post('/tutor-signup', upload.fields([
   { name: 'id_photo', maxCount: 1 },
   { name: 'selfie_photo', maxCount: 1 }
@@ -303,7 +305,6 @@ app.get('/user-topics', async (req, res) => {
       if (d.type === 'strong' && d.topics) result.strong.push(d.topics.topic_name);
       if (d.type === 'teaches' && d.topics) result.teaches.push(d.topics.topic_name);
     });
-    console.log(result);
     res.json(result);
   } catch (error) {
     console.error("Unexpected error:", error);
@@ -325,6 +326,7 @@ app.get('/ocupations-academic-levels', async (req, res) => {
       value: level.academic_level_id,
       label: level.academic_level_name
     }));
+    console.log({ ocupations: formattedOcupations, academicLevels: formattedAcademicLevels });
     res.json({ ocupations: formattedOcupations, academicLevels: formattedAcademicLevels });
   } catch (error) {
     console.error('Error fetching ocupations or academic levels: ', error);

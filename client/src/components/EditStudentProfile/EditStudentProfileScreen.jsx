@@ -40,19 +40,19 @@ const customStyles = {
 };
 
 function EditStudentProfileScreen() {
-    const { user, setUser } = useUser();
+    const { user } = useUser();
     const { userStrongTopics } = useUser();
     const { userWeakTopics } = useUser();
     const [engineeringOptions, setEngineeringOptions] = useState([]);
     const [groupedSubjects, setGroupedSubjects] = useState([]);
-    const [career, setCareer] = useState(user?.career || "");
+    const [career, setCareer] = useState(user?.career || "Selecciona aquí tu carrera");
     const [weakness, setWeakness] = useState([]);
     const [strength, setStrength] = useState([]);
-    const [currentName] = useState(user?.name || "");
-    const [currentLastName] = useState(user?.last_name || "");
-    const [currentInstitution] = useState(user?.institution || "");
-    const [fullDescription] = useState(user?.full_description || "");
-    const [briefDescription] = useState(user?.short_description || "");
+    const [currentName, setCurrentName] = useState(user?.name || "Escribe tu(s) nombre(s)");
+    const [currentLastName, setCurrentLastName] = useState(user?.last_name || "Escribe tu(s) apellido(s)");
+    const [currentInstitution,  setCurrentInstitution] = useState(user?.institution || "Escribe dónde estudias");
+    const [fullDescription, setFullDescription] = useState(user?.full_description || "Escribe sobre ti, añade enlaces que creas convenientes, etc...");
+    const [briefDescription, setBriefDescription] = useState(user?.short_description || "Una descripción breve...");
     const currentImageUrl = "https://randomuser.me/api/portraits/men/12.jpg";
     const [preview, setPreview] = useState(currentImageUrl);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -60,6 +60,17 @@ function EditStudentProfileScreen() {
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
     const navigate = useNavigate();
     const fileInputRef = useRef();
+
+    useEffect(() => {
+    if (user) {
+        setCareer(user.career || "");
+        setCurrentName(user.name || "");
+        setCurrentLastName(user.last_name || "");
+        setCurrentInstitution(user.institution || "");
+        setFullDescription(user.full_description || "");
+        setBriefDescription(user.short_description || "");
+    }
+    }, [user]);
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/careers`)
@@ -112,7 +123,7 @@ function EditStudentProfileScreen() {
 
     async function handleSubmit(event) {
         event.preventDefault();
-        axios.post("http")
+        axios.post("http://localhost:5000/student-update")
         setShowToast(true);
         setTimeout(() => {
             navigate("/student-profile");

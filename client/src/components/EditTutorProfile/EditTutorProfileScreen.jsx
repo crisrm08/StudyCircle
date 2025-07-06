@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../contexts/UserContext";
 import ScheduleSelector from "./ScheduleSelector";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import TutorSidebar from "../Common/TutorSidebar";
@@ -40,19 +41,23 @@ const customStyles = {
 };
 
 function EditTutorProfileScreen() {
-    const [ currentName ] = useState("Carlos");
-    const [ currentLastName ] = useState("Santana");
-    const [ currentOcupation, setCurrentOcupation ] = useState("Profesor")
-    const [ currentInstitution ] = useState("INTEC");
-    const [ currentAcademicLevel, setCurrentAcademicLevel ] = useState("Maestría");
-    const [ currentPricePerHour ] = useState("1000");
+    const { user } = useUser();
+    const { userTeachedTopics } = useUser();
+    const { userOcupationName } = useUser();
+    const { userAcademicLevelName } = useUser();
+    const [ currentName, setCurrentName ] = useState(user?.name || "");
+    const [ currentLastName, setCurrentLastName ] = useState(user?.last_name  || "");
+    const [ currentOcupation, setCurrentOcupation ] = useState(userOcupationName || "");
+    const [ currentInstitution, setCurrentInstitution ] = useState(user?.institution || "");
+    const [ currentAcademicLevel, setCurrentAcademicLevel ] = useState(userAcademicLevelName || "");
+    const [ currentPricePerHour, setCurrentPricePerHour ] = useState(user?.hourly_fee || "");
     const [schedule, setSchedule] = useState({
         Lunes: { from: "16:00", to: "18:00" },
         Miércoles: { from: "19:00", to: "22:00" }
     });
     const [groupedSubjects, setGroupedSubjects] = useState([]);
-    const [ currentFullDescription ] = useState("Docente egresado de la Universidad Autónoma de Santo Domingo de la carrera de Física. Cuento con más de 10 años de experiencia dedicados a la docencia de estudiantes universitarios en el Insituto Tecnológico de Santo Domingo.");
-    const [ currentBriefDescription ] = useState("Apasionado por la enseñanza de matemáticas y física. Vamos a resolver tus dudas juntos.");
+    const [ currentFullDescription ] = useState(user?.full_description || "Escribe sobre ti, añade enlaces que creas convenientes, etc...");
+    const [ currentBriefDescription ] = useState(user?.shot_description || "Una descripción breve...");
     const teachedTopicsInitialValues = [
       { value: "cinemática y movimiento", label: "Cinemática y movimiento" },
       { value: "pndas y sonido",    label: "Ondas y Sonido" },
@@ -65,9 +70,19 @@ function EditTutorProfileScreen() {
     const [preview, setPreview] = useState(currentImageUrl);
     const [ showToast, setShowToast ] = useState(false);
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
-
     const navigate = useNavigate();
     const fileInputRef = useRef();
+
+    useEffect(() => {
+      if (user) {
+        setCurrentName(user.name || "");
+        setCurrentLastName(user.last_name || "");
+        setCurrentOcupation(userOcupationName || "");
+        setCurrentInstitution(user.institution || "");
+        setCurrentAcademicLevel(userAcademicLevelName || "");
+        setCurrentPricePerHour(user.hourly_fee || "");
+      }
+    })
 
      useEffect(() => {
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/subjects-topics`)
@@ -92,6 +107,15 @@ function EditTutorProfileScreen() {
             .catch(console.error);
     }, []);
 
+    useEffect(() => {
+            if (groupedSubjects.length > 0 && userTeachedTopics) {
+                const allOptions = groupedSubjects.flatMap(group => group.options);
+                setTeachedTopics(userTeachedTopics.map(topicName => allOptions.find(opt => opt.value === topicName || opt.label === topicName))
+                        .filter(Boolean)
+                );
+            }
+        }, [groupedSubjects, userTeachedTopics]);
+
     function handleImageClick(){
       fileInputRef.current.click();
     };
@@ -114,7 +138,6 @@ function EditTutorProfileScreen() {
       }, 2000);
     }
   
-
     return(
         <div className="edit-profile-screen">
             <Header/>
