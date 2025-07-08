@@ -196,7 +196,91 @@ app.post('/student-signup', upload.fields([
   }
 });
 
-app.post('student-update')
+app.post('/student-save-update', async (req, res) => {
+  try {
+    const { name, last_name, institution, career, full_description, short_description, strong_topics, weak_topics, user_id } = req.body;
+
+    const { data: updatedUser, error: updateErr } = await supabase.from('users')
+      .update({
+        name,
+        last_name,
+        institution,
+        career,
+        full_description,
+        short_description
+      }).eq('user_id', user_id).select('*').maybeSingle();
+
+    if (updateErr) {
+      console.error("Error updating user:", updateErr);
+      return res.status(500).json({ error: updateErr.message });
+    }
+
+    const topicUpdates = [];
+    if (Array.isArray(strong_topics)) { strong_topics.forEach(topic => {
+        topicUpdates.push({ user_id, topic_id: topic.value, type: 'strong' });
+      });
+    }
+    if (Array.isArray(weak_topics)) { weak_topics.forEach(topic => {
+        topicUpdates.push({ user_id, topic_id: topic.value, type: 'weak' });
+      });
+    }
+
+    await supabase.from('user_topics').delete().eq('user_id', user_id);
+
+    if (topicUpdates.length > 0) {
+      const { error: topicErr } = await supabase.from('user_topics').insert(topicUpdates);
+      if (topicErr) {
+        console.error("Error updating topics:", topicErr);
+        return res.status(500).json({ error: topicErr.message });
+      }
+    }
+    res.json(updatedUser);
+  } catch (error) {
+    console.error('Error saving student update:', error);
+    res.status(500).json({ error: 'Internal server error', details: error.message });
+  }
+});
+
+app.post('/tutor-save-update', async (req, res) => {
+  try {
+    const { name, last_name, institution, full_description, short_description, occupation, academic_level, teached_topics, user_id } = req.body;
+
+    const { data: updatedUser, error: updateErr } = await supabase.from('users')
+      .update({
+        name,
+        last_name,
+        institution,
+        full_description,
+        short_description,
+        occupation, 
+        academic_level
+      }).eq('user_id', user_id).select('*').maybeSingle();
+
+    if (updateErr) {
+      console.error("Error updating user:", updateErr);
+      return res.status(500).json({ error: updateErr.message });
+    }
+    const topicUpdates = [];
+    if (Array.isArray(teached_topics)) {teached_topics.forEach(topic => {
+        topicUpdates.push({ user_id, topic_id: topic.value, type: "teaches" });
+    })}
+
+    await supabase.from('user_topics').delete().eq('user_id', user_id);
+
+    if (topicUpdates.length > 0) {
+      const { error: topicErr } = await supabase.from('user_topics').insert(topicUpdates);
+      if (topicErr) {
+        console.error("Error updating topics:", topicErr);
+        return res.status(500).json({ error: topicErr.message });
+      }
+    }
+    res.json(updatedUser);
+  }
+  catch (error) {
+     console.error('Error saving tutor update:', error);
+    res.status(500).json({ error: 'Internal server error', details: error.message });
+  }
+});
 
 app.post('/tutor-signup', upload.fields([
   { name: 'id_photo', maxCount: 1 },
@@ -221,7 +305,6 @@ app.post('/tutor-signup', upload.fields([
         return res.status(400).json({ error: 'La imagen de la cédula y la selfie subida no coinciden' });
       }
       const { name, last_name, email, profile_type, academic_level, subject_teach, institution, occupation, hourly_fee, supabase_user_id } = req.body;
-      // Insert tutor
       const { data: newTutor, error: insertErr } = await supabase
         .from('users')
         .insert({
@@ -241,7 +324,7 @@ app.post('/tutor-signup', upload.fields([
         return res.status(500).json({ error: insertErr.message });
       }
       const userId = newTutor.user_id;
-      // Insert teaches topics
+
       const teachTopics = Array.isArray(JSON.parse(subject_teach)) ? JSON.parse(subject_teach) : [];
       if (teachTopics.length > 0) {
         const teachRows = teachTopics.map(topic => ({ user_id: userId, topic_id: topic.value, type: 'teaches' }));
@@ -326,7 +409,6 @@ app.get('/ocupations-academic-levels', async (req, res) => {
       value: level.academic_level_id,
       label: level.academic_level_name
     }));
-    console.log({ ocupations: formattedOcupations, academicLevels: formattedAcademicLevels });
     res.json({ ocupations: formattedOcupations, academicLevels: formattedAcademicLevels });
   } catch (error) {
     console.error('Error fetching ocupations or academic levels: ', error);

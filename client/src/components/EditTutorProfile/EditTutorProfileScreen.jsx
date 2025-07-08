@@ -45,19 +45,21 @@ function EditTutorProfileScreen() {
     const { userTeachedTopics } = useUser();
     const { userOcupationName } = useUser();
     const { userAcademicLevelName } = useUser();
-    const [ currentName, setCurrentName ] = useState(user?.name || "");
-    const [ currentLastName, setCurrentLastName ] = useState(user?.last_name  || "");
-    const [ currentOcupation, setCurrentOcupation ] = useState(userOcupationName || "");
-    const [ currentInstitution, setCurrentInstitution ] = useState(user?.institution || "");
-    const [ currentAcademicLevel, setCurrentAcademicLevel ] = useState(userAcademicLevelName || "");
-    const [ currentPricePerHour, setCurrentPricePerHour ] = useState(user?.hourly_fee || "");
+    const [formData, setFormData] = useState({
+        name: user?.name || "",
+        last_name: user?.last_name || "",
+        institution: user?.institution || "",
+        price_per_hour: user?.hourly_fee || "",
+        full_description: user?.full_description || "",
+        short_description: user?.short_description || "",
+    });
+    const [currentOcupation, setCurrentOcupation] = useState(null);
+    const [currentAcademicLevel, setCurrentAcademicLevel] = useState(null);
     const [schedule, setSchedule] = useState({
         Lunes: { from: "16:00", to: "18:00" },
         Miércoles: { from: "19:00", to: "22:00" }
     });
     const [groupedSubjects, setGroupedSubjects] = useState([]);
-    const [ currentFullDescription ] = useState(user?.full_description || "Escribe sobre ti, añade enlaces que creas convenientes, etc...");
-    const [ currentBriefDescription ] = useState(user?.shot_description || "Una descripción breve...");
     const teachedTopicsInitialValues = [
       { value: "cinemática y movimiento", label: "Cinemática y movimiento" },
       { value: "pndas y sonido",    label: "Ondas y Sonido" },
@@ -74,22 +76,36 @@ function EditTutorProfileScreen() {
     const fileInputRef = useRef();
 
     useEffect(() => {
-      if (user) {
-        setCurrentName(user.name || "");
-        setCurrentLastName(user.last_name || "");
-        setCurrentOcupation(userOcupationName || "");
-        setCurrentInstitution(user.institution || "");
-        setCurrentAcademicLevel(userAcademicLevelName || "");
-        setCurrentPricePerHour(user.hourly_fee || "");
-      }
-    })
+        if (user) {
+            setFormData({
+            name: user.name || "Escribe tu nombre aquí",
+            last_name: user.last_name || "Escribe tu apallido",
+            institution: user.institution || "Donde trabajas/estudias",
+            full_description: user.full_description || "Describe tu perfil, agrega enlaces, etc...",
+            short_description: user.short_description || "Una breve descripción",
+            });
+            setCurrentOcupation(userOcupationName || "Selecciona tu ocupación principal");
+            setCurrentAcademicLevel(userAcademicLevelName || "Selecciona tu nivel académico actual");
+        }
+    }, [user]);
 
-     useEffect(() => {
+    useEffect(() => {
+      if (occupationOptions.length && userOcupationName) {
+        const found = occupationOptions.find(opt => opt.label === userOcupationName);
+        setCurrentOcupation(found || null);
+      }
+      if (academicLevelOptions.length && userAcademicLevelName) {
+        const found = academicLevelOptions.find(opt => opt.label === userAcademicLevelName);
+        setCurrentAcademicLevel(found || null);
+      }
+    }, [occupationOptions, academicLevelOptions, userOcupationName, userAcademicLevelName]);
+
+    useEffect(() => {
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/subjects-topics`)
             .then(res => {
                 setGroupedSubjects(res.data.map(subject => ({
                     label: subject.name,
-                    options: subject.topics.map(topic => ({ value: topic.name, label: topic.name }))
+                    options: subject.topics.map(topic => ({ value: topic.id, label: topic.name }))
                 })));
             })
             .catch(err => {
@@ -108,13 +124,13 @@ function EditTutorProfileScreen() {
     }, []);
 
     useEffect(() => {
-            if (groupedSubjects.length > 0 && userTeachedTopics) {
-                const allOptions = groupedSubjects.flatMap(group => group.options);
-                setTeachedTopics(userTeachedTopics.map(topicName => allOptions.find(opt => opt.value === topicName || opt.label === topicName))
-                        .filter(Boolean)
-                );
-            }
-        }, [groupedSubjects, userTeachedTopics]);
+        if (groupedSubjects.length > 0 && userTeachedTopics) {
+            const allOptions = groupedSubjects.flatMap(group => group.options);
+            setTeachedTopics(userTeachedTopics.map(topicName => allOptions.find(opt => opt.value === topicName || opt.label === topicName))
+                    .filter(Boolean)
+            );
+        }
+    }, [groupedSubjects, userTeachedTopics]);
 
     function handleImageClick(){
       fileInputRef.current.click();
@@ -129,15 +145,40 @@ function EditTutorProfileScreen() {
       }
     }
 
-    function handleSubmit(event) {
-      event.preventDefault();
-      setShowToast(true);
-
-      setTimeout(() => {
-        navigate("/tutor-info");
-      }, 2000);
+    function handleOcupationChange(option) {
+      setCurrentOcupation(option);
     }
-  
+
+    function handleAcademicLevelChange(option) {
+      setCurrentAcademicLevel(option);
+    }
+
+    function handleChange(e) {
+      const { name, value } = e.target;
+      setFormData(prev => ({...prev, [name]: value}))
+    }
+
+    async function handleSubmit(event) {
+      
+        event.preventDefault();        
+        axios.post("http://localhost:5000/tutor-save-update", {
+            ...formData,
+            user_id: user.user_id,
+            occupation: currentOcupation?.value,        
+            academic_level: currentAcademicLevel?.value,
+            teached_topics: teachedTopics.map(topic => ({ value: topic.value, label: topic.label })),
+        })
+        .then(response => {
+            setShowToast(true);
+            setTimeout(() => {
+                navigate("/tutor-info");
+            }, 2000);
+        })
+        .catch(error => {
+            console.error("Error saving tutor profile:", error);
+        });
+    }
+    
     return(
         <div className="edit-profile-screen">
             <Header/>
@@ -148,25 +189,25 @@ function EditTutorProfileScreen() {
                   <label htmlFor="ocupation">Ocupación</label>
                     <Select
                         id="ocupation"
-                        name="ocupation"
+                        name="ocupation_id"
                         placeholder={currentOcupation}
                         options={occupationOptions}
                         value={currentOcupation}
-                        onChange={setCurrentOcupation}
+                        onChange={handleOcupationChange}
                         styles={customStyles}
                     />
 
                     <label htmlFor="Institution">Institución/Universidad</label>
-                    <input htmlFor="Institution" type="text" placeholder={currentInstitution} />
+                    <input name="institution" type="text" placeholder={formData.institution} value={formData.institution} onChange={handleChange} />
 
                     <label htmlFor="academic-level">Nivel académico</label>
                     <Select
                         id="academic-level"
-                        name="academic-level"
+                        name="academic_level_id"
                         placeholder={currentAcademicLevel}
                         options={academicLevelOptions}
                         value={currentAcademicLevel}
-                        onChange={setCurrentAcademicLevel}
+                        onChange={handleAcademicLevelChange}
                         styles={customStyles}
                     />
 
@@ -204,10 +245,10 @@ function EditTutorProfileScreen() {
                   <div className="top-right">
                     <div className="name-lastname">
                       <label htmlFor="name">Nombre(s)</label>
-                      <input htmlFor="name" type="text" placeholder={currentName} />
+                      <input name="name" type="text" placeholder={formData.name} value={formData.name} onChange={handleChange}/>
 
-                      <label htmlFor="last-name">Apellidos(s)</label>
-                      <input htmlFor="last-name" type="text" placeholder={currentLastName} />
+                      <label htmlFor="last_name">Apellidos(s)</label>
+                      <input name="last_name" type="text" placeholder={formData.last_name} value={formData.last_name} onChange={handleChange} />
                     </div>
                     <div className="top-right-image">
                       <img src={preview}  alt="profile-pic" onClick={handleImageClick} style={{ cursor: 'pointer' }}/>
@@ -217,11 +258,11 @@ function EditTutorProfileScreen() {
 
                     <input type="file" accept="image/*" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange}/>
 
-                    <label htmlFor="brief-description">Descripción breve</label>
-                    <input htmlFor="brief-description" className="brief-description" type="text" value={currentBriefDescription} />
+                    <label htmlFor="short_description">Descripción breve</label>
+                    <input name="short_description" className="brief-description" type="text" value={formData.short_description} onChange={handleChange} />
 
-                    <label htmlFor="about-me">Sobre mí</label>
-                    <textarea name="about-me" id="about-me" value={currentFullDescription}></textarea>
+                    <label htmlFor="full_description">Sobre mí</label>
+                    <textarea name="full_description" id="about-me" value={formData.full_description} onChange={handleChange}></textarea>
                 </div>
             </form>
 

@@ -41,18 +41,20 @@ const customStyles = {
 
 function EditStudentProfileScreen() {
     const { user } = useUser();
+    const [formData, setFormData] = useState({
+        name: user?.name || "",
+        last_name: user?.last_name || "",
+        institution: user?.institution || "",
+        full_description: user?.full_description || "",
+        short_description: user?.short_description || "",
+    });
+    const [career, setCareer] = useState(user?.career || "Selecciona aquí tu carrera");
     const { userStrongTopics } = useUser();
     const { userWeakTopics } = useUser();
     const [engineeringOptions, setEngineeringOptions] = useState([]);
     const [groupedSubjects, setGroupedSubjects] = useState([]);
-    const [career, setCareer] = useState(user?.career || "Selecciona aquí tu carrera");
     const [weakness, setWeakness] = useState([]);
     const [strength, setStrength] = useState([]);
-    const [currentName, setCurrentName] = useState(user?.name || "Escribe tu(s) nombre(s)");
-    const [currentLastName, setCurrentLastName] = useState(user?.last_name || "Escribe tu(s) apellido(s)");
-    const [currentInstitution,  setCurrentInstitution] = useState(user?.institution || "Escribe dónde estudias");
-    const [fullDescription, setFullDescription] = useState(user?.full_description || "Escribe sobre ti, añade enlaces que creas convenientes, etc...");
-    const [briefDescription, setBriefDescription] = useState(user?.short_description || "Una descripción breve...");
     const currentImageUrl = "https://randomuser.me/api/portraits/men/12.jpg";
     const [preview, setPreview] = useState(currentImageUrl);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -62,14 +64,16 @@ function EditStudentProfileScreen() {
     const fileInputRef = useRef();
 
     useEffect(() => {
-    if (user) {
-        setCareer(user.career || "");
-        setCurrentName(user.name || "");
-        setCurrentLastName(user.last_name || "");
-        setCurrentInstitution(user.institution || "");
-        setFullDescription(user.full_description || "");
-        setBriefDescription(user.short_description || "");
-    }
+        if (user) {
+            setFormData({
+            name: user.name || "Escribe tu nombre aquí",
+            last_name: user.last_name || "Escribe tu apallido",
+            institution: user.institution || "Donde estudias",
+            full_description: user.full_description || "Describe tu perfil, agrega enlaces, etc...",
+            short_description: user.short_description || "Una breve descripción",
+            });
+            setCareer(user.career);
+        }
     }, [user]);
 
     useEffect(() => {
@@ -83,13 +87,9 @@ function EditStudentProfileScreen() {
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/subjects-topics`)
             .then(res => {
                 setGroupedSubjects(res.data.map(subject => ({
-                    label: subject.name,
-                    options: subject.topics.map(topic => ({ value: topic.name, label: topic.name }))
-                })));
+                label: subject.name,
+                options: subject.topics.map(topic => ({ value: topic.id, label: topic.name  }))})));
             })
-            .catch(err => {
-   
-            });
     }, []);
 
     useEffect(() => {
@@ -121,13 +121,30 @@ function EditStudentProfileScreen() {
         }
     }
 
+    function handleChange(e) {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    }
+
     async function handleSubmit(event) {
-        event.preventDefault();
-        axios.post("http://localhost:5000/student-update")
-        setShowToast(true);
-        setTimeout(() => {
-            navigate("/student-profile");
-        }, 2000);
+        event.preventDefault();        
+        axios.post("http://localhost:5000/student-save-update", {
+            ...formData,
+            career: career.value,
+            user_id: user.user_id,
+            strong_topics: strength.map(topic => ({ value: topic.value, label: topic.label })),
+            weak_topics: weakness.map(topic => ({ value: topic.value, label: topic.label }))
+           
+        })
+        .then(response => {
+            setShowToast(true);
+            setTimeout(() => {
+                navigate("/student-profile");
+            }, 2000);
+        })
+        .catch(error => {
+            console.error("Error saving student profile:", error);
+        });
     }
 
     return (
@@ -137,11 +154,11 @@ function EditStudentProfileScreen() {
             <form className="edit-profile-container">
                 <div className="left">
                     <label htmlFor="name">Nombre(s)</label>
-                    <input htmlFor="name" type="text" placeholder={currentName} />
-                    <label htmlFor="last-name">Apellidos(s)</label>
-                    <input htmlFor="last-name" type="text" placeholder={currentLastName} />
-                    <label htmlFor="Institution">Institución/Universidad</label>
-                    <input htmlFor="Institution" type="text" placeholder={currentInstitution} />
+                    <input name="name" type="text" placeholder={formData.name} value={formData.name} onChange={handleChange} />
+                    <label htmlFor="last_name">Apellidos(s)</label>
+                    <input name="last_name" type="text" placeholder={formData.last_name} value={formData.last_name} onChange={handleChange} />
+                    <label htmlFor="institution">Institución/Universidad</label>
+                    <input name="institution" type="text" placeholder={formData.institution} value={formData.institution} onChange={handleChange} />
                     <label htmlFor="engineering-degree">Ingeniería</label>
                     <Select
                         id="engineering-degree"
@@ -176,15 +193,15 @@ function EditStudentProfileScreen() {
                         onChange={setWeakness}
                         styles={customStyles}
                     />
-                    <label htmlFor="brief-description">Descripción breve</label>
-                    <input htmlFor="brief-description" type="text" value={briefDescription} />
+                    <label htmlFor="short_description">Descripción breve</label>
+                    <input name="short_description" type="text" placeholder={formData.short_description} value={formData.short_description} onChange={handleChange} />
                 </div>
                 <div className="right">
                     <img src={preview} alt="profile-pic" onClick={handleImageClick} style={{ cursor: 'pointer' }} />
                     <p>Haz click para cambiar tu foto</p>
                     <input type="file" accept="image/*" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
-                    <label htmlFor="about-me">Sobre mí</label>
-                    <textarea name="about-me" id="about-me" value={fullDescription}></textarea>
+                    <label htmlFor="full_description">Sobre mí</label>
+                    <textarea name="full_description" id="about-me" placeholder={formData.full_description} value={formData.full_description} onChange={handleChange}></textarea>
                 </div>
             </form>
             <button className="save-button" onClick={handleSubmit}>Guardar</button>
