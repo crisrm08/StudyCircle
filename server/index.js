@@ -93,7 +93,6 @@ app.post('/student-signup', upload.fields([
 ]), async (req, res) => {
   try {
     console.log("Signup request recibido");
-
     const idPhotoFile = req.files['id_photo']?.[0];
     const selfiePhotoFile = req.files['selfie_photo']?.[0];
 
@@ -315,11 +314,18 @@ app.post('/tutor-signup', upload.fields([
   try {
     const idPhotoFile = req.files['id_photo']?.[0];
     const selfiePhotoFile = req.files['selfie_photo']?.[0];
+
+    if (!idPhotoFile || !selfiePhotoFile) {
+      console.error("Missing image files", { idPhotoFile, selfiePhotoFile });
+      return res.status(400).json({ error: "Both ID and selfie photos are required." });
+    }
+
     const params = {
       SourceImage: { Bytes: idPhotoFile.buffer },
       TargetImage: { Bytes: selfiePhotoFile.buffer },
       SimilarityThreshold: 90
     };
+
     rekognition.compareFaces(params, async (err, data) => {
       if (err) {
         console.error('Rekognition error:', err);
@@ -331,6 +337,7 @@ app.post('/tutor-signup', upload.fields([
         return res.status(400).json({ error: 'La imagen de la cédula y la selfie subida no coinciden' });
       }
       const { name, last_name, email, profile_type, academic_level, subject_teach, institution, occupation, hourly_fee, supabase_user_id } = req.body;
+
       const { data: newTutor, error: insertErr } = await supabase
         .from('users')
         .insert({
