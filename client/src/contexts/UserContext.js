@@ -8,6 +8,8 @@ const UserContext = createContext();
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [imageFilePath, setImageFilePath] = useState(null);
+  const [imageData, setImageData] = useState(null);
   const [userStrongTopics, setUserStrongTopics] = useState("");
   const [userWeakTopics, setUserWeakTopics] = useState("");
   const [userTeachedTopics, setUserTeachedTopics] = useState("");
@@ -126,6 +128,20 @@ export function UserProvider({ children }) {
   }, [navigate, location.pathname]);
 
   useEffect(() => {
+    if (!user) return;
+
+    const filePath = `user_${user.user_id}.jpg`;
+    setImageFilePath(filePath);
+
+    const { data } = supabase
+      .storage
+      .from('profile.images')
+      .getPublicUrl(filePath);
+    setImageData(data.publicUrl + `?t=${Date.now()}`)
+
+  },[user]);
+
+  useEffect(() => {
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/ocupations-academic-levels`)
       .then(res => {
         setOcupations(res.data.ocupations);
@@ -148,6 +164,8 @@ export function UserProvider({ children }) {
     <UserContext.Provider value={{
       user,
       setUser,
+      imageFilePath,
+      imageData,
       loading,
       userStrongTopics,
       userWeakTopics,

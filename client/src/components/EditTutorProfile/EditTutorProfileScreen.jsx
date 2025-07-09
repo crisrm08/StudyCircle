@@ -53,6 +53,9 @@ function EditTutorProfileScreen() {
         full_description: user?.full_description || "",
         short_description: user?.short_description || "",
     });
+    const [selectedFile, setSelectedFile] = useState(null);
+    const { imageData } = useUser();
+    const { imageFilePath } = useUser();
     const [currentOcupation, setCurrentOcupation] = useState(null);
     const [currentAcademicLevel, setCurrentAcademicLevel] = useState(null);
     const [schedule, setSchedule] = useState({
@@ -86,6 +89,8 @@ function EditTutorProfileScreen() {
             });
             setCurrentOcupation(userOcupationName || "Selecciona tu ocupación principal");
             setCurrentAcademicLevel(userAcademicLevelName || "Selecciona tu nivel académico actual");
+            setPreview(imageData);
+            setSelectedFile(imageData);
         }
     }, [user]);
 
@@ -139,9 +144,9 @@ function EditTutorProfileScreen() {
     function handleFileChange (event) {
       const file = event.target.files[0];
       if (file) {
-        
         const imageUrl = URL.createObjectURL(file);
         setPreview(imageUrl);
+        setSelectedFile(file);
       }
     }
 
@@ -159,24 +164,31 @@ function EditTutorProfileScreen() {
     }
 
     async function handleSubmit(event) {
-      
-        event.preventDefault();        
-        axios.post("http://localhost:5000/tutor-save-update", {
-            ...formData,
-            user_id: user.user_id,
-            occupation: currentOcupation?.value,        
-            academic_level: currentAcademicLevel?.value,
-            teached_topics: teachedTopics.map(topic => ({ value: topic.value, label: topic.label })),
+        event.preventDefault();    
+        
+        const form = new FormData();
+        Object.entries(formData).forEach(([key, value]) => {
+          form.append(key, value);
         })
-        .then(response => {
-            setShowToast(true);
-            setTimeout(() => {
-                navigate("/tutor-info");
-            }, 2000);
-        })
-        .catch(error => {
-            console.error("Error saving tutor profile:", error);
-        });
+
+        form.append("user_id", user.user_id);
+        form.append("occupation", currentOcupation?.value);
+        form.append("academic_level", currentAcademicLevel?.value);
+        form.append("teached_topics", JSON.stringify(teachedTopics.map(t => t.value)));
+        form.append("user_image", selectedFile);
+        form.append("file_path", `user_${user.user_id}.jpg`);
+
+        await axios.post("http://localhost:5000/tutor-save-update",
+            form,
+            { headers: { "Content-Type": "multipart/form-data" } }
+        ).then(() => {
+                setShowToast(true);
+                setTimeout(() => {
+                    setShowToast(false);
+                    navigate("/tutor-info");
+                }, 2000);
+            }
+        );
     }
     
     return(
@@ -190,7 +202,7 @@ function EditTutorProfileScreen() {
                     <Select
                         id="ocupation"
                         name="ocupation_id"
-                        placeholder={currentOcupation}
+                        placeholder="Elige tu ocupación aquí..."
                         options={occupationOptions}
                         value={currentOcupation}
                         onChange={handleOcupationChange}

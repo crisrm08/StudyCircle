@@ -48,9 +48,11 @@ function EditStudentProfileScreen() {
         full_description: user?.full_description || "",
         short_description: user?.short_description || "",
     });
-    const [career, setCareer] = useState(user?.career || "Selecciona aquí tu carrera");
+    const [career, setCareer] = useState(null);
     const { userStrongTopics } = useUser();
     const { userWeakTopics } = useUser();
+    const { imageData } = useUser();
+    const { imageFilePath } = useUser();
     const [engineeringOptions, setEngineeringOptions] = useState([]);
     const [groupedSubjects, setGroupedSubjects] = useState([]);
     const [weakness, setWeakness] = useState([]);
@@ -73,6 +75,8 @@ function EditStudentProfileScreen() {
             short_description: user.short_description || "Una breve descripción",
             });
             setCareer(user.career);
+            setPreview(imageData);
+            setSelectedFile(imageData);
         }
     }, [user]);
 
@@ -108,6 +112,14 @@ function EditStudentProfileScreen() {
         }
     }, [groupedSubjects, userStrongTopics, userWeakTopics]);
 
+    useEffect(() => {
+        if (engineeringOptions.length > 0 && user?.career) {
+            const preset = engineeringOptions.find(opt => opt.value === user.career);
+        if (preset) setCareer(preset);
+    }
+}, [engineeringOptions, user?.career]);
+
+
     function handleImageClick() {
         fileInputRef.current.click();
     };
@@ -127,24 +139,31 @@ function EditStudentProfileScreen() {
     }
 
     async function handleSubmit(event) {
-        event.preventDefault();        
-        axios.post("http://localhost:5000/student-save-update", {
-            ...formData,
-            career: career.value,
-            user_id: user.user_id,
-            strong_topics: strength.map(topic => ({ value: topic.value, label: topic.label })),
-            weak_topics: weakness.map(topic => ({ value: topic.value, label: topic.label }))
-           
-        })
-        .then(response => {
-            setShowToast(true);
-            setTimeout(() => {
-                navigate("/student-profile");
-            }, 2000);
-        })
-        .catch(error => {
-            console.error("Error saving student profile:", error);
-        });
+        event.preventDefault();  
+        
+        const form = new FormData();
+        Object.entries(formData).forEach(([key, value]) => {
+            form.append(key, value);
+        }); 
+
+        form.append("career", career?.value || "");
+        form.append("user_id", user.user_id);
+        form.append("strong_topics", JSON.stringify(strength.map(t => t.value)));
+        form.append("weak_topics", JSON.stringify(weakness.map(t => t.value)));
+        form.append("user_image", selectedFile);
+        form.append("file_path", `user_${user.user_id}.jpg`);
+
+        await axios.post("http://localhost:5000/student-save-update",
+            form,
+            { headers: { "Content-Type": "multipart/form-data" } }
+        ).then(() => {
+                setShowToast(true);
+                setTimeout(() => {
+                    setShowToast(false);
+                    navigate("/student-profile");
+                }, 2000);
+            }
+        );
     }
 
     return (
@@ -161,9 +180,9 @@ function EditStudentProfileScreen() {
                     <input name="institution" type="text" placeholder={formData.institution} value={formData.institution} onChange={handleChange} />
                     <label htmlFor="engineering-degree">Ingeniería</label>
                     <Select
-                        id="engineering-degree"
-                        name="engineering-degree"
-                        placeholder={career}
+                        id="career"
+                        name="career"
+                        placeholder="Selecciona aquí tu carrera"
                         options={engineeringOptions}
                         value={career}
                         onChange={setCareer}

@@ -16,12 +16,11 @@ AWS.config.update({
 });
 
 const rekognition = new AWS.Rekognition();
-
 const app = express();
 const PORT = 5000;
 const router = express.Router();
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SERVICE_ROLE_KEY);
 const upload = multer({ storage: multer.memoryStorage() });
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SERVICE_ROLE_KEY);
 
 app.use(cors());
 app.use(express.json());
@@ -196,44 +195,39 @@ app.post('/student-signup', upload.fields([
   }
 });
 
-app.post('/student-save-update', async (req, res) => {
+app.post('/student-save-update', upload.single("user_image"), async (req, res) => {
   try {
-    const { name, last_name, institution, career, full_description, short_description, strong_topics, weak_topics, user_id } = req.body;
+    const { name, last_name, institution, career, full_description, short_description, strong_topics, weak_topics, user_id, file_path } = req.body;
+    const file = req.file;
 
     const { data: updatedUser, error: updateErr } = await supabase.from('users')
-      .update({
-        name,
-        last_name,
-        institution,
-        career,
-        full_description,
-        short_description
-      }).eq('user_id', user_id).select('*').maybeSingle();
+      .update({name, last_name, institution, career, full_description, short_description
+    }).eq('user_id', user_id).select('*').maybeSingle();
 
     if (updateErr) {
       console.error("Error updating user:", updateErr);
       return res.status(500).json({ error: updateErr.message });
     }
 
-    const topicUpdates = [];
-    if (Array.isArray(strong_topics)) { strong_topics.forEach(topic => {
-        topicUpdates.push({ user_id, topic_id: topic.value, type: 'strong' });
-      });
-    }
-    if (Array.isArray(weak_topics)) { weak_topics.forEach(topic => {
-        topicUpdates.push({ user_id, topic_id: topic.value, type: 'weak' });
-      });
+    const path = file_path || `user_${user_id}.jpg`;
+    if (file) {
+      const { error: storageErr } = await supabase.storage.from('profile.images').upload(path,file.buffer,{ upsert: true, contentType: file.mimetype });
+      if (storageErr) throw storageErr;
     }
 
     await supabase.from('user_topics').delete().eq('user_id', user_id);
-
-    if (topicUpdates.length > 0) {
+    const topicUpdates = [];
+    JSON.parse(strong_topics || '[]').forEach(id =>
+      topicUpdates.push({ user_id, topic_id: id, type: 'strong' })
+    );
+    JSON.parse(weak_topics || '[]').forEach(id =>
+      topicUpdates.push({ user_id, topic_id: id, type: 'weak' })
+    );
+    if (topicUpdates.length) {
       const { error: topicErr } = await supabase.from('user_topics').insert(topicUpdates);
-      if (topicErr) {
-        console.error("Error updating topics:", topicErr);
-        return res.status(500).json({ error: topicErr.message });
-      }
+      if (topicErr) throw topicErr;
     }
+
     res.json(updatedUser);
   } catch (error) {
     console.error('Error saving student update:', error);
@@ -241,39 +235,36 @@ app.post('/student-save-update', async (req, res) => {
   }
 });
 
-app.post('/tutor-save-update', async (req, res) => {
+app.post('/tutor-save-update', upload.single("user_image"), async (req, res) => {
   try {
-    const { name, last_name, institution, full_description, short_description, occupation, academic_level, teached_topics, user_id } = req.body;
+    const { name, last_name, institution, full_description, short_description, occupation, academic_level, teached_topics, user_id, file_path} = req.body;
+    const file = req.file;
 
     const { data: updatedUser, error: updateErr } = await supabase.from('users')
-      .update({
-        name,
-        last_name,
-        institution,
-        full_description,
-        short_description,
-        occupation, 
-        academic_level
-      }).eq('user_id', user_id).select('*').maybeSingle();
+      .update({ name, last_name, institution, full_description, short_description, occupation, academic_level
+    }).eq('user_id', user_id).select('*').maybeSingle();
 
     if (updateErr) {
       console.error("Error updating user:", updateErr);
       return res.status(500).json({ error: updateErr.message });
     }
-    const topicUpdates = [];
-    if (Array.isArray(teached_topics)) {teached_topics.forEach(topic => {
-        topicUpdates.push({ user_id, topic_id: topic.value, type: "teaches" });
-    })}
+
+    const path = file_path || `user_${user_id}.jpg`;
+    if (file) {
+      const { error: storageErr } = await supabase.storage.from('profile.images').upload(path,file.buffer,{ upsert: true, contentType: file.mimetype });
+      if (storageErr) throw storageErr;
+    }
 
     await supabase.from('user_topics').delete().eq('user_id', user_id);
-
-    if (topicUpdates.length > 0) {
+    const topicUpdates = [];
+    JSON.parse(teached_topics || '[]').forEach(id =>
+      topicUpdates.push({ user_id, topic_id: id, type: 'teaches' })
+    );
+    if (topicUpdates.length) {
       const { error: topicErr } = await supabase.from('user_topics').insert(topicUpdates);
-      if (topicErr) {
-        console.error("Error updating topics:", topicErr);
-        return res.status(500).json({ error: topicErr.message });
-      }
+      if (topicErr) throw topicErr;
     }
+    
     res.json(updatedUser);
   }
   catch (error) {
