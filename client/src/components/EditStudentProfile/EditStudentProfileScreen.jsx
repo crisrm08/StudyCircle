@@ -161,8 +161,12 @@ function EditStudentProfileScreen() {
         form.append("user_image", selectedFile);
         form.append("file_path", `user_${user.user_id}.jpg`);
 
-        
-        await axios.post("http://localhost:5000/student-save-update",
+        if (!formData.name || !formData.last_name || !formData.institution || !career || !strength.length || !weakness.length) {
+            alert("Por favor completa todos los campos requeridos.");
+            return;
+        }
+
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/student-save-update`,
             form,
             { headers: { "Content-Type": "multipart/form-data" } }
         ).then(() => {

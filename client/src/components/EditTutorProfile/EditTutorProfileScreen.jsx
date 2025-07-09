@@ -142,7 +142,7 @@ function EditTutorProfileScreen() {
 
     useEffect(() => {
       if (!user) return;
-      axios.get("http://localhost:5000/tutor-availability", { params: { tutor_id: user.user_id }})
+      axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutor-availability`, { params: { tutor_id: user.user_id }})
         .then(({ data }) => {
 
           const init = daysOfWeek.reduce((acc, d) => {
@@ -214,7 +214,12 @@ function EditTutorProfileScreen() {
         form.append("user_image", selectedFile);
         form.append("file_path", `user_${user.user_id}.jpg`);
 
-        await axios.post("http://localhost:5000/tutor-save-update",
+        if (!formData.name || !formData.last_name || !formData.institution || !currentOcupation || !currentAcademicLevel || !teachedTopics.length) {
+            alert("Por favor completa todos los campos requeridos.");
+            return;
+        }
+
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/tutor-save-update`,
             form,
             { headers: { "Content-Type": "multipart/form-data" } }
         ).then(() => {

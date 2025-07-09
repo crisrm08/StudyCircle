@@ -59,6 +59,9 @@ function StudentSignUp1Screen() {
         if (studentSignUpData.name === "" || studentSignUpData.last_name === "" || studentSignUpData.email === "" || studentSignUpData.password === "") {
             alert("Por favor, completa todos los campos.");
         }
+        else if (studentSignUpData.password.length < 7 ){
+            alert("La contraseña debe tener al menos 6 caracteres.");
+        }
         else if (!match) {
             alert("Las contraseñas no coinciden. Por favor verifica e intenta nuevamente.");
         }

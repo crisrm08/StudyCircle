@@ -59,6 +59,9 @@ function TutorSignUp1Screen() {
         if (tutorSignUpData.name === "" || tutorSignUpData.last_name === "" || tutorSignUpData.email === "" || tutorSignUpData.password === "") {
             alert("Por favor, completa todos los campos.");
         }
+        else if (tutorSignUpData.password.length < 7 ){
+            alert("La contraseña debe tener al menos 6 caracteres.");
+        }
         else if (!match) {
             alert("Las contraseñas no coinciden.");     
         }

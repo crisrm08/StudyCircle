@@ -31,7 +31,7 @@ export function UserProvider({ children }) {
       setUser(response.data);
       console.log(response.data);
 
-      const topicsResponse = await axios.get("http://localhost:5000/user-topics",
+      const topicsResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/user-topics`,
         { params: { user_id: response.data.user_id } }
       );
       setUserStrongTopics(topicsResponse.data.strong);
