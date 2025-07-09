@@ -57,8 +57,7 @@ function EditStudentProfileScreen() {
     const [groupedSubjects, setGroupedSubjects] = useState([]);
     const [weakness, setWeakness] = useState([]);
     const [strength, setStrength] = useState([]);
-    const currentImageUrl = "https://randomuser.me/api/portraits/men/12.jpg";
-    const [preview, setPreview] = useState(currentImageUrl);
+    const [preview, setPreview] = useState();
     const [selectedFile, setSelectedFile] = useState(null);
     const [showToast, setShowToast] = useState(false);
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
@@ -74,7 +73,6 @@ function EditStudentProfileScreen() {
             full_description: user.full_description || "Describe tu perfil, agrega enlaces, etc...",
             short_description: user.short_description || "Una breve descripción",
             });
-            setCareer(user.career);
             setPreview(imageData);
             setSelectedFile(imageData);
         }
@@ -124,13 +122,23 @@ function EditStudentProfileScreen() {
         fileInputRef.current.click();
     };
 
-    function handleFileChange(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setPreview(imageUrl);
-            setSelectedFile(file); 
+    function handleFileChange (event) {
+      const file = event.target.files[0];
+      if (file) {
+        const allowedTypes = ['image/png', 'image/jpeg', 'image/webp'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (
+          fileExtension === 'heic' ||
+          !allowedTypes.includes(file.type)
+        ) {
+          alert('Formato de imagen no soportado. Por favor selecciona un archivo PNG, JPG o WEBP.');
+          event.target.value = '';
+          return;
         }
+        const imageUrl = URL.createObjectURL(file);
+        setPreview(imageUrl);
+        setSelectedFile(file);
+      }
     }
 
     function handleChange(e) {
@@ -153,6 +161,7 @@ function EditStudentProfileScreen() {
         form.append("user_image", selectedFile);
         form.append("file_path", `user_${user.user_id}.jpg`);
 
+        
         await axios.post("http://localhost:5000/student-save-update",
             form,
             { headers: { "Content-Type": "multipart/form-data" } }
@@ -218,7 +227,7 @@ function EditStudentProfileScreen() {
                 <div className="right">
                     <img src={preview} alt="profile-pic" onClick={handleImageClick} style={{ cursor: 'pointer' }} />
                     <p>Haz click para cambiar tu foto</p>
-                    <input type="file" accept="image/*" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
+                    <input type="file" accept=".png, .jpg, .jpeg, .webp" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
                     <label htmlFor="full_description">Sobre mí</label>
                     <textarea name="full_description" id="about-me" placeholder={formData.full_description} value={formData.full_description} onChange={handleChange}></textarea>
                 </div>

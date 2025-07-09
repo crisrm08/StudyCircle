@@ -71,8 +71,7 @@ function EditTutorProfileScreen() {
     const [academicLevelOptions, setAcademicLevelOptions] = useState([]);
     const [occupationOptions, setOccupationOptions] = useState([]);
     const [teachedTopics, setTeachedTopics] = useState(teachedTopicsInitialValues);
-    const currentImageUrl = "https://randomuser.me/api/portraits/men/32.jpg";
-    const [preview, setPreview] = useState(currentImageUrl);
+    const [preview, setPreview] = useState();
     const [ showToast, setShowToast ] = useState(false);
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
     const navigate = useNavigate();
@@ -137,6 +136,32 @@ function EditTutorProfileScreen() {
         }
     }, [groupedSubjects, userTeachedTopics]);
 
+    const daysOfWeek = [
+      "Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"
+    ];
+
+    useEffect(() => {
+      if (!user) return;
+      axios.get("http://localhost:5000/tutor-availability", { params: { tutor_id: user.user_id }})
+        .then(({ data }) => {
+
+          const init = daysOfWeek.reduce((acc, d) => {
+            acc[d] = null;
+            return acc;
+          }, {});
+      
+          data.availability.forEach(({ day_of_week, start_time, end_time }) => {
+            init[day_of_week] = {
+              from: start_time.slice(0,5),   
+              to:   end_time.slice(0,5)     
+            };
+          });
+          setSchedule(init);
+        })
+        .catch(console.error);
+    }, [user]);
+
+
     function handleImageClick(){
       fileInputRef.current.click();
     };
@@ -144,6 +169,16 @@ function EditTutorProfileScreen() {
     function handleFileChange (event) {
       const file = event.target.files[0];
       if (file) {
+        const allowedTypes = ['image/png', 'image/jpeg', 'image/webp'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (
+          fileExtension === 'heic' ||
+          !allowedTypes.includes(file.type)
+        ) {
+          alert('Formato de imagen no soportado. Por favor selecciona un archivo PNG, JPG o WEBP.');
+          event.target.value = '';
+          return;
+        }
         const imageUrl = URL.createObjectURL(file);
         setPreview(imageUrl);
         setSelectedFile(file);
@@ -175,6 +210,7 @@ function EditTutorProfileScreen() {
         form.append("occupation", currentOcupation?.value);
         form.append("academic_level", currentAcademicLevel?.value);
         form.append("teached_topics", JSON.stringify(teachedTopics.map(t => t.value)));
+        form.append("schedule", JSON.stringify(schedule));
         form.append("user_image", selectedFile);
         form.append("file_path", `user_${user.user_id}.jpg`);
 
@@ -268,7 +304,7 @@ function EditTutorProfileScreen() {
                     </div>
                   </div>
 
-                    <input type="file" accept="image/*" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange}/>
+                    <input type="file" accept=".png, .jpg, .jpeg, .webp" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange}/>
 
                     <label htmlFor="short_description">Descripción breve</label>
                     <input name="short_description" className="brief-description" type="text" value={formData.short_description} onChange={handleChange} />

@@ -235,6 +235,22 @@ app.post('/student-save-update', upload.single("user_image"), async (req, res) =
   }
 });
 
+app.get('/tutor-availability', async (req, res) => {
+  try {
+    const tutor_id = parseInt(req.query.tutor_id, 10);
+    if (!tutor_id) return res.status(400).json({ error: "tutor_id requerido" });
+
+    const { data, error } = await supabase.from('tutor_availability').select('day_of_week, start_time, end_time').eq('tutor_id', tutor_id);
+
+    if (error) throw error;
+
+    res.json({ availability: data });  
+  } catch (err) {
+    console.error("Error fetching availability:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.post('/tutor-save-update', upload.single("user_image"), async (req, res) => {
   try {
     const { name, last_name, institution, full_description, short_description, occupation, academic_level, teached_topics, user_id, file_path} = req.body;
@@ -264,7 +280,26 @@ app.post('/tutor-save-update', upload.single("user_image"), async (req, res) => 
       const { error: topicErr } = await supabase.from('user_topics').insert(topicUpdates);
       if (topicErr) throw topicErr;
     }
-    
+   
+    const scheduleObj = JSON.parse(req.body.schedule || "{}");
+    await supabase.from('tutor_availability').delete().eq('tutor_id', user_id);
+
+    const availUpdates = [];
+    for (const [day, times] of Object.entries(scheduleObj)) {
+      if (times && times.from && times.to) {
+        availUpdates.push({
+          tutor_id: user_id,
+          day_of_week: day,
+          start_time: times.from + ":00",  
+          end_time:   times.to   + ":00"
+        });
+      }
+    }
+
+    if (availUpdates.length) {
+      const { error: availErr } = await supabase.from('tutor_availability').insert(availUpdates);
+      if (availErr) throw availErr;
+    }
     res.json(updatedUser);
   }
   catch (error) {
