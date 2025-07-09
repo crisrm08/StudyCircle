@@ -39,7 +39,7 @@ function StudentSignUp3Screen() {
     });
 
     try {
-      const response = await axios.post("http://10.0.0.16:5000/student-signup", formData);
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/student-signup`, formData);
       const origin = window.location.origin; 
       const { data, error } = await supabase.auth.signUp({
         email,
