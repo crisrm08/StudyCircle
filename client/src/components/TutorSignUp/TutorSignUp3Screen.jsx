@@ -92,18 +92,32 @@ function TutorSignUp3Screen() {
 
   function handleIDPhotoChange(e) {
     const file = e.target.files[0];
-    if (file) {
-      setIdPhoto(file); 
-      setIdPreview(URL.createObjectURL(file));
+    if (!file) return;
+
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (!['jpg','jpeg','png'].includes(ext)) {
+      alert('Formato inválido. Solo .jpg, .jpeg o .png.');
+      e.target.value = null;
+      return;
     }
+
+    setIdPhoto(file); 
+    setIdPreview(URL.createObjectURL(file));
   }
 
   function handleSelfiePhotoChange(e) {
     const file = e.target.files[0];
-    if (file) {
-      setSelfiePhoto(file);
-      setSelfiePreview(URL.createObjectURL(file));
+    if (!file) return; 
+
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (!['jpg','jpeg','png'].includes(ext)) {
+      alert('Formato inválido. Solo .jpg, .jpeg o .png.');
+      e.target.value = null;
+      return;
     }
+
+    setSelfiePhoto(file);
+    setSelfiePreview(URL.createObjectURL(file));
   }
 
   function goBack() {
@@ -129,7 +143,7 @@ function TutorSignUp3Screen() {
                       {idPreview && ( <img src={idPreview} alt="Previsualización cédula" className="photo-preview" />)}
                     </div>
                     <label htmlFor="id-photo" className="photo-label"> Subir cédula </label>
-                    <input id="id-photo" name="id_photo" type="file" accept="image/*" onChange={handleIDPhotoChange} hidden/>
+                    <input id="id-photo" name="id_photo" type="file" accept=".jpg, .jpeg, .png" onChange={handleIDPhotoChange} hidden/>
                   </div>
 
                   <div className="photo-box circular">
@@ -137,7 +151,7 @@ function TutorSignUp3Screen() {
                       {selfiePreview && ( <img src={selfiePreview} alt="Previsualización selfie" className="photo-preview circular" />)}
                     </div>
                     <label htmlFor="selfie-photo" className="photo-label"> Subir selfie </label>
-                    <input id="selfie-photo" name="selfie_photo" type="file" accept="image/*" onChange={handleSelfiePhotoChange} hidden/>
+                    <input id="selfie-photo" name="selfie_photo" type="file" accept=".jpg, .jpeg, .png" onChange={handleSelfiePhotoChange} hidden/>
                   </div>
                 </div>
               </div>

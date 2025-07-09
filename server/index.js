@@ -88,10 +88,6 @@ app.post('/user-link-supabase', async (req, res) => {
   }
 });
 
-function isValidImage(file) {
-  return file && ['image/jpeg', 'image/png'].includes(file.mimetype);
-}
-
 app.post('/student-signup', upload.fields([
   { name: 'id_photo', maxCount: 1 },
   { name: 'selfie_photo', maxCount: 1 }
@@ -105,17 +101,6 @@ app.post('/student-signup', upload.fields([
       console.error("Missing image files", { idPhotoFile, selfiePhotoFile });
       return res.status(400).json({ error: "Both ID and selfie photos are required." });
     }
-
-    console.log("type of selfie:" + selfiePhotoFile.mimetype)
-    if (!isValidImage(idPhotoFile) || !isValidImage(selfiePhotoFile)) {
-      console.error('❌ Invalid image format:', {
-        idPhoto: idPhotoFile?.mimetype,
-        selfie: selfiePhotoFile?.mimetype
-      });
-      return res.status(400).json({
-        error: 'Formato de imagen inválido. Solo se permiten archivos .jpg o .png'
-      });
-    } 
 
     const params = {
       SourceImage: { Bytes: idPhotoFile.buffer },
@@ -218,14 +203,9 @@ app.post('/tutor-signup', upload.fields([
     const idPhotoFile = req.files['id_photo']?.[0];
     const selfiePhotoFile = req.files['selfie_photo']?.[0];
 
-     if (!isValidImage(idPhotoFile) || !isValidImage(selfiePhotoFile)) {
-      console.error('❌ Invalid image format:', {
-        idPhoto: idPhotoFile?.mimetype,
-        selfie: selfiePhotoFile?.mimetype
-      });
-      return res.status(400).json({
-        error: 'Formato de imagen inválido. Solo se permiten archivos .jpg o .png'
-      });
+    if (!idPhotoFile || !selfiePhotoFile) {
+      console.error("Missing image files", { idPhotoFile, selfiePhotoFile });
+      return res.status(400).json({ error: "Both ID and selfie photos are required." });
     }
 
     const params = {
