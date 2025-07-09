@@ -2,25 +2,42 @@ import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { supabase } from "../components/Supabase/supabaseClient";
 import { useNavigate, useLocation } from "react-router-dom";
+import { use } from "react";
 
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [imageFilePath, setImageFilePath] = useState(null);
+  const [imageData, setImageData] = useState(null);
+  const [userStrongTopics, setUserStrongTopics] = useState("");
+  const [userWeakTopics, setUserWeakTopics] = useState("");
+  const [userTeachedTopics, setUserTeachedTopics] = useState("");
+  const [ocupations, setOcupations] = useState([]);
+  const [academicLevels, setAcademicLevels] = useState([]);
+  const [userOcupationName, setUserOcupationName] = useState("");
+  const [userAcademicLevelName, setUserAcademicLevelName] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+  
 
   async function fetchUserProfile(session) {
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/api/login`,
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/login`,
         {},
         { headers: { Authorization: `Bearer ${session.access_token}` } }
       );
       setUser(response.data);
-      console.log(user);
-      
+      console.log(response.data);
+
+      const topicsResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/user-topics`,
+        { params: { user_id: response.data.user_id } }
+      );
+      setUserStrongTopics(topicsResponse.data.strong);
+      setUserWeakTopics(topicsResponse.data.weak);
+      setUserTeachedTopics(topicsResponse.data.teaches); 
+                
       return response.data;
     } catch (err) {
       if (err.response && err.response.status === 404) {
@@ -110,8 +127,55 @@ export function UserProvider({ children }) {
     };
   }, [navigate, location.pathname]);
 
+  useEffect(() => {
+    if (!user) return;
+
+    const filePath = `user_${user.user_id}.jpg`;
+    setImageFilePath(filePath);
+
+    const { data } = supabase
+      .storage
+      .from('profile.images')
+      .getPublicUrl(filePath);
+    setImageData(data.publicUrl + `?t=${Date.now()}`)
+
+  },[user]);
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/ocupations-academic-levels`)
+      .then(res => {
+        setOcupations(res.data.ocupations);
+        setAcademicLevels(res.data.academicLevels);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (user && ocupations.length > 0) {
+      const name = ocupations.find(o => Number(o.value) === Number(user.occupation))?.label || "";
+      setUserOcupationName(name);
+    }
+    if (user && academicLevels.length > 0) {
+      const name = academicLevels.find(a => Number(a.value) === Number(user.academic_level))?.label || "";
+      setUserAcademicLevelName(name);
+    }
+  }, [user, ocupations, academicLevels]);
+
   return (
-    <UserContext.Provider value={{ user, setUser, loading }}>
+    <UserContext.Provider value={{
+      user,
+      setUser,
+      imageFilePath,
+      imageData,
+      loading,
+      userStrongTopics,
+      userWeakTopics,
+      userTeachedTopics,
+      setUserStrongTopics,
+      setUserWeakTopics,
+      setUserTeachedTopics,
+      userOcupationName, 
+      userAcademicLevelName
+    }}>
       {children}
     </UserContext.Provider>
   );
