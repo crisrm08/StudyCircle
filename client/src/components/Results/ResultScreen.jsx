@@ -11,7 +11,7 @@ function ResultScreen() {
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
 
     function goToInfo() {
-        navigate("/tutor-profile");
+        navigate("/tutor-facts");
     }
       
     return(

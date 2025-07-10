@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { FaAngleLeft } from "react-icons/fa";
 import Request from "../TutorFacts/Request";
@@ -6,6 +6,7 @@ import "../../css/studentProfileStyles/modal.css";
 
 function TutorFactsModal({ tutor }) {
   const { image, name, last_name, institution, occupation, academicLevel, description, pricePerHour, rating, specialties } = tutor;
+  const [ renderRequest, setRenderRequest ] = useState(false);
   const navigate = useNavigate();
 
   function renderStars(){

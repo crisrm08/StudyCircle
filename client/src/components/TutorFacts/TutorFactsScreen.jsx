@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../Common/Header";
-import Modal from "./Modal";
-import TutorReviews from "./TutorReviews";
+import TutorFactsModal from "./TutorFactsModal";
+import TutorCritiques from "./TutorCritiques";
 import { useUser } from "../../contexts/UserContext";
 import StudentSidebar from "../Common/StudentSidebar";
 import TutorSidebar from "../Common/TutorSidebar";
@@ -32,7 +32,7 @@ function TutorFactsScreen() {
           <Header />
           <div className="tutor-info-container">
             <div className="tutor-full-description">
-                <Modal tutor={tutor}/>
+                <TutorFactsModal tutor={tutor}/>
             </div>
 
             <div className="right-section">
@@ -43,7 +43,7 @@ function TutorFactsScreen() {
                   <p>{tutor.fullDescription}</p>
                 </div>
               </div>
-              <TutorReviews 
+              <TutorCritiques 
                   reviews={[
                     { name: "Juan José", rating: 4, text: "Excelente explicación...", avatar: "https://randomuser.me/api/portraits/men/32.jpg", topic: "Cinemática" },
                     { name: "José Ramón", rating: 5, text: "Muy atento y claro...", avatar: "https://randomuser.me/api/portraits/men/52.jpg", topic: "Ondas y sonido" },
@@ -67,4 +67,4 @@ function TutorFactsScreen() {
     )
 }
 
-export default TutorFactsScreen();
+export default TutorFactsScreen;
