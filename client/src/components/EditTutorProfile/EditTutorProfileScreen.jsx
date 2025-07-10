@@ -86,8 +86,8 @@ function EditTutorProfileScreen() {
             full_description: user.full_description || "Describe tu perfil, agrega enlaces, etc...",
             short_description: user.short_description || "Una breve descripción",
             });
-            setCurrentOcupation(userOcupationName || "Selecciona tu ocupación principal");
-            setCurrentAcademicLevel(userAcademicLevelName || "Selecciona tu nivel académico actual");
+            console.log("ocupation: " + userOcupationName);
+            console.log("academic: " + userAcademicLevelName);
             setPreview(imageData);
             setSelectedFile(imageData);
         }
