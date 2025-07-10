@@ -24,7 +24,7 @@ function RequestBox({ avatar }) {
   }
 
   function seeStudentsProfile() {
-    navigate("/student-profile");
+    navigate("/student-facts");
   }
 
   if (rejected) return null;

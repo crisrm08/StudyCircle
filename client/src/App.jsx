@@ -17,6 +17,7 @@ import ResultScreen from "./components/Results/ResultScreen";
 import TutorFactsScreen from "./components/TutorFacts/TutorFactsScreen";
 import ChatScreen from "./components/Chat/ChatScreen";
 import TutorHomeScreen from "./components/TutorHome/TutorHomeScreen";
+import StudentFactsScreen from "./components/StudentFacts/StudentFactsScreen";
 import TutorProfileScreen from "./components/TutorProfile/TutorProfileScreen";
 import StudentProfileScreen from "./components/StudentProfile/StudentProfileScreen";
 import EditStudentProfileScreen from "./components/EditStudentProfile/EditStudentProfileScreen";
@@ -45,6 +46,7 @@ function App() {
         { path: 'tutor-facts', element: <TutorFactsScreen />},
         { path: 'chat', element: <ChatScreen /> },
         { path: 'tutor-home-page', element: <TutorHomeScreen /> },
+        { path: 'student-facts', element: <StudentFactsScreen/>},
         { path: 'tutor-profile', element: <TutorProfileScreen />},
         { path: 'student-profile', element: <StudentProfileScreen />},
         { path: 'edit-student-profile', element: <EditStudentProfileScreen />},
