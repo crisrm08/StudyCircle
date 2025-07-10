@@ -45,13 +45,23 @@ function EditTutorProfileScreen() {
     const { userTeachedTopics } = useUser();
     const { userOcupationName } = useUser();
     const { userAcademicLevelName } = useUser();
+    const PLACEHOLDERS = {
+      name: "Escribe tu nombre aquí",
+      last_name: "Escribe tu apellido",
+      institution: "Donde trabajas/estudias",
+      short_description: "Una breve descripción",
+      full_description: "Describe tu perfil, agrega enlaces...",
+      hourly_fee: "Tu precio por hora de tutoría",
+      academic_level: "Selecciona tu nivel académico más alto",
+      occupation: "Selecciona tu ocupación principal"
+    };
     const [formData, setFormData] = useState({
-        name: user?.name || "",
-        last_name: user?.last_name || "",
-        institution: user?.institution || "",
-        price_per_hour: user?.hourly_fee || "",
-        full_description: user?.full_description || "",
-        short_description: user?.short_description || "",
+      name: "",
+      last_name: "",
+      institution: "",
+      short_description: "",
+      full_description: "",
+      hourly_fee: ""
     });
     const [selectedFile, setSelectedFile] = useState(null);
     const { imageData } = useUser();
@@ -63,14 +73,9 @@ function EditTutorProfileScreen() {
         Miércoles: { from: "19:00", to: "22:00" }
     });
     const [groupedSubjects, setGroupedSubjects] = useState([]);
-    const teachedTopicsInitialValues = [
-      { value: "cinemática y movimiento", label: "Cinemática y movimiento" },
-      { value: "pndas y sonido",    label: "Ondas y Sonido" },
-      { value: "física nuclear", label: "Física Nuclear" }
-    ];
     const [academicLevelOptions, setAcademicLevelOptions] = useState([]);
     const [occupationOptions, setOccupationOptions] = useState([]);
-    const [teachedTopics, setTeachedTopics] = useState(teachedTopicsInitialValues);
+    const [teachedTopics, setTeachedTopics] = useState();
     const [preview, setPreview] = useState();
     const [ showToast, setShowToast ] = useState(false);
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
@@ -78,19 +83,17 @@ function EditTutorProfileScreen() {
     const fileInputRef = useRef();
 
     useEffect(() => {
-        if (user) {
-            setFormData({
-            name: user.name || "Escribe tu nombre aquí",
-            last_name: user.last_name || "Escribe tu apallido",
-            institution: user.institution || "Donde trabajas/estudias",
-            full_description: user.full_description || "Describe tu perfil, agrega enlaces, etc...",
-            short_description: user.short_description || "Una breve descripción",
-            });
-            console.log("ocupation: " + userOcupationName);
-            console.log("academic: " + userAcademicLevelName);
-            setPreview(imageData);
-            setSelectedFile(imageData);
-        }
+      if (!user) return;
+      setFormData({
+        name: user.name || "",
+        last_name: user.last_name || "",
+        institution: user.institution || "",
+        short_description: user.short_description || "",
+        full_description: user.full_description || "",
+        hourly_fee: user.hourly_fee   || ""
+      });
+      setPreview(imageData);
+      setSelectedFile(imageData);
     }, [user]);
 
     useEffect(() => {
@@ -134,7 +137,7 @@ function EditTutorProfileScreen() {
                     .filter(Boolean)
             );
         }
-    }, [groupedSubjects, userTeachedTopics]);
+    }, [groupedSubjects, userTeachedTopics, user]);
 
     const daysOfWeek = [
       "Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"
@@ -226,7 +229,7 @@ function EditTutorProfileScreen() {
                 setShowToast(true);
                 setTimeout(() => {
                     setShowToast(false);
-                    navigate("/tutor-info");
+                    navigate("/tutor-profile");
                 }, 2000);
             }
         );
@@ -243,21 +246,21 @@ function EditTutorProfileScreen() {
                     <Select
                         id="ocupation"
                         name="ocupation_id"
-                        placeholder="Elige tu ocupación aquí..."
+                        placeholder={PLACEHOLDERS.occupation}
                         options={occupationOptions}
                         value={currentOcupation}
                         onChange={handleOcupationChange}
                         styles={customStyles}
                     />
 
-                    <label htmlFor="Institution">Institución/Universidad</label>
-                    <input name="institution" type="text" placeholder={formData.institution} value={formData.institution} onChange={handleChange} />
+                    <label htmlFor="institution">Institución/Universidad</label>
+                    <input id="institution" name="institution" type="text" placeholder={PLACEHOLDERS.institution} value={formData.institution} onChange={handleChange} />
 
                     <label htmlFor="academic-level">Nivel académico</label>
                     <Select
                         id="academic-level"
                         name="academic_level_id"
-                        placeholder={currentAcademicLevel}
+                        placeholder={PLACEHOLDERS.academic_level}
                         options={academicLevelOptions}
                         value={currentAcademicLevel}
                         onChange={handleAcademicLevelChange}
@@ -280,17 +283,8 @@ function EditTutorProfileScreen() {
                     <label htmlFor="availability">Disponibilidad horaria</label>
                     <ScheduleSelector schedule={schedule} setSchedule={setSchedule} />
 
-                    <label htmlFor="preferred-mode">Modalidad preferida</label>
-                    <div className="mode-selection">
-                      <input type="radio" id="face-to-face" name="face-to-face" value="face-to-face"/>
-                      <label htmlFor="face-to-face">Presencial</label>
-
-                      <input type="radio" id="online" name="online" value="online"/>
-                      <label htmlFor="online">Virtual</label>
-
-                      <input type="radio" id="hybrid" name="hybrid" value="hybrid" defaultChecked/>
-                      <label htmlFor="hybrid">Híbrido</label>
-                    </div>
+                    <label htmlFor="hourly_fee">Precio por hora</label>
+                    <input id="hourly_fee"  name="hourly_fee" type="text" placeholder={PLACEHOLDERS.hourly_fee} value={formData.hourly_fee} onChange={handleChange} />
                 </div>
 
                 <div className="right">
@@ -298,10 +292,10 @@ function EditTutorProfileScreen() {
                   <div className="top-right">
                     <div className="name-lastname">
                       <label htmlFor="name">Nombre(s)</label>
-                      <input name="name" type="text" placeholder={formData.name} value={formData.name} onChange={handleChange}/>
+                      <input id="name" name="name" type="text" placeholder={PLACEHOLDERS.name} value={formData.name} onChange={handleChange}/>
 
                       <label htmlFor="last_name">Apellidos(s)</label>
-                      <input name="last_name" type="text" placeholder={formData.last_name} value={formData.last_name} onChange={handleChange} />
+                      <input id="name" name="last_name" type="text" placeholder={PLACEHOLDERS.last_name} value={formData.last_name} onChange={handleChange} />
                     </div>
                     <div className="top-right-image">
                       <img src={preview}  alt="profile-pic" onClick={handleImageClick} style={{ cursor: 'pointer' }}/>
@@ -312,10 +306,10 @@ function EditTutorProfileScreen() {
                     <input type="file" accept=".png, .jpg, .jpeg, .webp" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange}/>
 
                     <label htmlFor="short_description">Descripción breve</label>
-                    <input name="short_description" className="brief-description" type="text" value={formData.short_description} onChange={handleChange} />
+                    <input id="short_description" name="short_description" className="brief-description" type="text" placeholder={PLACEHOLDERS.short_description} value={formData.short_description} onChange={handleChange} />
 
                     <label htmlFor="full_description">Sobre mí</label>
-                    <textarea name="full_description" id="about-me" value={formData.full_description} onChange={handleChange}></textarea>
+                    <textarea id="full_description" name="full_description" placeholder={PLACEHOLDERS.full_description} value={formData.full_description} onChange={handleChange}></textarea>
                 </div>
             </form>
 

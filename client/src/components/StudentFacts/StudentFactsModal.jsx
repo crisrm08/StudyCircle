@@ -1,16 +1,11 @@
 import React, {useEffect, useState}from "react";
-import { useUser } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import { MdEdit } from "react-icons/md";
+import { FaAngleLeft } from "react-icons/fa";
 import "../../css/studentProfileStyles/modal.css";
 
-function StudentModal() {
+function StudentFactsModal() {
   
   const navigate = useNavigate();
-  const { user } = useUser();
-  const { imageData } = useUser();
-  const { userStrongTopics } = useUser();
-  const { userWeakTopics } = useUser();
   const [student, setStudent] = useState({
     id: null,
     image: null,
@@ -24,29 +19,6 @@ function StudentModal() {
     description: ""
   });
 
-
-  useEffect(() => {
-    if (user){
-      setStudent({
-        id: user.user_id,
-        image: imageData,
-        name: user.name,
-        last_name: user.last_name,
-        degree: user.career,
-        institution: user.institution,
-        strengths: userStrongTopics,
-        weaknesses: userWeakTopics,
-        rating: user.rating_avg, 
-        description: user.short_description
-      });
-
-    }
-  }, [user, imageData, userStrongTopics, userWeakTopics]);
-
-
-  function goToEdit() {
-    navigate("/edit-student-profile");
-  }
 
   function openChat() {
     navigate("/chat");
@@ -80,14 +52,8 @@ function StudentModal() {
   return (
     <div className="modal-content">
 
-      <img
-        src={student.image}
-        alt={`Foto de ${student.name}`}
-        className="modal-image"
-    />
+      <img src={student.image} alt={`Foto de ${student.name}`} style={{width: 100, height: 100 }} className="modal-image"/>
 
-      {user.profile_type === "student" && <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>}
-      
       <h2 className="modal-name">{student.name} {student.last_name}</h2>
       <p className="modal-occupation">{student.institution} - {student.degree}</p>
 
@@ -111,8 +77,12 @@ function StudentModal() {
 
       <div className="modal-rating"> {renderStars()} <span className="rating-number">({student.rating.toFixed(1)})</span> </div>
       <p style={{marginBottom:'0px'}} className="modal-description">{student.description}</p>
+      <div className="modal-button-container">
+        <button className="back-button" style={{marginTop: 15}} onClick={backToHome}><FaAngleLeft/> Volver</button>
+        <button className="tutor-button" style={{marginTop: 15}} onClick={openChat}> Aceptar tutoría</button>
+      </div>
     </div>
   )
 }
 
-export default StudentModal;
+export default StudentFactsModal;

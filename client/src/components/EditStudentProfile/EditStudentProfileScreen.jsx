@@ -41,12 +41,22 @@ const customStyles = {
 
 function EditStudentProfileScreen() {
     const { user } = useUser();
+    const PLACEHOLDERS = {
+        name: "Escribe tu nombre aquí",
+        last_name: "Escribe tu apellido",
+        institution: "Tu universidad/instituto/escuela",
+        short_description: "Una breve descripción",
+        full_description: "Describe tu perfil, agrega enlaces...",
+        career: "Selecciona el nomre de tu carrera",
+        strength: "Selecciona los temas que se te dan bien",
+        weakness: "Selecciona los temas que necesitas reforzar",
+    }
     const [formData, setFormData] = useState({
-        name: user?.name || "",
-        last_name: user?.last_name || "",
-        institution: user?.institution || "",
-        full_description: user?.full_description || "",
-        short_description: user?.short_description || "",
+        name: "",
+        last_name: "",
+        institution: "",
+        full_description: "",
+        short_description: "",
     });
     const [career, setCareer] = useState(null);
     const { userStrongTopics } = useUser();
@@ -65,17 +75,16 @@ function EditStudentProfileScreen() {
     const fileInputRef = useRef();
 
     useEffect(() => {
-        if (user) {
-            setFormData({
-            name: user.name || "Escribe tu nombre aquí",
-            last_name: user.last_name || "Escribe tu apallido",
-            institution: user.institution || "Donde estudias",
-            full_description: user.full_description || "Describe tu perfil, agrega enlaces, etc...",
-            short_description: user.short_description || "Una breve descripción",
+        if (!user) return;
+        setFormData({
+            name: user.name || "",
+            last_name: user.last_name || "",
+            institution: user.institution || "",
+            full_description: user.full_description || "",
+            short_description: user.short_description || "",
             });
             setPreview(imageData);
             setSelectedFile(imageData);
-        }
     }, [user]);
 
     useEffect(() => {
@@ -115,7 +124,7 @@ function EditStudentProfileScreen() {
             const preset = engineeringOptions.find(opt => opt.value === user.career);
         if (preset) setCareer(preset);
     }
-}, [engineeringOptions, user?.career]);
+    }, [engineeringOptions, user?.career]);
 
 
     function handleImageClick() {
@@ -186,16 +195,16 @@ function EditStudentProfileScreen() {
             <form className="edit-profile-container">
                 <div className="left">
                     <label htmlFor="name">Nombre(s)</label>
-                    <input name="name" type="text" placeholder={formData.name} value={formData.name} onChange={handleChange} />
+                    <input id="name" name="name" type="text" placeholder={PLACEHOLDERS.name} value={formData.name} onChange={handleChange} />
                     <label htmlFor="last_name">Apellidos(s)</label>
-                    <input name="last_name" type="text" placeholder={formData.last_name} value={formData.last_name} onChange={handleChange} />
+                    <input id="last_name" name="last_name" type="text" placeholder={PLACEHOLDERS.last_name} value={formData.last_name} onChange={handleChange} />
                     <label htmlFor="institution">Institución/Universidad</label>
-                    <input name="institution" type="text" placeholder={formData.institution} value={formData.institution} onChange={handleChange} />
+                    <input id="institution" name="institution" type="text" placeholder={PLACEHOLDERS.institution} value={formData.institution} onChange={handleChange} />
                     <label htmlFor="engineering-degree">Ingeniería</label>
                     <Select
                         id="career"
                         name="career"
-                        placeholder="Selecciona aquí tu carrera"
+                        placeholder={PLACEHOLDERS.career}
                         options={engineeringOptions}
                         value={career}
                         onChange={setCareer}
@@ -205,7 +214,7 @@ function EditStudentProfileScreen() {
                     <Select
                         id="strengths"
                         name="strengths"
-                        placeholder="Selecciona aquí..."
+                        placeholder={PLACEHOLDERS.strength}
                         isMulti
                         closeMenuOnSelect={false}
                         options={groupedSubjects}
@@ -217,7 +226,7 @@ function EditStudentProfileScreen() {
                     <Select
                         id="weaknesses"
                         name="weaknesses"
-                        placeholder="Selecciona aquí..."
+                        placeholder={PLACEHOLDERS.weakness}
                         isMulti
                         closeMenuOnSelect={false}
                         options={groupedSubjects}
@@ -226,14 +235,14 @@ function EditStudentProfileScreen() {
                         styles={customStyles}
                     />
                     <label htmlFor="short_description">Descripción breve</label>
-                    <input name="short_description" type="text" placeholder={formData.short_description} value={formData.short_description} onChange={handleChange} />
+                    <input id="short_description" name="short_description" type="text" placeholder={PLACEHOLDERS.short_description} value={formData.short_description} onChange={handleChange} />
                 </div>
                 <div className="right">
                     <img src={preview} alt="profile-pic" onClick={handleImageClick} style={{ cursor: 'pointer' }} />
                     <p>Haz click para cambiar tu foto</p>
                     <input type="file" accept=".png, .jpg, .jpeg, .webp" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
                     <label htmlFor="full_description">Sobre mí</label>
-                    <textarea name="full_description" id="about-me" placeholder={formData.full_description} value={formData.full_description} onChange={handleChange}></textarea>
+                    <textarea id="full_description" name="full_description" placeholder={PLACEHOLDERS.full_description} value={formData.full_description} onChange={handleChange}></textarea>
                 </div>
             </form>
             <button className="save-button" onClick={handleSubmit}>Guardar</button>

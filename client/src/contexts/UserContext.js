@@ -12,7 +12,7 @@ export function UserProvider({ children }) {
   const [imageData, setImageData] = useState(null);
   const [userStrongTopics, setUserStrongTopics] = useState("");
   const [userWeakTopics, setUserWeakTopics] = useState("");
-  const [userTeachedTopics, setUserTeachedTopics] = useState("");
+  const [userTeachedTopics, setUserTeachedTopics] = useState([]);
   const [ocupations, setOcupations] = useState([]);
   const [academicLevels, setAcademicLevels] = useState([]);
   const [userOcupationName, setUserOcupationName] = useState("");

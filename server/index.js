@@ -252,11 +252,11 @@ app.get('/tutor-availability', async (req, res) => {
 
 app.post('/tutor-save-update', upload.single("user_image"), async (req, res) => {
   try {
-    const { name, last_name, institution, full_description, short_description, occupation, academic_level, teached_topics, user_id, file_path} = req.body;
+    const { name, last_name, institution, full_description, short_description, hourly_fee, occupation, academic_level, teached_topics, user_id, file_path} = req.body;
     const file = req.file;
 
     const { data: updatedUser, error: updateErr } = await supabase.from('users')
-      .update({ name, last_name, institution, full_description, short_description, occupation, academic_level
+      .update({ name, last_name, institution, full_description, short_description,  hourly_fee, occupation, academic_level
     }).eq('user_id', user_id).select('*').maybeSingle();
 
     if (updateErr) {

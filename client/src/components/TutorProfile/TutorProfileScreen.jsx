@@ -1,41 +1,54 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../Common/Header";
 import Modal from "./Modal";
 import TutorReviews from "./TutorReviews";
 import { useUser } from "../../contexts/UserContext";
-import StudentSidebar from "../Common/StudentSidebar";
 import TutorSidebar from "../Common/TutorSidebar";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import { MdEdit } from "react-icons/md";
 import "../../css/tutorInfoStyles/tutorinfoscreen.css";
 
-function TutorInfoScreen() {
+function TutorProfileScreen() {
     const navigate = useNavigate();
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
-    const { user } = useUser();
+    const { user, imageData, userOcupationName, userAcademicLevelName, userTeachedTopics } = useUser();
+    const [tutor, setTutor] = useState({
+        id: 1,
+        image: null,
+        name: "",
+        last_name: "",
+        occupation: "",
+        institution: "",
+        academicLevel: "",
+        description: "",
+        fullDescription: "",
+        pricePerHour: "",
+        rating: 0,
+        specialties: []
+    })
   
-    const tutor = {
-            id: 1,
-            image: 'https://randomuser.me/api/portraits/men/32.jpg',
-            name: 'Carlos Santana',
-            occupation: 'Profesor',
-            institution: "INTEC",
-            academicLevel: "Maestría",
-            description: 'Apasionado por la enseñanza de matemáticas y física. Vamos a resolver tus dudas juntos.',
-            fullDescription: "Docente egresado de la Universidad Autónoma de Santo Domingo de la carrera de Física. Cuento con más de 10 años de experiencia dedicados a la docencia de estudiantes universitarios en el Insituto Tecnológico de Santo Domingo.",
-            pricePerHour: 1000,
-            rating: 4.4,
-            specialties: ["Cinemática y movimiento", "Ondas y sonido", "Física nuclear", "Electromagnetismo", "Termodinámica"]
-        };
+
+    useEffect(() => {
+      if (!user) return
+        setTutor({
+          id: user.user_id,
+          image: imageData,
+          name: user.name,
+          last_name: user.last_name,
+          occupation: userOcupationName,
+          institution: user.institution,
+          academicLevel: userAcademicLevelName,
+          description: user.short_description,
+          fullDescription: user.full_description,
+          pricePerHour: user.hourly_fee,
+          rating: user.rating_avg,
+          specialties: userTeachedTopics
+        });
+    },[user, imageData, userTeachedTopics]);
 
     function goToEdit() {
-      if (user.profile_type === "tutor") {
         navigate("/edit-tutor-profile");
-      }
-      else{
-        navigate("/edit-student-profile");
-      }
     }
 
     return(
@@ -49,7 +62,7 @@ function TutorInfoScreen() {
             <div className="right-section">
               <div className="about-tutor">
                 <div className="about-tutor__scroll">
-                  {user.profile_type === "tutor" && (<MdEdit className="edit-button" size={30} onClick={goToEdit}/>)}
+                <MdEdit className="edit-button" size={30} onClick={goToEdit}/>
                   <h2>Sobre {tutor.name}:</h2>
                   <hr/>
                   <p>{tutor.fullDescription}</p>
@@ -72,14 +85,11 @@ function TutorInfoScreen() {
                   className="overlay"
                   onClick={() => setIsSidebarClicked(false)}
                 />
-                {user.profile_type === "tutor"
-                  ? <TutorSidebar />
-                  : <StudentSidebar />
-                }
+                <TutorSidebar />
               </>
           )}
       </div>
     )
 }
 
-export default TutorInfoScreen;
+export default TutorProfileScreen;
