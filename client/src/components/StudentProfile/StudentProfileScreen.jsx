@@ -14,8 +14,8 @@ function StudentProfileScreen() {
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
     const { user } = useUser();
     const navigate = useNavigate();
-    const studentName = "Elvis García";
-    const studentFullDescription = "Estudiante de primer año de la carrera de Ingeniería en Ciencias de la Computación en la Pontificia Universidad Católica Madre y Maestra. Me interesa mejorar mis habilidades en la asignatura de Ecuaciones Diferenciales, ya que no me fue muy bien en mi primer parcial y necesito reforzar."
+    const studentName = user?.name;
+    const studentFullDescription = user?.full_description;
 
     function goToEdit() {
         navigate("/edit-student-profile");

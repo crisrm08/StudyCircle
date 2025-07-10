@@ -7,7 +7,7 @@ import { useUser } from "../../contexts/UserContext";
 import "../../css/studentProfileStyles/modal.css";
 
 function Modal({ tutor }) {
-  const { image, name, institution, occupation, academicLevel, description, pricePerHour, rating, specialties } = tutor;
+  const { image, name, last_name, institution, occupation, academicLevel, description, pricePerHour, rating, specialties } = tutor;
   const [ renderRequest, setRenderRequest ] = useState(false);
   const { user } = useUser();
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ function Modal({ tutor }) {
       <img src={image} alt={`Foto de ${name}`} className="modal-image" />
       {user.profile_type === "tutor" && ( <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>)}
      
-      <h2 className="modal-name">{name}</h2>
+      <h2 className="modal-name">{name} {last_name}</h2>
       <p className="modal-occupation">{occupation} - {institution} - {academicLevel}</p>
 
       {specialties?.length > 0 && (

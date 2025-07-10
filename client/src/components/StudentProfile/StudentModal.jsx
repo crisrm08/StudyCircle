@@ -1,25 +1,49 @@
-import React, {useState}from "react";
+import React, {useEffect, useState}from "react";
+import { useUser } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { MdEdit } from "react-icons/md";
 import { FaAngleLeft } from "react-icons/fa";
-import { useUser } from "../../contexts/UserContext";
 import "../../css/studentProfileStyles/modal.css";
 
 function StudentModal() {
   
   const navigate = useNavigate();
   const { user } = useUser();
-  const [student] = useState({
-        id: 1,
-        image: 'https://randomuser.me/api/portraits/men/12.jpg',
-        name: 'Elvis García',
-        degree: "Ingeniería en Ciencias de la Computación",
-        institution: 'INTEC',
-        strengths: ['Leyes de Newton', 'Base de Datos', 'Tecnicas de Integración'],
-        weaknesses: ['Ecuaciones diferenciales', 'Purebas y depuración de código'],
-        rating: 3.5,
-        description: 'Estudiante de primer año de la carrera de Ingeniería en Ciencias de la Computación'
+  const { imageData } = useUser();
+  const { userStrongTopics } = useUser();
+  const { userWeakTopics } = useUser();
+  const [student, setStudent] = useState({
+    id: null,
+    image: null,
+    name: "",
+    last_name: "",
+    degree: "",
+    institution: "",
+    strengths: [],
+    weaknesses: [],
+    rating: 0,          
+    description: ""
   });
+
+
+  useEffect(() => {
+    if (user){
+      setStudent({
+        id: user.user_id,
+        image: imageData,
+        name: user.name,
+        last_name: user.last_name,
+        degree: user.career,
+        institution: user.institution,
+        strengths: userStrongTopics,
+        weaknesses: userWeakTopics,
+        rating: user.rating_avg, 
+        description: user.short_description
+      });
+
+    }
+  }, [user, imageData, userStrongTopics, userWeakTopics]);
+
 
   function goToEdit() {
     navigate("/edit-student-profile");
@@ -69,7 +93,7 @@ function StudentModal() {
 
       {user.profile_type === "student" && <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>}
       
-      <h2 className="modal-name">{student.name}</h2>
+      <h2 className="modal-name">{student.name} {student.last_name}</h2>
       <p className="modal-occupation">{student.institution} - {student.degree}</p>
 
       <h2 className="modal-strengths-title" >Destrezas</h2>

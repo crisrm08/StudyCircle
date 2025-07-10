@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../Common/Header";
 import Modal from "./Modal";
@@ -14,20 +14,44 @@ function TutorInfoScreen() {
     const navigate = useNavigate();
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
     const { user } = useUser();
+    const { imageData } = useUser();
+    const { userOcupationName } = useUser();
+    const { userAcademicLevelName } = useUser();
+    const { userTeachedTopics } = useUser();
+    const [tutor, setTutor] = useState({
+        id: 1,
+        image: null,
+        name: "",
+        last_name: "",
+        occupation: "",
+        institution: "",
+        academicLevel: "",
+        description: "",
+        fullDescription: "",
+        pricePerHour: "",
+        rating: 0,
+        specialties: []
+    })
   
-    const tutor = {
-            id: 1,
-            image: 'https://randomuser.me/api/portraits/men/32.jpg',
-            name: 'Carlos Santana',
-            occupation: 'Profesor',
-            institution: "INTEC",
-            academicLevel: "Maestría",
-            description: 'Apasionado por la enseñanza de matemáticas y física. Vamos a resolver tus dudas juntos.',
-            fullDescription: "Docente egresado de la Universidad Autónoma de Santo Domingo de la carrera de Física. Cuento con más de 10 años de experiencia dedicados a la docencia de estudiantes universitarios en el Insituto Tecnológico de Santo Domingo.",
-            pricePerHour: 1000,
-            rating: 4.4,
-            specialties: ["Cinemática y movimiento", "Ondas y sonido", "Física nuclear", "Electromagnetismo", "Termodinámica"]
-        };
+
+    useEffect(() => {
+      if (user) {
+        setTutor({
+          id: user.user_id,
+          image: imageData,
+          name: user.name,
+          last_name: user.last_name,
+          occupation: userOcupationName,
+          institution: user.institution,
+          academicLevel: userAcademicLevelName,
+          description: user.short_description,
+          fullDescription: user.full_description,
+          pricePerHour: user.hourly_fee,
+          rating: user.rating_avg,
+          specialties: userTeachedTopics
+        })
+      }
+    },[user, imageData]);
 
     function goToEdit() {
       if (user.profile_type === "tutor") {
