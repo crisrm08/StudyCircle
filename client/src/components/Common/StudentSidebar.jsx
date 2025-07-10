@@ -11,8 +11,10 @@ function StudentSidebar() {
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
     const { user } = useUser();
     const { imageData } = useUser();
+    const { loading } = useUser();
     const sidebarRef = useRef();
     const navigate = useNavigate();
+
 
     useEffect(() =>  {
         function handleClickOutside(event) {
@@ -65,6 +67,8 @@ function StudentSidebar() {
       setIsSidebarClicked(false);
     }
 
+    if (loading || !user) return null;
+
     return (
       <div className={`sidebar ${isSidebarClicked ? "open" : ""}`} ref={sidebarRef}>
           <button className="close-btn" onClick={() => setIsSidebarClicked(false)} title="Cerrar sidebar"> <FiX /></button>
@@ -75,7 +79,7 @@ function StudentSidebar() {
           </div>
 
           <nav className="nav-links">
-              <h2 onClick={goToHome}><FiHome />Home</h2>
+              <h2 onClick={goToHome}><FiHome /> Home</h2>
               <h2 onClick={goToProfile}><FiUser /> Mi perfil</h2>
               <h2 onClick={goToChat}><FiMessageSquare /> Mensajes</h2>
               <h2 onClick={goToSettings}> <FiSettings /> Ajustes</h2>

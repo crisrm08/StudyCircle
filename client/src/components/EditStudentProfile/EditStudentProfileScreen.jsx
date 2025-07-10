@@ -124,7 +124,7 @@ function EditStudentProfileScreen() {
             const preset = engineeringOptions.find(opt => opt.value === user.career);
         if (preset) setCareer(preset);
     }
-}, [engineeringOptions, user?.career]);
+    }, [engineeringOptions, user?.career]);
 
 
     function handleImageClick() {
@@ -175,7 +175,7 @@ function EditStudentProfileScreen() {
             return;
         }
 
-        await axios.post("http://localhost:5000/student-save-update",
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/student-save-update`,
             form,
             { headers: { "Content-Type": "multipart/form-data" } }
         ).then(() => {

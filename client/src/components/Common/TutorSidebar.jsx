@@ -12,6 +12,7 @@ function TutorSidebar() {
     const sidebarRef = useRef();
     const { user } = useUser();
     const { imageData } = useUser();
+    const { loading } = useUser();
     const navigate = useNavigate();
 
     useEffect(() =>  {
@@ -59,6 +60,8 @@ function TutorSidebar() {
       navigate("/tutor-payment-settings");
       setIsSidebarClicked(false);
     }
+
+    if (loading || !user) return null;
 
     return (
       <div className={`sidebar ${isSidebarClicked ? "open" : ""}`} ref={sidebarRef}>

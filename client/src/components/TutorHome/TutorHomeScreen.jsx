@@ -1,33 +1,66 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect} from "react";
 import Header from "../Common/Header";
 import TutorTopBar from "./TutorTopBar";
 import TutorControlBar from "./TutorControlBar";
 import RequestBox from "../TutorHome/RequestBox";
 import HistoryLog from "../History/HistoryLog"
 import TutorSidebar from "../Common/TutorSidebar";
+import { useUser } from "../../contexts/UserContext";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import { ActiveTabContext } from "../../contexts/ActiveTabContext";
+import axios from "axios";
 import "../../css/tutorHomeStyles/tutorhomescreen.css";
 
 function TutorHomeScreen() {
 
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
+    const { user } = useUser();
+    const { imageData } = useUser();
+    const { userTeachedTopics } = useUser();
+    const { loading } = useUser();
     const { activeTab } = useContext(ActiveTabContext);
+    const [schedule, setSchedule] = useState([]);
+    
+    const daysOfWeek = [ "Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo" ];
 
+    useEffect(() => {
+      if (!user) return;
+      axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutor-availability`, { params: { tutor_id: user.user_id }})
+        .then(({ data }) => {
+        console.log("Schedule data:", data.availability);
+
+          const init = daysOfWeek.reduce((acc, d) => {
+            acc[d] = null;
+            return acc;
+          }, {});
+      
+          data.availability.forEach(({ day_of_week, start_time, end_time }) => {
+            init[day_of_week] = {
+              from: start_time.slice(0,5),   
+              to:   end_time.slice(0,5)     
+            };
+          });
+          setSchedule(data.availability);
+        })
+        .catch(console.error);
+    }, [user]);
+
+    if (loading || !user) return null;
+    
     return(
         <div>
             <Header/>
             <TutorTopBar 
-                name="Carlos Santana"
-                avatar="https://randomuser.me/api/portraits/men/32.jpg"
+                name={user.name}
+                last_name={user.last_name}
+                avatar={imageData}
                 rating={4}
-                subjects={["Derivadas", "Series y secuencias", "Límites", "Ecuaciones", "Integrales"]}
-                price={1000}
-                schedule={["Lunes 16:00 - 18:00", "Miércoles 19:00 - 22:00"]}
+                subjects={userTeachedTopics}
+                price={user.hourly_fee}
+                schedule={schedule}
             />
             <TutorControlBar /> 
 
-        
             {activeTab === "Solicitudes" ? (
                 <div className="tutorship-request-container">
                     <RequestBox avatar={"https://randomuser.me/api/portraits/men/12.jpg"} />
