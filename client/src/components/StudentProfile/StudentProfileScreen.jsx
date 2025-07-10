@@ -4,7 +4,6 @@ import { useUser } from "../../contexts/UserContext";
 import Header from "../Common/Header";
 import StudentModal from "./StudentModal";
 import StudentSidebar from "../Common/StudentSidebar";
-import TutorSidebar from "../Common/TutorSidebar";
 import StudentReviews from "./StudentReviews";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import { MdEdit } from "react-icons/md";
@@ -27,7 +26,7 @@ function StudentProfileScreen() {
                 <div className="right-section">
                     <div className="about-student">
                         <div className="about-student__scroll">
-                           {user.profile_type === "student" && <MdEdit className="edit-button" size={30} onClick={goToEdit}/> } 
+                            <MdEdit className="edit-button" size={30} onClick={goToEdit}/> 
                             <h2>Sobre {studentName}:</h2>
                             <hr/>
                             <p>{studentFullDescription}</p>
@@ -51,10 +50,7 @@ function StudentProfileScreen() {
                   className="overlay"
                   onClick={() => setIsSidebarClicked(false)}
                 />
-                {user.profile_type === "tutor"
-                  ? <TutorSidebar />
-                  : <StudentSidebar />
-                } 
+                <StudentSidebar />
               </>
             )}
         </div>

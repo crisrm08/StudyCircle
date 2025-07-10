@@ -2,7 +2,6 @@ import React, {useEffect, useState}from "react";
 import { useUser } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { MdEdit } from "react-icons/md";
-import { FaAngleLeft } from "react-icons/fa";
 import "../../css/studentProfileStyles/modal.css";
 
 function StudentModal() {
@@ -84,10 +83,6 @@ function StudentModal() {
       <img
         src={student.image}
         alt={`Foto de ${student.name}`}
-        style={user.profile_type === "tutor"
-          ? { width: 100, height: 100 }
-          : undefined
-        }
         className="modal-image"
     />
 
@@ -116,10 +111,6 @@ function StudentModal() {
 
       <div className="modal-rating"> {renderStars()} <span className="rating-number">({student.rating.toFixed(1)})</span> </div>
       <p style={{marginBottom:'0px'}} className="modal-description">{student.description}</p>
-      <div className="modal-button-container">
-        {user.profile_type === "tutor" && ( <button className="back-button" style={{marginTop: 15}} onClick={backToHome}><FaAngleLeft/> Volver</button>)}
-        {user.profile_type === "tutor" && ( <button className="tutor-button" style={{marginTop: 15}} onClick={openChat}> Aceptar tutoría</button>)}
-      </div>
     </div>
   )
 }
