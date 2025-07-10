@@ -38,7 +38,7 @@ function TutorSidebar() {
     }
 
     function goToProfile() {
-      navigate("/tutor-info");
+      navigate("/tutor-profile");
       setIsSidebarClicked(false);
     }
 

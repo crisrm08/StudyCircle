@@ -4,20 +4,15 @@ import Header from "../Common/Header";
 import Modal from "./Modal";
 import TutorReviews from "./TutorReviews";
 import { useUser } from "../../contexts/UserContext";
-import StudentSidebar from "../Common/StudentSidebar";
 import TutorSidebar from "../Common/TutorSidebar";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import { MdEdit } from "react-icons/md";
 import "../../css/tutorInfoStyles/tutorinfoscreen.css";
 
-function TutorInfoScreen() {
+function TutorProfileScreen() {
     const navigate = useNavigate();
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
-    const { user } = useUser();
-    const { imageData } = useUser();
-    const { userOcupationName } = useUser();
-    const { userAcademicLevelName } = useUser();
-    const { userTeachedTopics } = useUser();
+    const { user, imageData, userOcupationName, userAcademicLevelName, userTeachedTopics } = useUser();
     const [tutor, setTutor] = useState({
         id: 1,
         image: null,
@@ -35,7 +30,7 @@ function TutorInfoScreen() {
   
 
     useEffect(() => {
-      if (user) {
+      if (!user) return
         setTutor({
           id: user.user_id,
           image: imageData,
@@ -49,17 +44,11 @@ function TutorInfoScreen() {
           pricePerHour: user.hourly_fee,
           rating: user.rating_avg,
           specialties: userTeachedTopics
-        })
-      }
-    },[user, imageData]);
+        });
+    },[user, imageData, userTeachedTopics]);
 
     function goToEdit() {
-      if (user.profile_type === "tutor") {
         navigate("/edit-tutor-profile");
-      }
-      else{
-        navigate("/edit-student-profile");
-      }
     }
 
     return(
@@ -73,7 +62,7 @@ function TutorInfoScreen() {
             <div className="right-section">
               <div className="about-tutor">
                 <div className="about-tutor__scroll">
-                  {user.profile_type === "tutor" && (<MdEdit className="edit-button" size={30} onClick={goToEdit}/>)}
+                <MdEdit className="edit-button" size={30} onClick={goToEdit}/>
                   <h2>Sobre {tutor.name}:</h2>
                   <hr/>
                   <p>{tutor.fullDescription}</p>
@@ -96,14 +85,11 @@ function TutorInfoScreen() {
                   className="overlay"
                   onClick={() => setIsSidebarClicked(false)}
                 />
-                {user.profile_type === "tutor"
-                  ? <TutorSidebar />
-                  : <StudentSidebar />
-                }
+                <TutorSidebar />
               </>
           )}
       </div>
     )
 }
 
-export default TutorInfoScreen;
+export default TutorProfileScreen;

@@ -229,7 +229,7 @@ function EditTutorProfileScreen() {
                 setShowToast(true);
                 setTimeout(() => {
                     setShowToast(false);
-                    navigate("/tutor-info");
+                    navigate("/tutor-profile");
                 }, 2000);
             }
         );

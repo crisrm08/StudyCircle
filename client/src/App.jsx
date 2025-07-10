@@ -16,7 +16,7 @@ import TutorSignUp3Screen from "./components/TutorSignUp/TutorSignUp3Screen";
 import ResultScreen from "./components/Results/ResultScreen";
 import ChatScreen from "./components/Chat/ChatScreen";
 import TutorHomeScreen from "./components/TutorHome/TutorHomeScreen";
-import TutorInfoScreen from "./components/TutorInfo/TutorInfoScreen";
+import TutorProfileScreen from "./components/TutorProfile/TutorProfileScreen";
 import StudentProfileScreen from "./components/StudentProfile/StudentProfileScreen";
 import EditStudentProfileScreen from "./components/EditStudentProfile/EditStudentProfileScreen";
 import EditTutorProfileScreen from "./components/EditTutorProfile/EditTutorProfileScreen";
@@ -43,7 +43,7 @@ function App() {
         { path: 'results', element: <ResultScreen /> },
         { path: 'chat', element: <ChatScreen /> },
         { path: 'tutor-home-page', element: <TutorHomeScreen /> },
-        { path: 'tutor-info', element: <TutorInfoScreen />},
+        { path: 'tutor-profile', element: <TutorProfileScreen />},
         { path: 'student-profile', element: <StudentProfileScreen />},
         { path: 'edit-student-profile', element: <EditStudentProfileScreen />},
         { path: 'edit-tutor-profile', element: <EditTutorProfileScreen />},
