@@ -6,7 +6,7 @@ import { ModeContext } from "../../contexts/ModeContext";
 import { MessageContext } from "../../contexts/MessageContext";
 import "../../css/tutorHomeStyles/requestbox.css";
 
-function RequestBox({ avatar }) {
+function RequestBox() {
   const { subject, topic } = useContext(SubjectTopicContext);
   const { hour, day } = useContext(TimeContext); 
   const { mode } = useContext(ModeContext);
@@ -33,7 +33,7 @@ function RequestBox({ avatar }) {
     <div className="request-box">
       <div className="request-header">
         <div className="request-student-info">
-          {avatar && (<img src={avatar} alt="Estudiante" className="student-avatar" onClick={seeStudentsProfile} />)}
+          <img src="" alt="Estudiante" className="student-avatar" onClick={seeStudentsProfile} />
           <span className="subject-topic"> {subject} - {topic} </span>
         </div>
         <span className="request-mode">{mode}</span>

@@ -302,7 +302,7 @@ app.post('/tutor-save-update', upload.single("user_image"), async (req, res) => 
     res.json(updatedUser);
   }
   catch (error) {
-     console.error('Error saving tutor update:', error);
+    console.error('Error saving tutor update:', error);
     res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 });
@@ -636,5 +636,29 @@ app.get('/tutors/:id', async (req, res) => {
   }
 });
 
+app.post('/tutorship/request', async (req, res) => {
+  try {
+    const { tutorshipRequestDetails } = req.body;
+    const {
+      student_id,
+      tutor_id,
+      tutorship_subject,
+      tutorship_topic,
+      tutorship_mode,
+      tutorship_hour,
+      tutorship_day,
+      tutorship_message
+    } = tutorshipRequestDetails;
+
+    console.log("detalles de la solicitud: " + student_id, tutor_id, tutorship_subject, tutorship_topic, tutorship_mode, tutorship_hour, tutorship_day, tutorship_message);
+  
+   
+    res.status(201).json({ message: "Solicitud enviada con éxito" });
+  }
+  catch(error){
+    console.error('Error saving saving tutorship request:', error);
+    res.status(500).json({ error: 'Server error saving tutorship request', details: error.message });
+  }
+});
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
