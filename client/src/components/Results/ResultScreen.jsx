@@ -26,7 +26,7 @@ function ResultScreen() {
         if (day)   params.day   = day;
         if (hour)  params.hour  = hour.toString();
 
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutors`, { params })
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}`, { params })
         .then(({ data }) => {
             setTutors(data.tutors);
             console.log(data.tutors);
