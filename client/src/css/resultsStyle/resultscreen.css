@@ -17,3 +17,16 @@
     background: rgba(0,0,0,0.5); 
     z-index: 1000; 
 }
+
+.result-screen.no-results {
+    height: calc(100vh - 180px); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.result-screen.no-results h1 {
+    font-size: 24px;
+    color: #163172;
+    text-align: center;
+}

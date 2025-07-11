@@ -464,4 +464,113 @@ app.get('/careers', async (req, res) => {
   }
 });
 
+app.get('/tutors', async (req, res) => {
+  try {
+    const { topic, day, hour } = req.query;
+    let tutorIds = null;
+
+    // — 1. Filtrar por tópico, si viene
+    if (topic) {
+      // 1a. Busca el topic_id
+      const { data: topicRec, error: topicErr } = await supabase
+        .from('topics')
+        .select('topic_id')
+        .eq('topic_name', topic)
+        .maybeSingle();
+      if (topicErr) throw topicErr;
+      if (!topicRec) return res.json({ tutors: [] });
+
+      // 1b. Lista de tutores que enseñan ese topic
+      const { data: uts } = await supabase
+        .from('user_topics')
+        .select('user_id')
+        .eq('type', 'teaches')
+        .eq('topic_id', topicRec.topic_id);
+      const ids = uts.map(u => u.user_id);
+      if (ids.length === 0) return res.json({ tutors: [] });
+      tutorIds = ids;
+    }
+
+    // — 2. Filtrar por disponibilidad, si viene day/hour
+    if (day || hour) {
+      let availQ = supabase
+        .from('tutor_availability')
+        .select('tutor_id');
+      if (day)  availQ = availQ.eq('day_of_week', day);
+      if (hour) {
+        const time = `${hour.padStart(2,'0')}:00:00`;
+        availQ = availQ.lte('start_time', time).gte('end_time', time);
+      }
+      const { data: avails } = await availQ;
+      const availIds = avails.map(a => a.tutor_id);
+      if (tutorIds) {
+        tutorIds = tutorIds.filter(id => availIds.includes(id));
+      } else {
+        tutorIds = availIds;
+      }
+      if (tutorIds.length === 0) return res.json({ tutors: [] });
+    }
+
+    // — 3. Consulta base de datos de tutores
+    let usersQ = supabase
+      .from('users')
+      .select(`
+        user_id, name, last_name,
+        occupation,          
+        short_description,
+        hourly_fee, rating_avg,
+        profile_image_url
+      `)
+      .eq('profile_type','tutor');
+    if (tutorIds) usersQ = usersQ.in('user_id', tutorIds);
+
+    const { data: tutors, error: usersErr } = await usersQ;
+    if (usersErr) throw usersErr;
+
+    // — 4. Traducir occupation_id → ocupation_name
+    // Obtén el set único de IDs (numéricos)
+    const occIds = [...new Set(
+      tutors
+        .map(t => parseInt(t.occupation, 10))
+        .filter(n => !isNaN(n))
+    )];
+    let occMap = {};
+    if (occIds.length) {
+      const { data: occList } = await supabase
+        .from('ocupations')
+        .select('ocupation_id, ocupation_name')
+        .in('ocupation_id', occIds);
+      occMap = Object.fromEntries(
+        occList.map(o => [o.ocupation_id, o.ocupation_name])
+      );
+    }
+
+    // — 5. Armar el array final, con nombre de ocupación
+    const result = tutors.map(t => {
+      const occId = parseInt(t.occupation, 10);
+      const publicUrl = supabase
+        .storage
+        .from('profile.images')
+        .getPublicUrl(t.profile_image_url || `user_${t.user_id}.jpg`)
+        .data.publicUrl;
+      return {
+        id:           t.user_id,
+        name:         `${t.name} ${t.last_name}`.trim(),
+        occupation:   occMap[occId] || null,    // ← ahora el nombre
+        description:  t.short_description,
+        pricePerHour: t.hourly_fee,
+        rating:       t.rating_avg,
+        image:        publicUrl + `?t=${Date.now()}`,
+        specialties:  [] // los añadirías luego igual que antes
+      };
+    });
+
+    res.json({ tutors: result });
+  } catch (err) {
+    console.error("Error en GET /tutors:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
