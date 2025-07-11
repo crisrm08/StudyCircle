@@ -473,19 +473,13 @@ app.get('/tutors', async (req, res) => {
     if (topic) {
       // 1a. Busca el topic_id
       const { data: topicRec, error: topicErr } = await supabase
-        .from('topics')
-        .select('topic_id')
-        .eq('topic_name', topic)
-        .maybeSingle();
+        .from('topics').select('topic_id').eq('topic_name', topic).maybeSingle();
       if (topicErr) throw topicErr;
       if (!topicRec) return res.json({ tutors: [] });
 
       // 1b. Lista de tutores que enseñan ese topic
       const { data: uts } = await supabase
-        .from('user_topics')
-        .select('user_id')
-        .eq('type', 'teaches')
-        .eq('topic_id', topicRec.topic_id);
+        .from('user_topics').select('user_id').eq('type', 'teaches').eq('topic_id', topicRec.topic_id);
       const ids = uts.map(u => u.user_id);
       if (ids.length === 0) return res.json({ tutors: [] });
       tutorIds = ids;
@@ -493,9 +487,7 @@ app.get('/tutors', async (req, res) => {
 
     // — 2. Filtrar por disponibilidad, si viene day/hour
     if (day || hour) {
-      let availQ = supabase
-        .from('tutor_availability')
-        .select('tutor_id');
+      let availQ = supabase.from('tutor_availability').select('tutor_id');
       if (day)  availQ = availQ.eq('day_of_week', day);
       if (hour) {
         const time = `${hour.padStart(2,'0')}:00:00`;
@@ -513,14 +505,7 @@ app.get('/tutors', async (req, res) => {
 
     // — 3. Consulta base de datos de tutores
     let usersQ = supabase
-      .from('users')
-      .select(`
-        user_id, name, last_name,
-        occupation,          
-        short_description,
-        hourly_fee, rating_avg,
-        profile_image_url
-      `)
+      .from('users').select(`user_id, name, last_name, occupation, short_description, hourly_fee, rating_avg, profile_image_url`)
       .eq('profile_type','tutor');
     if (tutorIds) usersQ = usersQ.in('user_id', tutorIds);
 
@@ -529,17 +514,11 @@ app.get('/tutors', async (req, res) => {
 
     // — 4. Traducir occupation_id → ocupation_name
     // Obtén el set único de IDs (numéricos)
-    const occIds = [...new Set(
-      tutors
-        .map(t => parseInt(t.occupation, 10))
-        .filter(n => !isNaN(n))
-    )];
+    const occIds = [...new Set(tutors.map(t => parseInt(t.occupation, 10)).filter(n => !isNaN(n)))];
     let occMap = {};
     if (occIds.length) {
       const { data: occList } = await supabase
-        .from('ocupations')
-        .select('ocupation_id, ocupation_name')
-        .in('ocupation_id', occIds);
+        .from('ocupations').select('ocupation_id, ocupation_name').in('ocupation_id', occIds);
       occMap = Object.fromEntries(
         occList.map(o => [o.ocupation_id, o.ocupation_name])
       );
@@ -547,22 +526,48 @@ app.get('/tutors', async (req, res) => {
 
     // — 5. Armar el array final, con nombre de ocupación
     const result = tutors.map(t => {
-      const occId = parseInt(t.occupation, 10);
-      const publicUrl = supabase
-        .storage
-        .from('profile.images')
-        .getPublicUrl(t.profile_image_url || `user_${t.user_id}.jpg`)
-        .data.publicUrl;
+      // 1) Si profile_image_url es un URL absoluto (dummy), úsalo tal cual
+      let imageUrl;
+      if (t.profile_image_url && /^https?:\/\//.test(t.profile_image_url)) {
+        imageUrl = t.profile_image_url;
+      } else {
+        // 2) Si no, cae al bucket de Supabase
+        const { data: { publicUrl }} = supabase.storage
+          .from('profile.images').getPublicUrl(
+            t.profile_image_url || `user_${t.user_id}.jpg`
+          );
+        imageUrl = publicUrl + `?t=${Date.now()}`;
+      }
+
       return {
         id:           t.user_id,
         name:         `${t.name} ${t.last_name}`.trim(),
-        occupation:   occMap[occId] || null,    // ← ahora el nombre
+        occupation:   occMap[parseInt(t.occupation, 10)] || null,
         description:  t.short_description,
         pricePerHour: t.hourly_fee,
         rating:       t.rating_avg,
-        image:        publicUrl + `?t=${Date.now()}`,
-        specialties:  [] // los añadirías luego igual que antes
+        image:        imageUrl,
+        specialties:  [] 
       };
+    });
+
+    // 5. Obtener specialties (user_topics → topics)
+    const tutorIdsFinal = result.map(t => t.id);
+    const { data: utsAll } = await supabase
+      .from('user_topics').select('user_id, topic_id').eq('type', 'teaches').in('user_id', tutorIdsFinal);
+    const topicIds = [...new Set(utsAll.map(u => u.topic_id))];
+    const { data: topicList } = await supabase
+      .from('topics').select('topic_id, topic_name').in('topic_id', topicIds);
+
+    // 5b. Mapear specialties por tutor
+    const specMap = {};
+    utsAll.forEach(({ user_id, topic_id }) => {
+      const name = topicList.find(t => t.topic_id === topic_id)?.topic_name;
+      if (!specMap[user_id]) specMap[user_id] = [];
+      if (name) specMap[user_id].push(name);
+    });
+    result.forEach(t => {
+      t.specialties = specMap[t.id] || [];
     });
 
     res.json({ tutors: result });
@@ -571,6 +576,5 @@ app.get('/tutors', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
