@@ -26,7 +26,7 @@ function ResultScreen() {
         if (day)   params.day   = day;
         if (hour)  params.hour  = hour.toString();
 
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}`, { params })
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutors`, { params })
         .then(({ data }) => {
             setTutors(data.tutors);
             console.log(data.tutors);
@@ -34,12 +34,15 @@ function ResultScreen() {
         .catch(console.error);
     }, [topic, day, hour]);
     
-    function goToInfo() {
-        navigate("/tutor-facts");
-        console.log("topic selected: " + topic);
-        console.log("day: " + day);
-        console.log("hour: " + hour);
-    }
+    useEffect(() => {
+        const handlePopState = (event) => { navigate("/", { replace: true });};
+
+        window.addEventListener("popstate", handlePopState);
+
+        return () => {
+            window.removeEventListener("popstate", handlePopState);
+        };
+    }, [navigate]);
       
     return(
         <div>
@@ -58,7 +61,7 @@ function ResultScreen() {
                         pricePerHour={t.pricePerHour}
                         rating={t.rating}
                         specialties={t.specialties}
-                        onExplore={() => {/* … */}}
+                        onExplore={() => navigate(`/tutor-facts/${t.id}`)}
                         />
                     ))
                 }

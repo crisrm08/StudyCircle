@@ -577,4 +577,64 @@ app.get('/tutors', async (req, res) => {
   }
 });
 
+app.get('/tutors/:id', async (req, res) => {
+  try {
+    const tutor_id = parseInt(req.params.id, 10);
+    if (!tutor_id) return res.status(400).json({ error: "tutor_id inválido" });
+
+    const { data: user, error: userErr } = await supabase
+      .from('users').select(`user_id, name, last_name, institution, occupation, academic_level, short_description, full_description, hourly_fee, rating_avg, profile_image_url`)
+      .eq('profile_type','tutor').eq('user_id', tutor_id).maybeSingle();
+    if (userErr) throw userErr;
+    if (!user) return res.status(404).json({ error: "Tutor no encontrado" });
+
+    const [{ data: [occ] = [] }, { data: [lvl] = [] }] = await Promise.all([
+      supabase.from('ocupations').select('ocupation_name').eq('ocupation_id', user.occupation),
+      supabase.from('academic_levels').select('academic_level_name').eq('academic_level_id', user.academic_level)
+    ]);
+    
+    const { data: usertopics, error: userTopcisErr } = await supabase.from('user_topics').select('topic_id').eq('type','teaches').eq('user_id', tutor_id);
+    if (userTopcisErr) throw userTopcisErr;
+
+    const topicIds = usertopics.map(u => u.topic_id);
+    const { data: topicList } = await supabase.from('topics').select('topic_name').in('topic_id', topicIds);
+
+    const { data: avail } = await supabase.from('tutor_availability').select('day_of_week, start_time, end_time').eq('tutor_id', tutor_id);
+
+    let imageUrl;
+    if (user.profile_image_url && /^https?:\/\//.test(user.profile_image_url)) {
+      imageUrl = user.profile_image_url;
+    } else {
+      const { data: { publicUrl } } = supabase.storage.from('profile.images').getPublicUrl(user.profile_image_url || `user_${tutor_id}.jpg`);
+      imageUrl = publicUrl + `?t=${Date.now()}`;
+    }
+
+    res.json({
+      tutor: {
+        id: user.user_id,
+        name: user.name,
+        lastName: user.last_name,
+        institution: user.institution,
+        occupation: occ?.ocupation_name || null,
+        academicLevel: lvl?.academic_level_name || null,
+        shortDescription: user.short_description,
+        fullDescription: user.full_description,
+        pricePerHour: user.hourly_fee,
+        rating: user.rating_avg,
+        image: imageUrl,
+        specialties: topicList.map(t => t.topic_name),
+        availability: avail.map(a => ({
+          day:   a.day_of_week,
+          from:  a.start_time.slice(0,5),
+          to:    a.end_time.slice(0,5)
+        }))
+      }
+    });
+  } catch (err) {
+    console.error("GET /tutors/:id error:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

@@ -31,7 +31,7 @@ function TutorFactsModal({ tutor }) {
   };
 
   function goBack() {
-    navigate("/results");
+    navigate(-1);
   }
 
   function openRequestModal() {

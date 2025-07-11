@@ -43,7 +43,7 @@ function App() {
         { path: 'tutor-signup-2', element: <TutorSignUp2Screen /> },
         { path: 'tutor-signup-3', element: <TutorSignUp3Screen /> },
         { path: 'results', element: <ResultScreen /> },
-        { path: 'tutor-facts', element: <TutorFactsScreen />},
+        { path: '/tutor-facts/:id', element: <TutorFactsScreen />},
         { path: 'chat', element: <ChatScreen /> },
         { path: 'tutor-home-page', element: <TutorHomeScreen /> },
         { path: 'student-facts', element: <StudentFactsScreen/>},
