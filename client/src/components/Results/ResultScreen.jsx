@@ -34,11 +34,7 @@ function ResultScreen() {
         .catch(console.error);
     }, [topic, day, hour]);
     
-    function goToInfo() {
-        navigate("/tutor-facts");
-    }
-
-      useEffect(() => {
+    useEffect(() => {
         const handlePopState = (event) => { navigate("/", { replace: true });};
 
         window.addEventListener("popstate", handlePopState);
@@ -65,7 +61,7 @@ function ResultScreen() {
                         pricePerHour={t.pricePerHour}
                         rating={t.rating}
                         specialties={t.specialties}
-                        onExplore={goToInfo}
+                        onExplore={() => navigate(`/tutor-facts/${t.id}`)}
                         />
                     ))
                 }
