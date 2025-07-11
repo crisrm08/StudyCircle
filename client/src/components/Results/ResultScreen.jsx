@@ -1,86 +1,67 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { SidebarContext } from "../../contexts/SidebarContext";
+import { SubjectTopicContext } from "../../contexts/SubjectTopicContext";
+import { TimeContext } from "../../contexts/TimeContext";
 import Header from "../Common/Header";
 import StudentSidebar from "../Common/StudentSidebar";
 import TutorProfileCard from "./TutorProfileCard";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../../css/resultsStyle/resultscreen.css";
 
 function ResultScreen() {
     const navigate = useNavigate();  
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
+    const { topic, setTopic } = useContext(SubjectTopicContext);
+    const { day, setDay, hour, setHour } = useContext(TimeContext);
+    const [tutors, setTutors] = useState([]);
 
+    useEffect(() => {
+        console.log("selected topic: " + topic);
+        console.log("selected day: " + day);
+        console.log("selected hour: " + hour);
+        
+        const params = {};
+        if (topic) params.topic = topic;
+        if (day)   params.day   = day;
+        if (hour)  params.hour  = hour.toString();
+
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutors`, { params })
+        .then(({ data }) => {
+            setTutors(data.tutors);
+            console.log(data.tutors);
+        })
+        .catch(console.error);
+    }, [topic, day, hour]);
+    
     function goToInfo() {
         navigate("/tutor-facts");
+        console.log("topic selected: " + topic);
+        console.log("day: " + day);
+        console.log("hour: " + hour);
     }
       
     return(
         <div>
             <Header/>
-            <div className="result-screen">
-                <TutorProfileCard 
-                    id="1"
-                    image="https://randomuser.me/api/portraits/men/32.jpg"
-                    name="Carlos Pérez"
-                    occupation="Profesor Intec"
-                    description="Apasionado por la enseñanza de matemáticas y física. Vamos a resolver tus dudas juntos"
-                    pricePerHour="1000"
-                    rating={4.4}
-                    specialties={[
-                        "Cinemática y movimiento", 
-                        "Ondas y sonido", 
-                        "Física nuclear"
-                    ]}
-                    onExplore={goToInfo}
-                />
-
-                <TutorProfileCard 
-                    id="2"
-                    image="https://randomuser.me/api/portraits/men/1.jpg"
-                    name="Armando Paredes"
-                    occupation="Estudiante de Ingeniería"
-                    description="Estudiante avanzado de la carrera de Física para la educación superior"
-                    pricePerHour="500"
-                    rating={5}
-                    specialties={[
-                        "Leyes de Newton", 
-                        "Cinemática y movimiento", 
-                        "Trabajo, energía y potencia",
-                        "Electromagnetismo",
-                        "Leyes de la termonidinámica"
-                    ]}
-                    onExplore={goToInfo}
-                />
-                <TutorProfileCard 
-                    id="3"
-                    image="https://randomuser.me/api/portraits/women/30.jpg"
-                    name="Elsa Capunta"
-                    occupation="Ingeniera Civil"
-                    description="Altos conocimientos de Cinemátca para compartir contigo"
-                    pricePerHour="600"
-                    rating={3.5}
-                    specialties={[
-                        "Cinemática y movimiento", 
-                        "Fluidos y su dinámica"
-                    ]}
-                    onExplore={goToInfo}
-                />
-                <TutorProfileCard 
-                    id="4"
-                    image="https://randomuser.me/api/portraits/men/29.jpg"
-                    name="Elvis Tek"
-                    occupation="Docente Unphu"
-                    description="Apasionado por la enseñanza de matemáticas y física. Vamos a resolver tus dudas juntos"
-                    pricePerHour="800"
-                    rating={4.2}
-                    specialties={[
-                        "Cinemática y movimiento", 
-                        "Óptica y luz", 
-                        "Electromagnetismo",
-                        "Ondas y sonido"
-                    ]}
-                    onExplore={goToInfo}
-                />
+            <div className={`result-screen ${tutors.length === 0 ? "no-results" : ""}`}>
+                {tutors.length === 0
+                    ? <h1>No se encontraron tutores que coincidan con tu búsqueda</h1>
+                    : tutors.map(t => (
+                        <TutorProfileCard
+                        key={t.id}
+                        id={t.id}
+                        image={t.image}
+                        name={t.name}
+                        occupation={t.occupation}
+                        description={t.description}
+                        pricePerHour={t.pricePerHour}
+                        rating={t.rating}
+                        specialties={t.specialties}
+                        onExplore={() => {/* … */}}
+                        />
+                    ))
+                }
             </div>
             {isSidebarClicked && (
                 <>
