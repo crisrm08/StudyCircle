@@ -588,64 +588,42 @@ app.get('/tutors/:id', async (req, res) => {
     if (userErr) throw userErr;
     if (!user) return res.status(404).json({ error: "Tutor no encontrado" });
 
-    // 2) Traducir occupation y academic_level
     const [{ data: [occ] = [] }, { data: [lvl] = [] }] = await Promise.all([
-      supabase.from('ocupations')
-        .select('ocupation_name')
-        .eq('ocupation_id', user.occupation),
-      supabase.from('academic_levels')
-        .select('academic_level_name')
-        .eq('academic_level_id', user.academic_level)
+      supabase.from('ocupations').select('ocupation_name').eq('ocupation_id', user.occupation),
+      supabase.from('academic_levels').select('academic_level_name').eq('academic_level_id', user.academic_level)
     ]);
     
-    // 3) Obtener specialties
-    const { data: uts, error: utErr } = await supabase
-      .from('user_topics')
-      .select('topic_id')
-      .eq('type','teaches')
-      .eq('user_id', tutor_id);
-    if (utErr) throw utErr;
+    const { data: usertopics, error: userTopcisErr } = await supabase.from('user_topics').select('topic_id').eq('type','teaches').eq('user_id', tutor_id);
+    if (userTopcisErr) throw userTopcisErr;
 
-    const topicIds = uts.map(u => u.topic_id);
-    const { data: topicList } = await supabase
-      .from('topics')
-      .select('topic_name')
-      .in('topic_id', topicIds);
+    const topicIds = usertopics.map(u => u.topic_id);
+    const { data: topicList } = await supabase.from('topics').select('topic_name').in('topic_id', topicIds);
 
-    // 4) Disponibilidad
-    const { data: avail } = await supabase
-      .from('tutor_availability')
-      .select('day_of_week, start_time, end_time')
-      .eq('tutor_id', tutor_id);
+    const { data: avail } = await supabase.from('tutor_availability').select('day_of_week, start_time, end_time').eq('tutor_id', tutor_id);
 
-    // 5) URL de imagen
     let imageUrl;
     if (user.profile_image_url && /^https?:\/\//.test(user.profile_image_url)) {
       imageUrl = user.profile_image_url;
     } else {
-      const { data: { publicUrl } } = supabase
-        .storage
-        .from('profile.images')
-        .getPublicUrl(user.profile_image_url || `user_${tutor_id}.jpg`);
+      const { data: { publicUrl } } = supabase.storage.from('profile.images').getPublicUrl(user.profile_image_url || `user_${tutor_id}.jpg`);
       imageUrl = publicUrl + `?t=${Date.now()}`;
     }
 
-    // 6) Armado final
     res.json({
       tutor: {
-        id:           user.user_id,
-        name:         user.name,
-        lastName:     user.last_name,
-        institution:  user.institution,
-        occupation:   occ?.ocupation_name || null,
+        id: user.user_id,
+        name: user.name,
+        lastName: user.last_name,
+        institution: user.institution,
+        occupation: occ?.ocupation_name || null,
         academicLevel: lvl?.academic_level_name || null,
         shortDescription: user.short_description,
-        fullDescription:  user.full_description,
-        pricePerHour:  user.hourly_fee,
-        rating:        user.rating_avg,
-        image:         imageUrl,
-        specialties:   topicList.map(t => t.topic_name),
-        availability:  avail.map(a => ({
+        fullDescription: user.full_description,
+        pricePerHour: user.hourly_fee,
+        rating: user.rating_avg,
+        image: imageUrl,
+        specialties: topicList.map(t => t.topic_name),
+        availability: avail.map(a => ({
           day:   a.day_of_week,
           from:  a.start_time.slice(0,5),
           to:    a.end_time.slice(0,5)
