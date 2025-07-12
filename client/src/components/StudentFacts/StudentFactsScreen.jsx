@@ -1,15 +1,25 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Header from "../Common/Header";
 import StudentFactsModal from "./StudentFactsModal";
 import TutorSidebar from "../Common/TutorSidebar";
 import StudentCritiques from "./StudentCritiques";
 import { SidebarContext } from "../../contexts/SidebarContext";
+import axios from "axios";
 import "../../css/studentProfileStyles/studentprofile.css";
 
 function StudentFactsScreen() {
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
-    const studentName = "Nombre";
-    const studentFullDescription = "Descripción";
+    const { id } = useParams();
+    const [student, setStudent] = useState(null);
+
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/students/${id}`)
+        .then(({ data }) => setStudent(data.student))
+        .catch(console.error);
+    }, [id]);
+
+    if (!student) return null;
 
     return(
         <div className="student-profile-screen">
@@ -19,9 +29,9 @@ function StudentFactsScreen() {
                     <div className="about-student">
                         <div className="about-student__scroll">
                          
-                            <h2>Sobre {studentName}:</h2>
+                            <h2>Sobre {student.name}:</h2>
                             <hr/>
-                            <p>{studentFullDescription}</p>
+                            <p>{student.description}</p>
                         </div>
                     </div>
                     <StudentCritiques 
@@ -33,7 +43,7 @@ function StudentFactsScreen() {
                     />
                 </div>
                 <div className="student-profile-card">
-                    <StudentFactsModal />
+                    <StudentFactsModal student={student}/>
                 </div>
             </div>
             {isSidebarClicked && (

@@ -7,14 +7,14 @@ import axios from "axios";
 function RequestBox(requestDetails) {
   const navigate = useNavigate();
   const [rejected, setRejected] = useState(false);
-  const { tutorship_request_id, student_avatar, tutorship_subject, tutorship_topic, tutorship_mode, tutorship_day, tutorship_hour, tutorship_request_message } = requestDetails.requestDetails;
+  const { tutorship_request_id, student_id, student_avatar, tutorship_subject, tutorship_topic, tutorship_mode, tutorship_day, tutorship_hour, tutorship_request_message } = requestDetails.requestDetails;
 
   useEffect(() => {
     console.log(requestDetails) ;
   })
 
   function handleDecline() {
-    axios.delete(`http://localhost:5000/tutorship/request/${tutorship_request_id}`)
+    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/tutorship/request/${tutorship_request_id}`)
       .then(() => setRejected(true))
       .catch(console.error);
   }
@@ -24,7 +24,7 @@ function RequestBox(requestDetails) {
   }
 
   function seeStudentProfile() {
-    navigate("/student-facts");
+    navigate(`/student-facts/${student_id}`);
   }
 
   if (rejected) return null;

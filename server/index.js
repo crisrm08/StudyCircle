@@ -636,6 +636,68 @@ app.get('/tutors/:id', async (req, res) => {
   }
 });
 
+app.get('/students/:id', async (req, res) => {
+  try {
+    const student_id = parseInt(req.params.id, 10);
+    if (!student_id) return res.status(400).json({ error: "student_id inválido" });
+
+    const { data: user, error: userErr } = await supabase
+      .from('users')
+      .select(`user_id, name, last_name, institution, career, short_description,full_description, rating_avg, profile_image_url`)
+      .eq('profile_type','student')
+      .eq('user_id', student_id)
+      .maybeSingle();
+    if (userErr) throw userErr;
+    if (!user) return res.status(404).json({ error: "Estudiante no encontrado" });
+
+    const { data: topics, error: topicsErr } = await supabase
+      .from('user_topics')
+      .select('topic_id, type')
+      .eq('user_id', student_id);
+    if (topicsErr) throw topicsErr;
+
+    const strongIds = topics.filter(t => t.type === 'strong').map(t => t.topic_id);
+    const weakIds   = topics.filter(t => t.type === 'weak').map(t => t.topic_id);
+  
+    const { data: topicList } = await supabase
+      .from('topics')
+      .select('topic_id, topic_name')
+      .in('topic_id', [...strongIds, ...weakIds]);
+    const nameMap = Object.fromEntries(topicList.map(t => [t.topic_id, t.topic_name]));
+
+    const strengths = strongIds.map(id => nameMap[id]).filter(Boolean);
+    const weaknesses = weakIds.map(id => nameMap[id]).filter(Boolean);
+
+  
+    let imageUrl;
+    if (user.profile_image_url && /^https?:\/\//.test(user.profile_image_url)) {
+      imageUrl = user.profile_image_url;
+    } else {
+      const { data: { publicUrl } } = supabase.storage.from('profile.images')
+      .getPublicUrl(user.profile_image_url || `user_${student_id}.jpg`);
+      imageUrl = publicUrl + `?t=${Date.now()}`;
+    }
+
+    res.json({
+      student: {
+        id: user.user_id,
+        name: user.name,
+        last_name: user.last_name,
+        institution: user.institution,
+        degree: user.career,      
+        strengths,
+        weaknesses,
+        rating: user.rating_avg,
+        description: user.full_description,
+        image: imageUrl
+      }
+    });
+  } catch (err) {
+    console.error("GET /students/:id error:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.post('/tutorship/request', async (req, res) => {
   try {
     const { tutorshipRequestDetails } = req.body;
@@ -693,10 +755,8 @@ app.get('/tutorship/requests', async (req, res) => {
       if (stu.profile_image_url && /^https?:\/\//.test(stu.profile_image_url)) {
         avatarUrl = stu.profile_image_url;
       } else {
-        const { data: { publicUrl } } = supabase
-          .storage
-          .from('profile.images')
-          .getPublicUrl(stu.profile_image_url || `user_${stu.user_id}.jpg`);
+        const { data: { publicUrl } } = supabase.storage.from('profile.images')
+        .getPublicUrl(stu.profile_image_url || `user_${stu.user_id}.jpg`);
         avatarUrl = publicUrl + `?t=${Date.now()}`;
       }
       return {
