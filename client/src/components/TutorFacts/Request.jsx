@@ -29,7 +29,7 @@ function Request({ onClose, tutor_id }) {
       tutorship_mode: mode,
       tutorship_hour: hour,
       tutorship_day: day,
-      tutorship_message: message  
+      tutorship_request_message: message  
     }
       
     axios.post("/tutorship/request", { tutorshipRequestDetails: payload })

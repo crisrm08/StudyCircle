@@ -647,12 +647,21 @@ app.post('/tutorship/request', async (req, res) => {
       tutorship_mode,
       tutorship_hour,
       tutorship_day,
-      tutorship_message
+      tutorship_request_message
     } = tutorshipRequestDetails;
 
-    console.log("detalles de la solicitud: " + student_id, tutor_id, tutorship_subject, tutorship_topic, tutorship_mode, tutorship_hour, tutorship_day, tutorship_message);
-  
-   
+    console.log("detalles de la solicitud: " + student_id, tutor_id, tutorship_subject, tutorship_topic, tutorship_mode, tutorship_hour, tutorship_day, tutorship_request_message);
+    const { data: newTutorshipRequest, error: insertErr } = await supabase
+      .from('tutorship_requests')
+      .insert({tutor_id, student_id, tutorship_mode, tutorship_subject, tutorship_topic, tutorship_mode, tutorship_hour, tutorship_day, tutorship_request_message})
+      .select()
+      .maybeSingle();
+
+      if (insertErr) {
+      console.error("Error insertando solicitud:", insertErr);
+      return res.status(500).json({ error: insertErr.message });
+    }
+
     res.status(201).json({ message: "Solicitud enviada con éxito" });
   }
   catch(error){
