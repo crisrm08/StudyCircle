@@ -46,7 +46,7 @@ function App() {
         { path: '/tutor-facts/:id', element: <TutorFactsScreen />},
         { path: 'chat', element: <ChatScreen /> },
         { path: 'tutor-home-page', element: <TutorHomeScreen /> },
-        { path: 'student-facts', element: <StudentFactsScreen/>},
+        { path: '/student-facts/:id', element: <StudentFactsScreen/>},
         { path: 'tutor-profile', element: <TutorProfileScreen />},
         { path: 'student-profile', element: <StudentProfileScreen />},
         { path: 'edit-student-profile', element: <EditStudentProfileScreen />},

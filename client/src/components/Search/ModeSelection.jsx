@@ -19,9 +19,9 @@ function ModeSelection() {
         <div className="mode-selection-container">
             <h1>Alguna modalidad preferida?</h1>
             <div className="mode-buttons-container">
-                <button className={mode === "presencial" ? "active" : ""} name="presencial" onClick={changeMode}> 🏫 Presencial </button>
-                <button className={mode === "virtual" ? "active" : ""} name="virtual" onClick={changeMode}> 💻 Virtual </button>
-                <button className={mode === "cualquiera" ? "active" : ""} name="cualquiera" onClick={changeMode}> 🔀 Cualquiera </button>
+                <button className={mode === "presencial" ? "active" : ""} name="🏫 Presencial" onClick={changeMode}> 🏫 Presencial </button>
+                <button className={mode === "virtual" ? "active" : ""} name="💻 Virtual" onClick={changeMode}> 💻 Virtual </button>
+                <button className={mode === "cualquiera" ? "active" : ""} name="🔀 Cualquiera" onClick={changeMode}> 🔀 Cualquiera </button>
             </div>
         </div>
     );

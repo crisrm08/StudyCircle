@@ -1,49 +1,49 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { SubjectTopicContext } from "../../contexts/SubjectTopicContext";
-import { TimeContext } from "../../contexts/TimeContext";
-import { ModeContext } from "../../contexts/ModeContext";
-import { MessageContext } from "../../contexts/MessageContext";
 import "../../css/tutorHomeStyles/requestbox.css";
+import { useEffect } from "react";
+import axios from "axios";
 
-function RequestBox({ avatar }) {
-  const { subject, topic } = useContext(SubjectTopicContext);
-  const { hour, day } = useContext(TimeContext); 
-  const { mode } = useContext(ModeContext);
-  const { message } = useContext(MessageContext);
+function RequestBox(requestDetails) {
   const navigate = useNavigate();
-
   const [rejected, setRejected] = useState(false);
+  const { tutorship_request_id, student_id, student_avatar, tutorship_subject, tutorship_topic, tutorship_mode, tutorship_day, tutorship_hour, tutorship_request_message } = requestDetails.requestDetails;
 
-  function handleDecline(){
-    setRejected(true);
-  };
+  useEffect(() => {
+    console.log(requestDetails) ;
+  })
+
+  function handleDecline() {
+    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/tutorship/request/${tutorship_request_id}`)
+      .then(() => setRejected(true))
+      .catch(console.error);
+  }
 
   function handleAccept() {
     navigate("/chat");
   }
 
-  function seeStudentsProfile() {
-    navigate("/student-facts");
+  function seeStudentProfile() {
+    navigate(`/student-facts/${student_id}`);
   }
 
   if (rejected) return null;
-
+  
   return (
     <div className="request-box">
       <div className="request-header">
         <div className="request-student-info">
-          {avatar && (<img src={avatar} alt="Estudiante" className="student-avatar" onClick={seeStudentsProfile} />)}
-          <span className="subject-topic"> {subject} - {topic} </span>
+          <img src={student_avatar} alt="Estudiante" className="student-avatar" onClick={seeStudentProfile}/>
+          <span className="subject-topic"> {tutorship_subject} - {tutorship_topic} </span>
         </div>
-        <span className="request-mode">{mode}</span>
+        <span className="request-mode">{tutorship_mode}</span>
       </div>
 
       <div className="request-details">
         <p>
-          <strong>Día:</strong> {day} | <strong>Hora:</strong> {hour}
+          <strong>Día:</strong> {(!tutorship_day) ? "Por decidir" : tutorship_day} | <strong>Hora:</strong> {(!tutorship_hour) ? "Por decidir" : tutorship_hour}
         </p>
-        <p className="request-message">{message}</p>
+        <p className="request-message">{tutorship_request_message}</p>
       </div>
 
       <div className="request-actions">

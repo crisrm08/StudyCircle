@@ -26,6 +26,24 @@
     scrollbar-color: #1E56A0 transparent;
 }
 
+.no-requests {
+    min-height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.no-requests h2{
+    color: #163172;
+}
+
+.no-requests p{
+    color: #1E56A0;
+}
+
 .tutor-history-log{
     min-width: 300px;
 }

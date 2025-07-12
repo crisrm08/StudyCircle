@@ -5,7 +5,7 @@ import Request from "../TutorFacts/Request";
 import "../../css/studentProfileStyles/modal.css";
 
 function TutorFactsModal({ tutor }) {
-  const { image, name, last_name, institution, occupation, academicLevel, description, pricePerHour, rating, specialties } = tutor;
+  const { id, image, name, last_name, institution, occupation, academicLevel, description, pricePerHour, rating, specialties } = tutor;
   const [ renderRequest, setRenderRequest ] = useState(false);
   const navigate = useNavigate();
 
@@ -67,7 +67,7 @@ function TutorFactsModal({ tutor }) {
         <button className="tutor-button" style={{marginTop: 15}} onClick={openRequestModal}> Solicitar tutoría</button>
       </div>
 
-      {renderRequest === true && (<Request onClose={closeRequestModal}/>)}
+      {renderRequest === true && (<Request onClose={closeRequestModal} tutor_id={id}/>)}
     </div>
   )
 }
