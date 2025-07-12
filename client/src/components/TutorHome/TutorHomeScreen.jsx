@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect} from "react";
+import React, { useContext, useState, useEffect, useRef} from "react";
 import Header from "../Common/Header";
 import TutorTopBar from "./TutorTopBar";
 import TutorControlBar from "./TutorControlBar";
@@ -20,8 +20,11 @@ function TutorHomeScreen() {
     const { loading } = useUser();
     const { activeTab } = useContext(ActiveTabContext);
     const [schedule, setSchedule] = useState([]);
-    
     const daysOfWeek = [ "Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo" ];
+    const [ tutorshipsRequests, setTutorshipRequests ] = useState([]);
+    const tutor_id = user?.user_id
+    const fetchedOnce = useRef(false);
+    
 
     useEffect(() => {
       if (!user) return;
@@ -45,6 +48,21 @@ function TutorHomeScreen() {
         .catch(console.error);
     }, [user]);
 
+    useEffect(() => {
+        if (!user?.user_id) return;
+        if (fetchedOnce.current) return;
+        fetchedOnce.current = true;
+
+        axios.get("http://localhost:5000/tutorship/requests", {params: {tutor_id}})
+        .then(({ data: { requests } }) => {
+            console.log("got requests:", requests);
+        
+            setTutorshipRequests(requests);
+            })
+        .catch((err) => console.error(err));
+        
+    },[tutor_id]);
+
     if (loading || !user) return null;
     
     return(
@@ -62,12 +80,20 @@ function TutorHomeScreen() {
             <TutorControlBar /> 
 
             {activeTab === "Solicitudes" ? (
-                <div className="tutorship-request-container">
-                    <RequestBox avatar={"https://randomuser.me/api/portraits/men/12.jpg"} />
-                    <RequestBox avatar={"https://randomuser.me/api/portraits/men/15.jpg"} />
-                    <RequestBox avatar={"https://randomuser.me/api/portraits/men/16.jpg"} />
-                    <RequestBox avatar={"https://randomuser.me/api/portraits/men/23.jpg"} />
-                </div>
+                 tutorshipsRequests.length > 0 ? (
+                    <div className="request-box-container">
+                    <div className="tutorship-request-container">
+                        {tutorshipsRequests.map((request, index) => (
+                            <RequestBox key={index} requestDetails={request}/>
+                        ))}
+                    </div>
+                    </div>
+                ) : (
+                   <div className="no-requests">
+                        <h2>No tienes solicitudes de tutoría por ahora</h2> 
+                        <p>Optimiza tu perfil y añade tu disponibilidad para que los estudiantes te encuentren y te envíen peticiones.</p>
+                    </div>
+                )
             ) : (
                 <div className="tutor-history-container">
                     <HistoryLog 

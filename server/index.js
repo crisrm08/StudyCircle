@@ -670,4 +670,62 @@ app.post('/tutorship/request', async (req, res) => {
   }
 });
 
+app.get('/tutorship/requests', async (req, res) => {
+  try {
+    const tutorId = parseInt(req.query.tutor_id, 10);
+
+    const { data: requests, error } = await supabase
+      .from('tutorship_requests')
+      .select(`
+        *,
+        student:users!tutorship_requests_student_id_fkey (
+          user_id,
+          profile_image_url
+        )
+      `)
+      .eq('tutor_id', tutorId);
+
+    if (error) throw error;
+
+    const enriched = requests.map(r => {
+      const stu = r.student;
+      let avatarUrl;
+      if (stu.profile_image_url && /^https?:\/\//.test(stu.profile_image_url)) {
+        avatarUrl = stu.profile_image_url;
+      } else {
+        const { data: { publicUrl } } = supabase
+          .storage
+          .from('profile.images')
+          .getPublicUrl(stu.profile_image_url || `user_${stu.user_id}.jpg`);
+        avatarUrl = publicUrl + `?t=${Date.now()}`;
+      }
+      return {
+        ...r,
+        student_avatar: avatarUrl
+      };
+    });
+
+    res.json({ requests: enriched });
+  } catch (err) {
+    console.error("Error fetching tutorship requests:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete('/tutorship/request/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (!id) return res.status(400).json({ error: "ID inválido" });
+
+    const { error } = await supabase
+      .from('tutorship_requests').delete().eq('tutorship_request_id', id);
+
+    if (error) throw error;
+    res.json({ message: "Solicitud rechazada correctamente" });
+  } catch (err) {
+    console.error("Error deleting request:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
