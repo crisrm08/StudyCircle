@@ -20,7 +20,9 @@ function RequestBox(requestDetails) {
   }
 
   function handleAccept() {
-    navigate("/chat");
+    axios.patch(`http://localhost:5000/tutorship/requests/${tutorship_request_id}/accept`)
+    .then(() => {navigate("/chat")})
+    .catch(console.error);
   }
 
   function seeStudentProfile() {

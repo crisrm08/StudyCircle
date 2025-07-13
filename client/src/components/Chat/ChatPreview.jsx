@@ -1,7 +1,20 @@
-import React from "react";
+import React, {useState} from "react";
+import { useNavigate } from "react-router-dom";
 import "../../css/chatStyles/chatpreview.css";
 
-function ChatPreview({ name, lastMessage, image, handleOpenChat }) {
+function ChatPreview({ name, lastMessage, image, handleOpenChat, loggedUserRole}) {
+  const [isTutorshipOver, setIsTutorshipOver] = useState(true);
+  const navigate = useNavigate();
+  loggedUserRole = "tutor";
+
+  function handleUserReport() {
+    console.log("not implemented yet");
+  }
+
+  function requestNewTutorship() {
+    console.log("Not fully implemented yet");
+    //navigate(`/tutor-facts/${tutor_id}`);
+  }
   
   return (
     <div className="chat-preview" onClick={handleOpenChat}>
@@ -10,6 +23,15 @@ function ChatPreview({ name, lastMessage, image, handleOpenChat }) {
         <h2>{name}</h2>
         <h3>{lastMessage}</h3>
       </div>
+      {isTutorshipOver && loggedUserRole === "student" ? (
+        <div className="report-container">
+          <button className="request-tutorship-button" onClick={requestNewTutorship}> Solicitar otra tutoría </button>
+        </div>
+      ):(
+        <div className="report-container">
+          <button className="report-button" onClick={handleUserReport}>Reportar</button>
+        </div>
+      )}
     </div>
   );
 }

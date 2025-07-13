@@ -3,12 +3,13 @@ import Header from "../Common/Header"
 import ChatContainer from "./ChatContainer";
 import StudentSidebar from "../Common/StudentSidebar";
 import TutorSidebar from "../Common/TutorSidebar";
+import { useUser } from "../../contexts/UserContext";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import "../../css/chatStyles/chatscreen.css"
 
 function ChatScreen() {
     const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
-    const [ isTutorLogged ] = useState(false);
+    const { user } = useUser();
 
     return(
         <div className="chat-screen" >
@@ -18,11 +19,8 @@ function ChatScreen() {
             </div>
             {isSidebarClicked && (
               <>
-                <div
-                  className="overlay"
-                  onClick={() => setIsSidebarClicked(false)}
-                />
-                {isTutorLogged
+                <div className="overlay" onClick={() => setIsSidebarClicked(false)}/>
+                {user.profile_type === "tutor" 
                   ? <TutorSidebar />
                   : <StudentSidebar />}
               </>
