@@ -40,26 +40,25 @@ function ChatContainer() {
         const chatsArr = Array.isArray(data.chats) ? data.chats : [];
         setChats(chatsArr);
 
-        if (!selectedChat && chatsArr.length > 0) {
-          let chatToSelect;
-          if (user.profile_type === 'student') {
-            chatToSelect = chatsArr.find(c => c.status === 'pending');
-          } else {
-            chatToSelect = chatsArr.find(c => c.status === 'accepted');
-          }
-          if (chatToSelect) {
-            setSelectedChat(chatToSelect);
-            openChat(); 
-          }
+      if (!selectedChat && chatsArr.length > 0) {
+        let chatToSelect;
+        if (user.profile_type === 'student') {
+          chatToSelect = chatsArr.find(c => c.status === 'pending') || chatsArr.find(c => c.status === 'accepted');
+        } else {
+          chatToSelect = chatsArr.find(c => c.status === 'accepted');
         }
+        if (chatToSelect) {
+          setSelectedChat(chatToSelect);
+          openChat(); 
+        }
+      }
+
       })
       .catch(err => {
         console.error("Error fetching chats:", err);
         setChats([]);
       });
   }, [user.user_id]);
-
-
 
 
   function openChat() {
@@ -99,6 +98,5 @@ function ChatContainer() {
     </div>
   );
 }
-
 
 export default ChatContainer;

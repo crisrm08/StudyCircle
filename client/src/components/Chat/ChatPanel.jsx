@@ -26,17 +26,19 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
 
   function sendMessage() {
     if (!text.trim()) return;
-    axios
-      .post(`http://localhost:5000/chats/${chat.id}/messages`, {
+    axios.post(`/chats/${chat.id}/messages`, {
         sender_id: user.user_id,
-        content: text,
+        content: text
       })
       .then(({ data }) => {
-        setMessages((prev) => [...prev, data.message]);
+        if (data.message) {
+          setMessages(prev => [...prev, data.message]);
+        }
         setText("");
       })
       .catch(console.error);
   }
+
 
   function cancelTutorshipRequest() {
     // TODO: implementar cancelación de la solicitud
@@ -116,10 +118,24 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
       {chat.status === "accepted" && (
         <>
           <div className="messages-container">
-            {messages.map((m) => (
-              <ChatMessage key={m.message_id} text={m.content} isOwn={m.sender_id === user.user_id} />
-            ))}
+            {messages
+              .filter(m => m && m.content != null)
+              .map(m => (
+                <ChatMessage
+                  key={m.message_id}
+                  text={m.content}
+                  isOwn={m.sender_id === user.user_id}
+                />
+              ))}
           </div>
+
+           <SessionControlBar
+            chat={chat}
+            onEnd={endSession}
+            onRate={handleRating}
+            loggedUserRole={loggedUserRole}
+          />
+
           <div className="input-message-container">
             <input
               type="text"
@@ -132,12 +148,7 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
               <IoSend col/>
             </button>
           </div>
-          <SessionControlBar
-            chat={chat}
-            onEnd={endSession}
-            onRate={handleRating}
-            loggedUserRole={loggedUserRole}
-          />
+         
         </>
       )}
     </div>

@@ -745,7 +745,8 @@ app.get('/tutorship/requests', async (req, res) => {
           profile_image_url
         )
       `)
-      .eq('tutor_id', tutorId);
+      .eq('tutor_id', tutorId)
+      .eq('status', 'pending');
 
     if (error) throw error;
 
@@ -880,24 +881,25 @@ app.post('/chats/:id/messages', async (req, res) => {
 
   // Si el chat aún está pending y lo envía el tutor, lo aceptamos
   const { data: reqRow } = await supabase
-    .from('tutorship_requests')
-    .select('status,tutor_id')
-    .eq('tutorship_request_id', reqId)
+    .from('tutorship_requests').select('status,tutor_id').eq('tutorship_request_id', reqId)
     .maybeSingle();
 
   if (reqRow.status === 'pending' && reqRow.tutor_id === sender_id) {
-    await supabase
-      .from('tutorship_requests')
-      .update({ status: 'accepted', accepted_at: new Date().toISOString() })
-      .eq('tutorship_request_id', reqId);
+    await supabase.from('tutorship_requests').update({ status: 'accepted', accepted_at: new Date().toISOString() })
+    .eq('tutorship_request_id', reqId);
   }
 
-  // Insertar mensaje
-  const { data: msg } = await supabase
+  // Ahora pedimos explícitamente la fila que acabamos de insertar
+  const { data: msg, error: msgErr } = await supabase
     .from('chat_messages')
     .insert({ tutorship_request_id: reqId, sender_id, content })
+    .select('*')          
     .single();
 
+  if (msgErr || !msg) {
+    console.error("Error inserting message:", msgErr);
+    return res.status(500).json({ error: msgErr?.message || "No message returned" });
+  }
   res.json({ message: msg });
 });
 

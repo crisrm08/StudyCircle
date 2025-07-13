@@ -77,6 +77,8 @@ function StudentModal() {
     return stars;
   };
 
+  if(!user) return null;
+
   return (
     <div className="modal-content">
 

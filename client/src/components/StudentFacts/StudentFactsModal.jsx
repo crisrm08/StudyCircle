@@ -1,16 +1,12 @@
 import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { FaAngleLeft } from "react-icons/fa";
+import axios from "axios";
 import "../../css/studentProfileStyles/modal.css";
 
 function StudentFactsModal({student}) {
   const {  name, last_name, institution, degree, strengths, weaknesses, rating, description, image } = student;
   const navigate = useNavigate();
-
-
-  function openChat() {
-    navigate("/chat");
-  }
 
   function backToHome() {
     navigate(-1);
@@ -67,7 +63,6 @@ function StudentFactsModal({student}) {
       <p style={{marginBottom:'0px'}} className="modal-description">{description}</p>
       <div className="modal-button-container">
         <button className="back-button" style={{marginTop: 15}} onClick={backToHome}><FaAngleLeft/> Volver</button>
-        <button className="tutor-button" style={{marginTop: 15}} onClick={openChat}> Aceptar tutoría</button>
       </div>
     </div>
   )

@@ -1,19 +1,17 @@
-import React, {useState}from "react";
+import React, { useState } from "react";
 import ChatPreview from "./ChatPreview";
 import "../../css/chatStyles/chatsidebar.css";
 
 function ChatSidebar({ chats = [], selectedChat, onSelectChat, loggedUserRole }) {
   const [isPendingActive, setPendingActive] = useState(true);
 
-  {/*selectedChat no se está utilizando aquí */}
-  
   const displayedChats = chats.filter(chat => {
     // pestaña "Pendientes"
     if (isPendingActive) {
       // estudiante ve pending, tutor ve accepted
       return loggedUserRole === 'tutor'
         ? chat.status === 'accepted'
-        : chat.status === 'pending';
+        : chat.status === 'pending' || chat.status === 'accepted';
     }
     // pestaña "Finalizados"
     return chat.status === 'finished';
@@ -22,19 +20,21 @@ function ChatSidebar({ chats = [], selectedChat, onSelectChat, loggedUserRole })
   return (
     <div className="chat-sidebar">
       <div className="filter-container">
-          <button
-            className={`filter-button ${isPendingActive ? 'active' : ''}`}
-            onClick={() => setPendingActive(true)}>
-            Pendientes
-          </button>
+        <button
+          className={`filter-button ${isPendingActive ? 'active' : ''}`}
+          onClick={() => setPendingActive(true)}
+        >
+          Pendientes
+        </button>
 
-          <div className="divider" />
+        <div className="divider" />
 
-          <button
-            className={`filter-button ${!isPendingActive ? 'active' : ''}`}
-            onClick={() => setPendingActive(false)}>
-            Finalizados
-          </button>
+        <button
+          className={`filter-button ${!isPendingActive ? 'active' : ''}`}
+          onClick={() => setPendingActive(false)}
+        >
+          Finalizados
+        </button>
       </div>
 
       <div className="chat-list">
@@ -49,7 +49,7 @@ function ChatSidebar({ chats = [], selectedChat, onSelectChat, loggedUserRole })
               lastMessage={chat.lastMessage}
               image={chat.otherUser.avatar}
               status={chat.status}
-              onClick={() => onSelectChat(chat)}
+              handleOpenChat={() => onSelectChat(chat)}
               loggedUserRole={loggedUserRole}
             />
           ))
