@@ -20,10 +20,16 @@ function RequestBox(requestDetails) {
   }
 
   function handleAccept() {
-    axios.patch(`http://localhost:5000/tutorship/requests/${tutorship_request_id}/accept`)
-    .then(() => {navigate("/chat")})
+    axios.patch(
+      `${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${tutorship_request_id}/accept`
+    )
+    .then(() => {
+    
+      navigate("/chat", { state: { selectedChatId: tutorship_request_id } });
+    })
     .catch(console.error);
   }
+
 
   function seeStudentProfile() {
     navigate(`/student-facts/${student_id}`);

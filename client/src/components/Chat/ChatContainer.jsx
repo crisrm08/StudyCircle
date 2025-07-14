@@ -33,11 +33,14 @@ function ChatContainer() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const userId = user?.user_id;
+
   useEffect(() => {
-    if (!user) return;
-    axios.get("http://localhost:5000/chats", { params: { user_id: user.user_id } })
+    if (!userId) return;
+
+    axios.get("http://localhost:5000/chats", { params: { user_id: userId } })
       .then(({ data }) => {
-        const chatsArr = Array.isArray(data.chats) ? data.chats : [];
+         const chatsArr = Array.isArray(data.chats) ? data.chats : [];
         setChats(chatsArr);
 
       if (!selectedChat && chatsArr.length > 0) {
@@ -52,14 +55,14 @@ function ChatContainer() {
           openChat(); 
         }
       }
-
       })
       .catch(err => {
         console.error("Error fetching chats:", err);
         setChats([]);
       });
-  }, [user.user_id]);
+  }, [userId]);
 
+  if (!user) return null;
 
   function openChat() {
     if (isMobile) {

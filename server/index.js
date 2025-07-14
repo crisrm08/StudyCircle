@@ -773,6 +773,13 @@ app.get('/tutorship/requests', async (req, res) => {
   }
 });
 
+app.get('/tutorship/requests/:id', async (req, res) => {
+  const { data, error } = await supabase.from('tutorship_requests').select('student_closed, tutor_closed').
+  eq('tutorship_request_id', req.params.id).single();
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data);
+});
+
 app.delete('/tutorship/request/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);

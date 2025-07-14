@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatMessage from "./ChatMessage";
 import SessionControlBar from "./SessionControlBar";
@@ -41,7 +41,7 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
 
 
   function cancelTutorshipRequest() {
-    // TODO: implementar cancelación de la solicitud
+    // TODO (later): implementar cancelación de la solicitud
   }
 
   function endSession() {
@@ -129,7 +129,7 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
               ))}
           </div>
 
-           <SessionControlBar
+          <SessionControlBar
             chat={chat}
             onEnd={endSession}
             onRate={handleRating}
