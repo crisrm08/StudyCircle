@@ -40,7 +40,7 @@ function ChatContainer() {
 
   useEffect(() => {
     if (!user) return;
-    axios.get("/chats", { params: { user_id: user.user_id } })
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/chats`, { params: { user_id: user.user_id } })
       .then(({ data }) => {
         const arr = Array.isArray(data.chats) ? data.chats : [];
         setChats(arr);
