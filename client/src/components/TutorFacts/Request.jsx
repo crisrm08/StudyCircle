@@ -20,6 +20,10 @@ function Request({ onClose, tutor_id }) {
   }
 
   function handleSubmit() {
+     if (!user) {
+      navigate("/login");
+      return;
+    }
 
     const payload = {
       student_id: user.user_id,
