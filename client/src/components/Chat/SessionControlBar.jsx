@@ -14,7 +14,7 @@ function SessionControlBar({ chat, onEnd, onRate, loggedUserRole }) {
     setShowRatingModal(false);
 
    
-    axios.get(`http://localhost:5000/tutorship/requests/${chat.id}`)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}`)
       .then(({ data }) => {
         const userClosed =
           loggedUserRole === "tutor" ? data.tutor_closed : data.student_closed;
@@ -31,9 +31,7 @@ function SessionControlBar({ chat, onEnd, onRate, loggedUserRole }) {
     if (!hasRequestedEnd) return;
     const interval = setInterval(async () => {
       try {
-        const { data } = await axios.get(
-          `http://localhost:5000/tutorship/requests/${chat.id}`
-        );
+        const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}`);
         if (data.student_closed && data.tutor_closed) {
           setBothParticipantsReady(true);
           clearInterval(interval);
@@ -46,7 +44,6 @@ function SessionControlBar({ chat, onEnd, onRate, loggedUserRole }) {
     return () => clearInterval(interval);
   }, [hasRequestedEnd, chat.id]);
 
-  // Show the rating modal when both sides have closed
   useEffect(() => {
     if (bothParticipantsReady) {
       setShowRatingModal(true);
@@ -56,7 +53,6 @@ function SessionControlBar({ chat, onEnd, onRate, loggedUserRole }) {
   if (!chat || !loggedUserRole) return null;
 
   function handleEnd() {
-    // Trigger server-side close flag
     onEnd();
     setHasRequestedEnd(true);
   }

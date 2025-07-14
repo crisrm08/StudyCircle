@@ -716,8 +716,8 @@ app.post('/tutorship/request', async (req, res) => {
     const { data: newTutorshipRequest, error: insertErr } = await supabase
       .from('tutorship_requests')
       .insert({tutor_id, student_id, tutorship_mode, tutorship_subject, tutorship_topic, tutorship_mode, tutorship_hour, tutorship_day, tutorship_request_message})
-      .select()
-      .maybeSingle();
+      .select('tutorship_request_id')
+      .single();
 
       if (insertErr) {
       console.error("Error insertando solicitud:", insertErr);
@@ -822,7 +822,6 @@ app.get('/chats', async (req, res) => {
     .or(`tutor_id.eq.${userId},student_id.eq.${userId}`)
     .neq('status','finished');
 
-  // 2) Para cada solicitud, arma el preview:
   const previews = await Promise.all(
     requests.map(async r => {
       const otherId = r.student_id === userId ? r.tutor_id : r.student_id;
@@ -886,7 +885,6 @@ app.post('/chats/:id/messages', async (req, res) => {
   const { sender_id, content } = req.body;
   const reqId = parseInt(req.params.id,10);
 
-  // Si el chat aún está pending y lo envía el tutor, lo aceptamos
   const { data: reqRow } = await supabase
     .from('tutorship_requests').select('status,tutor_id').eq('tutorship_request_id', reqId)
     .maybeSingle();
@@ -896,7 +894,6 @@ app.post('/chats/:id/messages', async (req, res) => {
     .eq('tutorship_request_id', reqId);
   }
 
-  // Ahora pedimos explícitamente la fila que acabamos de insertar
   const { data: msg, error: msgErr } = await supabase
     .from('chat_messages')
     .insert({ tutorship_request_id: reqId, sender_id, content })
@@ -911,14 +908,13 @@ app.post('/chats/:id/messages', async (req, res) => {
 });
 
 app.patch('/tutorship/requests/:id/close', async (req, res) => {
-  const { by } = req.body; // 'student' o 'tutor'
+  const { by } = req.body; 
   const field = by === 'student' ? 'student_closed' : 'tutor_closed';
   await supabase
     .from('tutorship_requests')
     .update({ [field]: true })
     .eq('tutorship_request_id', req.params.id);
 
-  // Si ambos cerraron, marcamos finished
   const { data: row } = await supabase
     .from('tutorship_requests')
     .select('student_closed,tutor_closed')

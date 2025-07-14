@@ -53,7 +53,7 @@ function TutorHomeScreen() {
         if (fetchedOnce.current) return;
         fetchedOnce.current = true;
 
-        axios.get(`http://localhost:5000/tutorship/requests`, {params: {tutor_id}})
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests`, {params: {tutor_id}})
         .then(({ data: { requests } }) => {
             console.log("got requests:", requests);
             setTutorshipRequests(requests);

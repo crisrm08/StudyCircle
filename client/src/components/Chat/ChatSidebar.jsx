@@ -39,7 +39,11 @@ function ChatSidebar({ chats = [], selectedChat, onSelectChat, loggedUserRole })
 
       <div className="chat-list">
         {displayedChats.length === 0 ? (
-          <div className="no-chats-message">No hay chats disponibles</div>
+          loggedUserRole === "student" ? ( <div className="no-chats-message">No hay chats disponibles, solicita tutorías para abrir un chat con tutores</div>
+          ) : (
+            <div className="no-chats-message">No hay chats disponibles, espera a que los estudiantes soliciten tutorías</div>
+          )
+
         ) : (
           displayedChats.map(chat => (
             <ChatPreview

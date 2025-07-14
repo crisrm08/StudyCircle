@@ -4,12 +4,15 @@ import { useUser } from "../../contexts/UserContext";
 import ChatSidebar from "./ChatSidebar";
 import axios from "axios";
 import "../../css/chatStyles/chatcontainer.css";
+import { useLocation } from "react-router-dom";
 
 function ChatContainer() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isSidebarVisible, setSidebarVisible] = useState(true);  
   const [isPanelVisible, setPanelVisible] = useState(window.innerWidth > 768);
   const {user} = useUser();
+  const location = useLocation();
+  const forcedId = location.state?.selectedChatId; 
   const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
 
@@ -36,31 +39,37 @@ function ChatContainer() {
   const userId = user?.user_id;
 
   useEffect(() => {
-    if (!userId) return;
-
-    axios.get("http://localhost:5000/chats", { params: { user_id: userId } })
+    if (!user) return;
+    axios.get("/chats", { params: { user_id: user.user_id } })
       .then(({ data }) => {
-         const chatsArr = Array.isArray(data.chats) ? data.chats : [];
-        setChats(chatsArr);
+        const arr = Array.isArray(data.chats) ? data.chats : [];
+        setChats(arr);
 
-      if (!selectedChat && chatsArr.length > 0) {
-        let chatToSelect;
-        if (user.profile_type === 'student') {
-          chatToSelect = chatsArr.find(c => c.status === 'pending') || chatsArr.find(c => c.status === 'accepted');
-        } else {
-          chatToSelect = chatsArr.find(c => c.status === 'accepted');
+        if (forcedId) {
+          const forced = arr.find(c => c.id === forcedId);
+          if (forced) {
+            setSelectedChat(forced);
+            if (isMobile) openChat();
+            return;
+          }
         }
-        if (chatToSelect) {
-          setSelectedChat(chatToSelect);
-          openChat(); 
+
+        if (!selectedChat && arr.length > 0) {
+          let chatToSelect;
+          if (user.profile_type === 'student') {
+            chatToSelect = arr.find(c => c.status === 'pending') 
+                         || arr.find(c => c.status === 'accepted');
+          } else {
+            chatToSelect = arr.find(c => c.status === 'accepted');
+          }
+          if (chatToSelect) {
+            setSelectedChat(chatToSelect);
+            if (isMobile) openChat();
+          }
         }
-      }
       })
-      .catch(err => {
-        console.error("Error fetching chats:", err);
-        setChats([]);
-      });
-  }, [userId]);
+      .catch(console.error);
+  }, [user, forcedId]);
 
   if (!user) return null;
 

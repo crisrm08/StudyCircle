@@ -16,10 +16,8 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Carga mensajes cuando cambia el chat
     if (!chat || !chat.id) return;
-    axios
-      .get(`http://localhost:5000/chats/${chat.id}/messages`)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/${chat.id}/messages`)
       .then(({ data }) => setMessages(data.messages))
       .catch(console.error);
   }, [chat]);
@@ -45,12 +43,12 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
   }
 
   function endSession() {
-    axios.patch(`http://localhost:5000/tutorship/requests/${chat.id}/close`,{ by: isTutor ? "tutor" : "student" })
+    axios.patch(`${process.env.REACT_APP_BACKEND_URL}/${chat.id}/close`,{ by: isTutor ? "tutor" : "student" })
     .catch(console.error);
   }
 
   function handleRating({ rating, comment }) {
-    axios.post(`http://localhost:5000/tutorship/requests/${chat.id}/rate`, {
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}/rate`, {
         rater_id: user.user_id,
         ratee_id:
           isTutor ? chat.otherUser.userId : chat.otherUser.userId,
@@ -114,7 +112,7 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
         </div>
       )}
 
-      {/* Chat activo tras aceptación */}
+      {/* Chat activo cuando ss acepte*/}
       {chat.status === "accepted" && (
         <>
           <div className="messages-container">
