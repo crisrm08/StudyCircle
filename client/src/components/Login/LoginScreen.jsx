@@ -93,12 +93,12 @@ function LoginScreen() {
                     <div className="separator2"> <span>O</span> </div>
                     <div className="inputs-container">
                         <div className="input-container">
-                            <input id="user" type="text" placeholder="Ingresa tu email 👩🏻‍💻" onChange={handleEmailChange} />
+                            <input id="user" type="text" placeholder="Ingresa tu email" onChange={handleEmailChange} />
                         </div>
 
                         <div className="input-container">
                              <div className="input-with-icon">
-                                <input id="password" type={visible ? "text" : "password"} placeholder="Ingresa tu contraseña 🔐" onChange={handlePasswordChange}/>
+                                <input id="password" type={visible ? "text" : "password"} placeholder="Ingresa tu contraseña" onChange={handlePasswordChange}/>
                                 <button
                                     type="button"
                                     className="eye-toggle"
