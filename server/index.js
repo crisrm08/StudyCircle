@@ -716,8 +716,8 @@ app.post('/tutorship/request', async (req, res) => {
     const { data: newTutorshipRequest, error: insertErr } = await supabase
       .from('tutorship_requests')
       .insert({tutor_id, student_id, tutorship_mode, tutorship_subject, tutorship_topic, tutorship_mode, tutorship_hour, tutorship_day, tutorship_request_message})
-      .select()
-      .maybeSingle();
+      .select('tutorship_request_id')
+      .single();
 
       if (insertErr) {
       console.error("Error insertando solicitud:", insertErr);
@@ -745,7 +745,8 @@ app.get('/tutorship/requests', async (req, res) => {
           profile_image_url
         )
       `)
-      .eq('tutor_id', tutorId);
+      .eq('tutor_id', tutorId)
+      .eq('status', 'pending');
 
     if (error) throw error;
 
@@ -772,6 +773,13 @@ app.get('/tutorship/requests', async (req, res) => {
   }
 });
 
+app.get('/tutorship/requests/:id', async (req, res) => {
+  const { data, error } = await supabase.from('tutorship_requests').select('student_closed, tutor_closed').
+  eq('tutorship_request_id', req.params.id).single();
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data);
+});
+
 app.delete('/tutorship/request/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
@@ -786,6 +794,149 @@ app.delete('/tutorship/request/:id', async (req, res) => {
     console.error("Error deleting request:", err);
     res.status(500).json({ error: err.message });
   }
+});
+
+app.patch('/tutorship/requests/:id/accept', async (req, res) => {
+  await supabase
+    .from('tutorship_requests')
+    .update({ status: 'accepted', accepted_at: new Date().toISOString() })
+    .eq('tutorship_request_id', req.params.id);
+  res.sendStatus(200);
+});
+ 
+app.patch('/tutorship/requests/:id/reject', async (req, res) => {
+  await supabase
+    .from('tutorship_requests')
+    .update({ status: 'rejected' })
+    .eq('tutorship_request_id', req.params.id);
+  res.sendStatus(200);
+});
+
+app.get('/chats', async (req, res) => {
+  const userId = parseInt(req.query.user_id,10);
+
+  // 1) Traer todas las solicitudes activas (≠ 'finished'):
+  const { data: requests } = await supabase
+    .from('tutorship_requests')
+    .select('*')
+    .or(`tutor_id.eq.${userId},student_id.eq.${userId}`)
+    .neq('status','finished');
+
+  const previews = await Promise.all(
+    requests.map(async r => {
+      const otherId = r.student_id === userId ? r.tutor_id : r.student_id;
+      // a) Datos del otro usuario
+      const { data: other } = await supabase
+        .from('users')
+        .select('user_id, name, last_name, profile_image_url')
+        .eq('user_id', otherId)
+        .maybeSingle();
+      // b) URL de su avatar (bucket o externo)
+      let avatarUrl;
+      if (other.profile_image_url?.startsWith('http')) {
+        avatarUrl = other.profile_image_url;
+      } else {
+        const { data: { publicUrl } } = supabase
+          .storage
+          .from('profile.images')
+          .getPublicUrl(
+            other.profile_image_url || `user_${other.user_id}.jpg`
+          );
+        avatarUrl = publicUrl + `?t=${Date.now()}`;
+      }
+      // c) Último mensaje (si existe)
+      const { data: lastMsgs } = await supabase
+        .from('chat_messages')
+        .select('content, created_at')
+        .eq('tutorship_request_id', r.tutorship_request_id)
+        .order('created_at', { ascending: false })
+        .limit(1);
+      const lastMessage = lastMsgs.length ? lastMsgs[0].content : null;
+
+      return {
+        id:           r.tutorship_request_id,
+        status:       r.status,
+        subject:      r.tutorship_subject,
+        topic:        r.tutorship_topic,
+        mode:         r.tutorship_mode,
+        otherUser: {
+          userId: other.user_id,
+          name:   `${other.name} ${other.last_name}`.trim(),
+          avatar: avatarUrl
+        },
+        lastMessage
+      };
+    })
+  );
+
+  res.json({ chats: previews });
+});
+
+app.get('/chats/:id/messages', async (req, res) => {
+  const { data: messages } = await supabase
+    .from('chat_messages')
+    .select('*')
+    .eq('tutorship_request_id', req.params.id)
+    .order('created_at', { ascending: true });
+  res.json({ messages });
+});
+
+app.post('/chats/:id/messages', async (req, res) => {
+  const { sender_id, content } = req.body;
+  const reqId = parseInt(req.params.id,10);
+
+  const { data: reqRow } = await supabase
+    .from('tutorship_requests').select('status,tutor_id').eq('tutorship_request_id', reqId)
+    .maybeSingle();
+
+  if (reqRow.status === 'pending' && reqRow.tutor_id === sender_id) {
+    await supabase.from('tutorship_requests').update({ status: 'accepted', accepted_at: new Date().toISOString() })
+    .eq('tutorship_request_id', reqId);
+  }
+
+  const { data: msg, error: msgErr } = await supabase
+    .from('chat_messages')
+    .insert({ tutorship_request_id: reqId, sender_id, content })
+    .select('*')          
+    .single();
+
+  if (msgErr || !msg) {
+    console.error("Error inserting message:", msgErr);
+    return res.status(500).json({ error: msgErr?.message || "No message returned" });
+  }
+  res.json({ message: msg });
+});
+
+app.patch('/tutorship/requests/:id/close', async (req, res) => {
+  const { by } = req.body; 
+  const field = by === 'student' ? 'student_closed' : 'tutor_closed';
+  await supabase
+    .from('tutorship_requests')
+    .update({ [field]: true })
+    .eq('tutorship_request_id', req.params.id);
+
+  const { data: row } = await supabase
+    .from('tutorship_requests')
+    .select('student_closed,tutor_closed')
+    .eq('tutorship_request_id', req.params.id)
+    .single();
+  if (row.student_closed && row.tutor_closed) {
+    await supabase
+      .from('tutorship_requests')
+      .update({ status: 'finished' })
+      .eq('tutorship_request_id', req.params.id);
+  }
+
+  res.sendStatus(200);
+});
+
+app.post('/tutorship/requests/:id/rate', async (req, res) => {
+  const { rater_id, ratee_id, rating, comment } = req.body;
+  const { data } = await supabase
+    .from('session_ratings')
+    .insert({ tutorship_request_id: req.params.id, rater_id, ratee_id, rating, comment })
+    .single();
+  res.json({ rating: data });
 });
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

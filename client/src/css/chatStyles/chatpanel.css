@@ -175,3 +175,24 @@
     background: #163172;
     color: #f6f6f6;
 }
+
+.tutorship-rejected-notification {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff1f0;      
+    border: 1px solid #ff4d4f;      
+    border-radius: 12px;
+    padding: 32px 24px;
+    margin: 150px auto;
+    max-width: 480px;
+    box-shadow: 0 2px 8px rgba(255, 77, 79, 0.08);
+    text-align: center;
+}
+
+.tutorship-rejected-notification p {
+    color: #a8071a;               
+    font-size: 16px;
+    margin: 0;
+}

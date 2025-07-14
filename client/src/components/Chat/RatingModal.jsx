@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../css/chatStyles/ratingmodal.css";
 import { FaStar } from "react-icons/fa";
 
-function RatingModal({ isOpen, onClose, onSubmit }) {
+function RatingModal({ isOpen, onClose, onSubmit, loggedUserRole }) {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(null);
   const [comment, setComment] = useState("");
+  const navigate = useNavigate();
 
   if (!isOpen) return null;
 
@@ -15,6 +17,11 @@ function RatingModal({ isOpen, onClose, onSubmit }) {
     onSubmit({ rating, comment });
     onClose();
   };
+
+  function handleTutorPayment() {
+    console.log("Tutor payment logic goes here");
+    navigate("/payment-method");
+  }
 
   return (
     <div className="modal-overlay">
@@ -51,7 +58,12 @@ function RatingModal({ isOpen, onClose, onSubmit }) {
         />
 
         <div className="modal-buttons">
-          <button onClick={handleSubmit}>Enviar</button>
+          {loggedUserRole === "student" && (
+            <button onClick={handleTutorPayment}>Enviar</button>
+          )}
+          {loggedUserRole === "tutor" && (
+            <button onClick={handleSubmit}>Enviar</button>
+          )}
           <button onClick={onClose} className="cancel">Cancelar</button>
         </div>
       </div>

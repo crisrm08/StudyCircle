@@ -1,56 +1,63 @@
-import React, {useState}from "react";
+import React, { useState } from "react";
 import ChatPreview from "./ChatPreview";
 import "../../css/chatStyles/chatsidebar.css";
 
-function ChatSidebar({hideChatSidebar}) {
+function ChatSidebar({ chats = [], selectedChat, onSelectChat, loggedUserRole }) {
   const [isPendingActive, setPendingActive] = useState(true);
+
+  const displayedChats = chats.filter(chat => {
+    // pestaña "Pendientes"
+    if (isPendingActive) {
+      // estudiante ve pending, tutor ve accepted
+      return loggedUserRole === 'tutor'
+        ? chat.status === 'accepted'
+        : chat.status === 'pending' || chat.status === 'accepted';
+    }
+    // pestaña "Finalizados"
+    return chat.status === 'finished';
+  });
 
   return (
     <div className="chat-sidebar">
       <div className="filter-container">
-          <button
-            className={`filter-button ${isPendingActive ? 'active' : ''}`}
-            onClick={() => setPendingActive(true)}>
-            Pendientes
-          </button>
+        <button
+          className={`filter-button ${isPendingActive ? 'active' : ''}`}
+          onClick={() => setPendingActive(true)}
+        >
+          Pendientes
+        </button>
 
-          <div className="divider" />
+        <div className="divider" />
 
-          <button
-            className={`filter-button ${!isPendingActive ? 'active' : ''}`}
-            onClick={() => setPendingActive(false)}>
-            Finalizados
-          </button>
+        <button
+          className={`filter-button ${!isPendingActive ? 'active' : ''}`}
+          onClick={() => setPendingActive(false)}
+        >
+          Finalizados
+        </button>
       </div>
 
       <div className="chat-list">
-        <div className="chat-list___scroll">
-        <ChatPreview
-          name="Carlos Santana"
-          lastMessage="Gracias por la explicación, ahora sí entiendo"
-          image="https://randomuser.me/api/portraits/men/12.jpg"
-          handleOpenChat={hideChatSidebar}
-        />
-        <ChatPreview
-          name="Yaneris Morillo"
-          lastMessage="Ok"
-          image="https://randomuser.me/api/portraits/women/12.jpg"
-          handleOpenChat={hideChatSidebar}
-        />
-        <ChatPreview
-          name="Mariel Casas"
-          lastMessage="Muchas gracias"
-          image="https://randomuser.me/api/portraits/women/22.jpg"
-          handleOpenChat={hideChatSidebar}
-        />
-        <ChatPreview
-          name="Pedro Henríquez"
-          lastMessage="Le pondré 5 estrellas"
-          image="https://randomuser.me/api/portraits/men/16.jpg"
-          handleOpenChat={hideChatSidebar}
-        />
-  
-        </div>
+        {displayedChats.length === 0 ? (
+          loggedUserRole === "student" ? ( <div className="no-chats-message">No hay chats disponibles, solicita tutorías para abrir un chat con tutores</div>
+          ) : (
+            <div className="no-chats-message">No hay chats disponibles, espera a que los estudiantes soliciten tutorías</div>
+          )
+
+        ) : (
+          displayedChats.map(chat => (
+            <ChatPreview
+              key={chat.id}
+              id={chat.id}
+              name={chat.otherUser.name}
+              lastMessage={chat.lastMessage}
+              image={chat.otherUser.avatar}
+              status={chat.status}
+              handleOpenChat={() => onSelectChat(chat)}
+              loggedUserRole={loggedUserRole}
+            />
+          ))
+        )}
       </div>
     </div>
   );

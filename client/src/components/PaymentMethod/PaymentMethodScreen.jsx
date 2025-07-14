@@ -29,7 +29,7 @@ function PaymentMethodScreen() {
         <h1>Selecciona un método de pago</h1>
 
         <div className="info-box">
-            No te preocupes, el tutor no recibirá el pago hasta que hayas confirmado que recibiste la tutoría.
+            No te preocupes, puedes poner cualquier cosa, es solo una simulación del pago.
         </div>
 
         <div className="payment-content">
