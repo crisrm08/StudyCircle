@@ -26,7 +26,7 @@ function TimeSelection() {
 
   return (
     <div className="time-selection-wrapper">
-      <h1>Selecciona un día y una hora</h1>
+      <h1>Selecciona un día y una hora para la tutoría (opcional)</h1>
   
       <div className="time-selection-box">
         <div className="selector-card">
@@ -49,12 +49,20 @@ function TimeSelection() {
           <label>Hora deseada:</label>
           <div className="hour-picker">
             <button onClick={() => handleClick(-1)}>-</button>
-              <input type="number" value={hour} onChange={handleHourChange} min="0" max="23" placeholder="Cualquiera"/>
+            <input type="time" step="3600" min="00:00" max="23:00"
+              value={hour != null
+                ? String(hour).padStart(2, "0") + ":00"
+                : ""}
+              onChange={e => {
+                const h = parseInt(e.target.value.split(":")[0], 10);
+                setHour(isNaN(h) ? null : h);
+              }}
+              disabled={day === ""}
+            />
             <button onClick={() => handleClick(1)}>+</button>
           </div>
           <p>Hora seleccionada: <strong>{hour !== null ? hour : "Cualquiera"}</strong></p>
         </div>
-
       </div>
     </div>
   );

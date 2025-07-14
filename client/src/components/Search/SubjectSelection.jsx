@@ -39,7 +39,7 @@ function SubjectSelection() {
 
     return(
         <div className="subject-selection-container">
-            <h1>En qué asignatura necesitas ayuda?</h1>
+            <h1>¿En qué asignatura o tema necesitas ayuda?</h1>
 
             <div className="subjects-container">
                 {subjects.map((subj) => (

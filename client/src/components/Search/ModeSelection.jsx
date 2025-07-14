@@ -17,7 +17,7 @@ function ModeSelection() {
   }
     return (
         <div className="mode-selection-container">
-            <h1>Alguna modalidad preferida?</h1>
+            <h1>¿Alguna modalidad preferida?</h1>
             <div className="mode-buttons-container">
                 <button className={mode === "presencial" ? "active" : ""} name="🏫 Presencial" onClick={changeMode}> 🏫 Presencial </button>
                 <button className={mode === "virtual" ? "active" : ""} name="💻 Virtual" onClick={changeMode}> 💻 Virtual </button>
