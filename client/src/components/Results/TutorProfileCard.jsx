@@ -40,6 +40,7 @@ function TutorProfileCard({ id, image, name, occupation, description, pricePerHo
           {renderStars()} <span className="rating-number">({rating.toFixed(1)})</span>
         </div>
         <p className="tutor-description">{description}</p>
+        <p className="modal-price"> <strong>Precio por hora:</strong> RD${pricePerHour} </p>
       </div>
 
       <button className="tutor-button">Más información</button>
