@@ -9,7 +9,6 @@ import { MdKeyboardArrowLeft, MdHourglassEmpty } from "react-icons/md";
 import "../../css/chatStyles/chatpanel.css";
 import axios from "axios";
 
-
 function ChatPanel({ chat, onClose, loggedUserRole }) {
   const [messages, setMessages] = useState([]);
   const { user } = useUser();
@@ -54,11 +53,8 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
         sender_id: user.user_id,
         content: text
       })
-      .then(({ data }) => {
-        if (data.message) {
-          setMessages(prev => [...prev, data.message]);
-        }
-        setText("");
+      .then(() => {
+      setText("");
       })
       .catch(console.error);
   }
@@ -159,19 +155,24 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
             loggedUserRole={loggedUserRole}
           />
 
-          <div className="input-message-container">
+          <form
+            className="input-message-container"
+            onSubmit={e => {
+              e.preventDefault();   
+              sendMessage();         
+            }}
+          >
             <input
               type="text"
               placeholder="Escribe un mensaje…"
               value={text}
-              onChange={(e) => setText(e.target.value)}
+              onChange={e => setText(e.target.value)}
               disabled={chat.status !== "accepted"}
             />
-            <button className="send-button" onClick={sendMessage}>
-              <IoSend col/>
+            <button type="submit" className="send-button">
+              <IoSend />
             </button>
-          </div>
-         
+          </form>
         </>
       )}
     </div>

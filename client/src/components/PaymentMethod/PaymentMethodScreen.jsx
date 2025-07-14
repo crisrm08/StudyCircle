@@ -65,7 +65,7 @@ function PaymentMethodScreen() {
               )}
 
               {selectedMethod === "cash" && (
-                <p className="info">Se reservará tu tutoría. El pago se coordinará directamente con el tutor.</p>
+                <p className="info">El pago se coordinará directamente con el tutor</p>
               )}
 
               <button type="submit" className="pay-button">Pagar</button>
