@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { supabase } from "../Supabase/supabaseClient";
-import { FiUser, FiMessageSquare, FiClock, FiX, FiHome, FiSettings } from "react-icons/fi";
+import { FiUser, FiMessageSquare, FiClock, FiX, FiHome, FiSettings, FiSearch } from "react-icons/fi";
 import { MdOutlinePayment } from "react-icons/md";
 import { useUser } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -79,9 +79,9 @@ function StudentSidebar() {
           </div>
 
           <nav className="nav-links">
-              <h2 onClick={goToHome}><FiHome /> Home</h2>
+              <h2 onClick={goToHome}><FiSearch /> Búsqueda</h2>
               <h2 onClick={goToProfile}><FiUser /> Mi perfil</h2>
-              <h2 onClick={goToChat}><FiMessageSquare /> Mensajes</h2>
+              <h2 onClick={goToChat}><FiMessageSquare /> Chat</h2>
               <h2 onClick={goToSettings}> <FiSettings /> Ajustes</h2>
               <h2 onClick={goToHistory}><FiClock /> Historial</h2>
               <h2 onClick={goToPaymentSettings}><MdOutlinePayment /> Métodos de pago</h2>

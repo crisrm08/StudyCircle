@@ -15,13 +15,17 @@ function Header() {
     setIsSidebarClicked(true);
   }
 
+  function goToHome() {
+    navigate("/");
+  }
+
   function openLogIn() {
     navigate("/login");
   }
 
   return (
     <header>
-      <h1>StudyCircle</h1>
+      <h1 onClick={goToHome}>StudyCircle</h1>
        {user ? (
         <button className="logout-btn" title="Open Sidebar" onClick={openSidebar}> <FiMenu /> </button>
       ) : (

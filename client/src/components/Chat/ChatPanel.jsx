@@ -13,6 +13,7 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
   const [messages, setMessages] = useState([]);
   const { user } = useUser();
   const [text, setText] = useState("");
+  const [showToast, setShowToast] = useState(false);
   const isTutor = loggedUserRole === "tutor";
   const navigate = useNavigate();
 
@@ -60,7 +61,14 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
   }
 
   function cancelTutorshipRequest() {
-    // TODO (later): implementar cancelación de la solicitud
+    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/tutorship/request/${chat.id}`)
+    .then(() => {
+      setShowToast(true);
+                setTimeout(() => {
+                    setShowToast(false);
+                    navigate(0);
+                }, 2000);
+    });
   }
 
   function endSession() {
@@ -175,6 +183,7 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
           </form>
         </>
       )}
+      {showToast && <div className="toast">✅ Solicitud eliminada</div>}
     </div>
   );
 }

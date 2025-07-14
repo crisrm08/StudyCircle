@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from "../Supabase/supabaseClient";
 import { useUser } from "../../contexts/UserContext";
 import { LuEyeClosed } from "react-icons/lu";
@@ -13,6 +13,19 @@ function LoginScreen() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [visible, setVisible] = useState(false);
+    const [isMobile, setIsMobile] = useState(
+        window.innerWidth <= 768   
+    );
+
+    useEffect(() => {
+        const onResize = () => {
+        setIsMobile(window.innerWidth <= 768);
+        };
+
+        window.addEventListener("resize", onResize);
+        return () => window.removeEventListener("resize", onResize);
+    }, []);
+
 
     function handleEmailChange(event){
         setEmail(event.target.value);
@@ -69,7 +82,11 @@ function LoginScreen() {
                 <h1 className="title title-mobile">StudyCircle</h1>
 
                 <div className="login-forgotPWD-form">
-                    <h2>Inicia sesión en tu cuenta</h2>
+                    <h2>
+                        {isMobile
+                        ? "Inicia sesión o desliza hacia abajo y regístrate"
+                        : "Inicia sesión en tu cuenta"}
+                    </h2>
                     <h3>Inicia sesión o Regístrate con tu cuenta de google</h3>
 
                     <img src="images/googleLogo.webp" alt="google logo" onClick={handleGoogle} />
