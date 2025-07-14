@@ -820,7 +820,6 @@ app.get('/chats', async (req, res) => {
     .from('tutorship_requests')
     .select('*')
     .or(`tutor_id.eq.${userId},student_id.eq.${userId}`)
-    .neq('status','finished');
 
   const previews = await Promise.all(
     requests.map(async r => {

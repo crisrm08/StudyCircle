@@ -72,7 +72,7 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
   }
 
   function endSession() {
-    axios.patch(`${process.env.REACT_APP_BACKEND_URL}/${chat.id}/close`,{ by: isTutor ? "tutor" : "student" })
+    axios.patch(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}/close`,{ by: isTutor ? "tutor" : "student" })
     .catch(console.error);
   }
 
