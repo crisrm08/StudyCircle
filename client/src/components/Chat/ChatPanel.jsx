@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../Supabase/supabaseClient";
 import ChatMessage from "./ChatMessage";
 import SessionControlBar from "./SessionControlBar";
 import { IoSend } from "react-icons/io5";
@@ -7,6 +8,7 @@ import { useUser } from "../../contexts/UserContext";
 import { MdKeyboardArrowLeft, MdHourglassEmpty } from "react-icons/md";
 import "../../css/chatStyles/chatpanel.css";
 import axios from "axios";
+
 
 function ChatPanel({ chat, onClose, loggedUserRole }) {
   const [messages, setMessages] = useState([]);
@@ -16,11 +18,35 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!chat || !chat.id) return;
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/chats/${chat.id}/messages`)
+    if (!chat.id) return;
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/chats/${chat.id}/messages`)
       .then(({ data }) => setMessages(data.messages))
       .catch(console.error);
-  }, [chat]);
+  }, [chat.id]);
+
+  useEffect(() => {
+    if (!chat.id) return;
+    const subscription = supabase
+      .channel(`chat_messages:${chat.id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "chat_messages",
+          filter: `tutorship_request_id=eq.${chat.id}`,
+        },
+        payload => {
+          setMessages(prev => [...prev, payload.new]);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
+    };
+  }, [chat.id]);
 
   function sendMessage() {
     if (!text.trim()) return;
@@ -36,7 +62,6 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
       })
       .catch(console.error);
   }
-
 
   function cancelTutorshipRequest() {
     // TODO (later): implementar cancelación de la solicitud
