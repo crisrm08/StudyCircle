@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../css/chatStyles/sessioncontrolbar.css";
 import RatingModal from "./RatingModal";
@@ -7,6 +8,7 @@ function SessionControlBar({ chat, onEnd, onRate, loggedUserRole }) {
   const [hasRequestedEnd, setHasRequestedEnd] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [bothParticipantsReady, setBothParticipantsReady] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setHasRequestedEnd(false);
@@ -63,7 +65,7 @@ function SessionControlBar({ chat, onEnd, onRate, loggedUserRole }) {
   }
 
   function handleUserReport() {
-    console.log("Report user not implemented yet");
+    navigate("/report");
   }
 
   return (

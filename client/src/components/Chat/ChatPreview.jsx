@@ -8,7 +8,7 @@ function ChatPreview({ name, lastMessage, image, handleOpenChat, loggedUserRole}
   loggedUserRole = "tutor";
 
   function handleUserReport() {
-    console.log("not implemented yet");
+    navigate("/report");
   }
 
   function requestNewTutorship() {
