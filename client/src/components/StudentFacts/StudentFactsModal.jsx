@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaAngleLeft } from "react-icons/fa";
 import axios from "axios";
@@ -7,10 +7,11 @@ import "../../css/studentProfileStyles/modal.css";
 function StudentFactsModal({student}) {
   const {  name, last_name, institution, degree, strengths, weaknesses, rating, description, image } = student;
   const navigate = useNavigate();
+  const [reportsCount, setReportsCount] = useState(0);
 
-  function backToHome() {
+  function backToHome(){
     navigate(-1);
-  }
+  };
 
   function renderStars(){
     const filledStars = Math.floor(rating);
@@ -35,6 +36,16 @@ function StudentFactsModal({student}) {
 
   return (
     <div className="modal-content">
+      <div
+        className={`reports-indicator ${reportsCount > 0 ? "danger" : "safe"}`}
+        title={
+          reportsCount === 0
+            ? "Este estudiante nunca ha sido reportado"
+            : `Este estudiante ha sido reportado ${reportsCount} ${reportsCount === 1 ? "vez" : "veces"}`
+        }
+      >
+        {reportsCount === 0 ? "✔️" : "⚠️"} {reportsCount} reportes
+      </div>
 
       <img src={image} alt={`Foto de ${name}`} style={{width: 100, height: 100 }} className="modal-image"/>
 

@@ -5,6 +5,7 @@ import "../../css/studentProfileStyles/modal.css";
 
 function Modal({ tutor }) {
   const { image, name, last_name, institution, occupation, academicLevel, description, pricePerHour, rating, specialties } = tutor;
+  const [reportsCount, setReportsCount] = useState(0);
   const navigate = useNavigate();
 
   function renderStars(){
@@ -30,10 +31,20 @@ function Modal({ tutor }) {
 
   function goToEdit() {
     navigate("/edit-tutor-profile");
-  }
+  };
  
   return (
     <div className="modal-content">
+      <div
+        className={`reports-indicator ${reportsCount > 0 ? "danger" : "safe"}`}
+        title={
+          reportsCount === 0
+            ? "Este tutor nunca ha sido reportado"
+            : `Este tutor ha sido reportado ${reportsCount} ${reportsCount === 1 ? "vez" : "veces"}`
+        }
+      >
+        {reportsCount === 0 ? "✔️" : "⚠️"} {reportsCount} reportes
+      </div>
 
       <img src={image} alt={`Foto de ${name}`} className="modal-image" />
       <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>

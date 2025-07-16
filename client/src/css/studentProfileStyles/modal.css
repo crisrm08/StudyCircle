@@ -105,6 +105,26 @@
   color: #163172;
 }
 
+.reports-indicator {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.reports-indicator.safe {
+  background-color: #4caf50;
+}
+
+.reports-indicator.danger {
+  background-color: #e53935; 
+}
+
 
 /************************************************************************ Student Modal ***************************************************/
 
