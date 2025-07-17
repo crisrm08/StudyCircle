@@ -13,7 +13,8 @@ import "../../css/reportscreen.css";
 function ReportScreen() {
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [description, setDescription] = useState("");
-  const [images, setImages] = useState([]);
+  const [files, setFiles] = useState([]);
+  const [previews, setPreviews] = useState([]);
   const [ showToast, setShowToast ] = useState(false)
   const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
   const { id } = useParams();
@@ -39,33 +40,39 @@ function ReportScreen() {
   ];
 
   function handleFileChange(e) {
-    const files = Array.from(e.target.files);
-    const previews = files.map(file => URL.createObjectURL(file));
-    setImages(previews);
-  };
+    const fileList = Array.from(e.target.files);
+    setFiles(fileList);
+    setPreviews(fileList.map(f => URL.createObjectURL(f)));
+  }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!selectedIssue || !description) {
-      alert("Por favor, completa todos los campos");
+      alert('Por favor completa todos los campos');
+      return;
     }
-    else{
-      console.log("received id:", id);
-      
-      e.preventDefault();
-      axios.post(`http://localhost:5000/user/report/${id}`, {
-        reporter_user_id: user.user_id,
-        report_motive: selectedIssue.label,
-        report_description: description,
-        images
-      })
+    const form = new FormData();
+    form.append('reporter_user_id', user.user_id);
+    form.append('report_motive', selectedIssue.value);
+    form.append('report_description', description);
+    files.forEach(file => form.append('evidence', file));
+
+    try {
+      await axios.post(
+        `http://localhost:5000/user/report/${id}`,
+        form,
+        { headers: { 'Content-Type': 'multipart/form-data' } }
+      );
       setShowToast(true);
       setTimeout(() => {
           setShowToast(false);
           navigate("/chat");
       }, 2000);
+    } catch (err) {
+      console.error('Error sending report:', err.response || err);
+      alert('Falló el envío del reporte');
     }
-  };
+  }
 
   if (!user) return null; 
     
@@ -94,9 +101,9 @@ function ReportScreen() {
             <input type="file" accept="image/*" multiple onChange={handleFileChange}/>
 
             <div className="image-preview">
-            {images.map((src, index) => (
-                <img key={index} src={src} alt="preview" />
-            ))}
+                {previews.map((src, idx) => (
+                  <img key={idx} src={src} alt="preview" width={100} />
+                ))}
             </div>
             <button type="submit" className="send-button">Enviar reporte</button>
         </form>
