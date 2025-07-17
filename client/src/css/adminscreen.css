@@ -1,0 +1,136 @@
+.admin-screen {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.admin-title {
+  color: #1E56A0;
+  font-size: 28px;
+  margin-bottom: 25px;
+}
+
+.report-card {
+  width: 100%;
+  max-width: 900px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.report-card header h2 {
+  color: #F6F6F6;
+}
+
+.report-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.report-details p {
+  margin: 8px 0;
+  font-size: 15px;
+  color: #333;
+}
+
+.report-evidence h3 {
+  color: #1E56A0;
+  margin-bottom: 10px;
+}
+
+.evidence-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.evidence-grid img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #D6E4F0;
+}
+
+.report-footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.nav-buttons button,
+.admin-actions button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.nav-buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 20px
+}
+
+.nav-buttons button {
+  background-color: #1E56A0;
+  color: #fff;
+}
+
+.nav-buttons button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.nav-buttons button:hover:not(:disabled) {
+  background-color: #163172;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.admin-actions .danger {
+  background-color: #e53935;
+  color: #fff;
+}
+
+.admin-actions .danger:hover {
+  background-color: #b71c1c;
+}
+
+.admin-actions .neutral {
+  background-color: #D6E4F0;
+  color: #163172;
+}
+
+.admin-actions .neutral:hover {
+  background-color: #a5c3e6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .report-body {
+    grid-template-columns: 1fr;
+  }
+
+  .evidence-grid img {
+    width: 100%;
+    max-width: 250px;
+  }
+
+  .report-footer {
+    flex-direction: column;
+    align-items: center;
+  }
+}
