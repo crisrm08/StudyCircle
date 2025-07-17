@@ -938,4 +938,37 @@ app.post('/tutorship/requests/:id/rate', async (req, res) => {
   res.json({ rating: data });
 });
 
+app.post('/user/report/:id/', async (req, res) => {
+  const { reporter_user_id, report_motive, report_description } = req.body;
+  const { data, error } = await supabase.from('user_reports')
+    .insert({ reported_user_id: req.params.id, reporter_user_id, report_motive, report_description }).single();
+
+  if (error) {
+    console.error("Error reporting user:", error);
+    return res.status(500).json({ error: error.message });
+  }
+
+  const { data: userRec, error: fetchErr } = await supabase
+  .from('users').select('report_count').eq('user_id', req.params.id).single();
+
+  if (fetchErr) {
+    console.error("Error reading report_count:", fetchErr);
+    return res.status(500).json({ error: fetchErr.message });
+  }
+
+  const current = Number(userRec?.report_count) || 0;
+  const newCount = current + 1;
+
+  const { data: updateData, error: updateErr } = await supabase
+    .from('users').update({ report_count: newCount }).eq('user_id', req.params.id);
+
+  if (updateErr) {
+    console.error("Error updating report_count:", updateErr);
+    return res.status(500).json({ error: updateErr.message });
+  }
+
+  console.log("report details: " + data);
+  res.json({ report: data });
+});
+
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

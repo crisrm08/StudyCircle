@@ -2,13 +2,13 @@ import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/chatStyles/chatpreview.css";
 
-function ChatPreview({ name, lastMessage, image, handleOpenChat, loggedUserRole}) {
+function ChatPreview({ name, lastMessage, image, handleOpenChat, loggedUserRole, otherUserId }) {
   const [isTutorshipOver, setIsTutorshipOver] = useState(true);
   const navigate = useNavigate();
   loggedUserRole = "tutor";
 
   function handleUserReport() {
-    navigate("/report");
+    navigate(`/report/${otherUserId}`);
   }
 
   function requestNewTutorship() {

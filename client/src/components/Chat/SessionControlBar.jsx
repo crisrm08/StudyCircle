@@ -4,7 +4,7 @@ import axios from "axios";
 import "../../css/chatStyles/sessioncontrolbar.css";
 import RatingModal from "./RatingModal";
 
-function SessionControlBar({ chat, onEnd, onRate, loggedUserRole }) {
+function SessionControlBar({ chat, onEnd, onRate, loggedUserRole, otherUserId }) {
   const [hasRequestedEnd, setHasRequestedEnd] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [bothParticipantsReady, setBothParticipantsReady] = useState(false);
@@ -65,7 +65,7 @@ function SessionControlBar({ chat, onEnd, onRate, loggedUserRole }) {
   }
 
   function handleUserReport() {
-    navigate("/report");
+    navigate(`/report/${otherUserId}`);
   }
 
   return (

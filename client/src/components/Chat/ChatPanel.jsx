@@ -161,6 +161,7 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
             onEnd={endSession}
             onRate={handleRating}
             loggedUserRole={loggedUserRole}
+            otherUserId={chat.otherUser.userId}
           />
 
           <form

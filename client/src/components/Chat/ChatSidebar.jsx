@@ -50,6 +50,7 @@ function ChatSidebar({ chats = [], selectedChat, onSelectChat, loggedUserRole })
               key={chat.id}
               id={chat.id}
               name={chat.otherUser.name}
+              otherUserId={chat.otherUser.userId}
               lastMessage={chat.lastMessage}
               image={chat.otherUser.avatar}
               status={chat.status}

@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useParams } from "react-router-dom";
 import Select from "react-select";
 import Header from "./Header";
 import { useUser } from "../../contexts/UserContext";
@@ -6,6 +7,7 @@ import { SidebarContext } from "../../contexts/SidebarContext";
 import TutorSidebar from "./TutorSidebar";
 import StudentSidebar from "./StudentSidebar";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../../css/reportscreen.css";
 
 function ReportScreen() {
@@ -14,6 +16,7 @@ function ReportScreen() {
   const [images, setImages] = useState([]);
   const [ showToast, setShowToast ] = useState(false)
   const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
+  const { id } = useParams();
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -47,7 +50,15 @@ function ReportScreen() {
       alert("Por favor, completa todos los campos");
     }
     else{
+      console.log("received id:", id);
+      
       e.preventDefault();
+      axios.post(`http://localhost:5000/user/report/${id}`, {
+        reporter_user_id: user.user_id,
+        report_motive: selectedIssue.label,
+        report_description: description,
+        images
+      })
       setShowToast(true);
       setTimeout(() => {
           setShowToast(false);
