@@ -37,9 +37,10 @@ function StudentModal() {
         strengths: userStrongTopics,
         weaknesses: userWeakTopics,
         rating: user.rating_avg, 
-        description: user.short_description
+        description: user.short_description,
+        reports: user.report_count
       });
-
+      setReportsCount(student.reports);
     }
   }, [user, imageData, userStrongTopics, userWeakTopics]);
 

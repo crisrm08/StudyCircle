@@ -583,7 +583,7 @@ app.get('/tutors/:id', async (req, res) => {
     if (!tutor_id) return res.status(400).json({ error: "tutor_id inválido" });
 
     const { data: user, error: userErr } = await supabase
-      .from('users').select(`user_id, name, last_name, institution, occupation, academic_level, short_description, full_description, hourly_fee, rating_avg, profile_image_url`)
+      .from('users').select(`user_id, name, last_name, institution, occupation, academic_level, short_description, full_description, hourly_fee, rating_avg, report_count, profile_image_url`)
       .eq('profile_type','tutor').eq('user_id', tutor_id).maybeSingle();
     if (userErr) throw userErr;
     if (!user) return res.status(404).json({ error: "Tutor no encontrado" });
@@ -622,6 +622,7 @@ app.get('/tutors/:id', async (req, res) => {
         pricePerHour: user.hourly_fee,
         rating: user.rating_avg,
         image: imageUrl,
+        reports: user.report_count,
         specialties: topicList.map(t => t.topic_name),
         availability: avail.map(a => ({
           day:   a.day_of_week,
@@ -641,34 +642,25 @@ app.get('/students/:id', async (req, res) => {
     const student_id = parseInt(req.params.id, 10);
     if (!student_id) return res.status(400).json({ error: "student_id inválido" });
 
-    const { data: user, error: userErr } = await supabase
-      .from('users')
-      .select(`user_id, name, last_name, institution, career, short_description,full_description, rating_avg, profile_image_url`)
-      .eq('profile_type','student')
-      .eq('user_id', student_id)
-      .maybeSingle();
+    const { data: user, error: userErr } = await supabase.from('users')
+      .select(`user_id, name, last_name, institution, career, short_description, full_description, rating_avg, report_count, profile_image_url`)
+      .eq('profile_type','student').eq('user_id', student_id).maybeSingle();
     if (userErr) throw userErr;
     if (!user) return res.status(404).json({ error: "Estudiante no encontrado" });
 
     const { data: topics, error: topicsErr } = await supabase
-      .from('user_topics')
-      .select('topic_id, type')
-      .eq('user_id', student_id);
+      .from('user_topics').select('topic_id, type').eq('user_id', student_id);
     if (topicsErr) throw topicsErr;
 
     const strongIds = topics.filter(t => t.type === 'strong').map(t => t.topic_id);
     const weakIds   = topics.filter(t => t.type === 'weak').map(t => t.topic_id);
   
-    const { data: topicList } = await supabase
-      .from('topics')
-      .select('topic_id, topic_name')
-      .in('topic_id', [...strongIds, ...weakIds]);
+    const { data: topicList } = await supabase.from('topics').select('topic_id, topic_name').in('topic_id', [...strongIds, ...weakIds]);
     const nameMap = Object.fromEntries(topicList.map(t => [t.topic_id, t.topic_name]));
 
     const strengths = strongIds.map(id => nameMap[id]).filter(Boolean);
     const weaknesses = weakIds.map(id => nameMap[id]).filter(Boolean);
 
-  
     let imageUrl;
     if (user.profile_image_url && /^https?:\/\//.test(user.profile_image_url)) {
       imageUrl = user.profile_image_url;
@@ -689,6 +681,7 @@ app.get('/students/:id', async (req, res) => {
         weaknesses,
         rating: user.rating_avg,
         description: user.full_description,
+        reports: user.report_count,
         image: imageUrl
       }
     });

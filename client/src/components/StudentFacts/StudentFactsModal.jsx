@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { FaAngleLeft } from "react-icons/fa";
 import axios from "axios";
 import "../../css/studentProfileStyles/modal.css";
+import { useEffect } from "react";
 
 function StudentFactsModal({student}) {
-  const {  name, last_name, institution, degree, strengths, weaknesses, rating, description, image } = student;
+  const { name, last_name, institution, degree, strengths, weaknesses, rating, description, reports, image } = student;
   const navigate = useNavigate();
-  const [reportsCount, setReportsCount] = useState(0);
+  const [reportsCount, setReportsCount] = useState(reports);
 
   function backToHome(){
     navigate(-1);

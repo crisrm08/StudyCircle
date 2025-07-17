@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdEdit } from "react-icons/md";
 import "../../css/studentProfileStyles/modal.css";
+import { useEffect } from "react";
 
 function Modal({ tutor }) {
-  const { image, name, last_name, institution, occupation, academicLevel, description, pricePerHour, rating, specialties } = tutor;
-  const [reportsCount, setReportsCount] = useState(0);
+  const { image, name, last_name, institution, occupation, academicLevel, description, pricePerHour, rating, reports, specialties } = tutor;
+  const [reportsCount, setReportsCount] = useState(reports);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    setReportsCount(reports);
+  })
   function renderStars(){
     const filledStars = Math.floor(rating);
     const hasHalfStar = rating - filledStars >= 0.5;

@@ -5,9 +5,9 @@ import Request from "../TutorFacts/Request";
 import "../../css/studentProfileStyles/modal.css";
 
 function TutorFactsModal({ tutor }) {
-  const { id, image, name, last_name, institution, occupation, academicLevel, description, pricePerHour, rating, specialties } = tutor;
+  const { id, image, name, last_name, institution, occupation, academicLevel, description, pricePerHour, rating, reports, specialties } = tutor;
   const [ renderRequest, setRenderRequest ] = useState(false);
-  const [reportsCount, setReportsCount] = useState(0);
+  const [reportsCount, setReportsCount] = useState(reports);
   const navigate = useNavigate();
 
   function renderStars(){
