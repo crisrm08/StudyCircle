@@ -17,7 +17,7 @@ function ReportScreen() {
   const [previews, setPreviews] = useState([]);
   const [ showToast, setShowToast ] = useState(false)
   const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
-  const { id } = useParams();
+  const { id, tutorship } = useParams();
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -55,12 +55,11 @@ function ReportScreen() {
     form.append('reporter_user_id', user.user_id);
     form.append('report_motive', selectedIssue.label);
     form.append('report_description', description);
+    form.append('tutorship_request_id', tutorship);
     files.forEach(file => form.append('evidence', file));
 
     try {
-      await axios.post(
-        `http://localhost:5000/user/report/${id}`,
-        form,
+      await axios.post(`http://localhost:5000/user/report/${id}`,form,
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );
       setShowToast(true);

@@ -56,7 +56,7 @@ function App() {
         { path: 'student-history', element: <StudentHistoryScreen />},
         { path: 'payment-method', element: <PaymentMethodScreen />},
         { path: 'tutor-payment-settings', element: <TutorPaymentScreen /> },
-        { path: 'report/:id', element: <ReportScreen />},
+        { path: 'report/:tutorship/:id', element: <ReportScreen />},
         { path: 'admin-reports', element: <AdminScreen />}
       ]
     }

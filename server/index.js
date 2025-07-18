@@ -934,7 +934,7 @@ app.post('/tutorship/requests/:id/rate', async (req, res) => {
 app.post('/user/report/:id',upload.array('evidence', 5),async (req, res) => {
     try {
       const reportedId = parseInt(req.params.id, 10);
-      const { reporter_user_id,report_motive,report_description} = req.body;
+      const { reporter_user_id,report_motive,report_description,tutorship_request_id} = req.body;
 
       const { data: report, error: insertErr } = await supabase.from('user_reports')
         .insert({reported_user_id: reportedId, reporter_user_id,report_motive,report_description})
@@ -944,7 +944,7 @@ app.post('/user/report/:id',upload.array('evidence', 5),async (req, res) => {
       const paths = [];
       for (const file of req.files) {
         const ext = file.originalname.split('.').pop();
-        const filePath = `reported_user_${reportedId}/${Date.now()}_${file.originalname}`;
+        const filePath = `tutorship_reported_${tutorship_request_id}/${reportedId}/${Date.now()}_${file.originalname}`;
         const { error: storageErr } = await supabase.storage
           .from('report.evidence').upload(filePath, file.buffer, {
             upsert: true,

@@ -47,6 +47,8 @@ function SessionControlBar({ chat, onEnd, onRate, loggedUserRole, otherUserId })
   }, [hasRequestedEnd, chat.id]);
 
   useEffect(() => {
+    console.log(chat.id);
+    
     if (bothParticipantsReady) {
       setShowRatingModal(true);
     }
@@ -65,7 +67,7 @@ function SessionControlBar({ chat, onEnd, onRate, loggedUserRole, otherUserId })
   }
 
   function handleUserReport() {
-    navigate(`/report/${otherUserId}`);
+    navigate(`/report/${chat.id}/${otherUserId}`);
   }
 
   return (
