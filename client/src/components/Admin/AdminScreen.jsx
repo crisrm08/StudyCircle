@@ -1,13 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Header from "../Common/Header";
+import AdminSidebar from "../Common/AdminSidebar";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../../contexts/UserContext";
+import { SidebarContext } from "../../contexts/SidebarContext";
 import "../../css/adminscreen.css";
 
 function AdminScreen() {
   const [reports, setReports] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { user, loading } = useUser();
+  const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Simulación de datos, más adelante usarás fetch
     const dummyReports = [
       {
         report_id: 1,
@@ -33,6 +39,18 @@ function AdminScreen() {
     ];
     setReports(dummyReports);
   }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      if (!user) {
+        navigate("/login");
+      } else if (user.profile_type !== "admin") {
+        navigate("/login");
+      }
+    }
+  }, [user, loading, navigate]);
+
+  if (loading) return null;
 
   const currentReport = reports[currentIndex];
 
@@ -87,6 +105,12 @@ function AdminScreen() {
             </div>
         </div>
         </div>
+        {isSidebarClicked && (
+          <>
+            <div className="overlay" onClick={() => setIsSidebarClicked(false)} />
+            <AdminSidebar />
+          </>
+        )}
     </div>
   );
 }

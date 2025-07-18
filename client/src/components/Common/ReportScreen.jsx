@@ -53,7 +53,7 @@ function ReportScreen() {
     }
     const form = new FormData();
     form.append('reporter_user_id', user.user_id);
-    form.append('report_motive', selectedIssue.value);
+    form.append('report_motive', selectedIssue.label);
     form.append('report_description', description);
     files.forEach(file => form.append('evidence', file));
 

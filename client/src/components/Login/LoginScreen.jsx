@@ -49,8 +49,11 @@ function LoginScreen() {
         setUser(user);
 
         if (user.profile_type === "student") {
-            navigate("/");              
-        } else {
+            navigate("/");  
+        } else if (user.profile_type === "admin") {
+            navigate("/admin-reports");
+        }            
+        else {
             navigate("/tutor-home-page"); 
         }
     }

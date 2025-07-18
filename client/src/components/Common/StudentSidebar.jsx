@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { supabase } from "../Supabase/supabaseClient";
-import { FiUser, FiMessageSquare, FiClock, FiX, FiHome, FiSettings, FiSearch } from "react-icons/fi";
+import { FiUser, FiMessageSquare, FiClock, FiX, FiSettings, FiSearch } from "react-icons/fi";
 import { MdOutlinePayment } from "react-icons/md";
 import { useUser } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
