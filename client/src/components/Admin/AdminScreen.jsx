@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import Header from "../Common/Header";
-import AdminSidebar from "../Common/AdminSidebar";
+import AdminSidebar from "./AdminSidebar";
 import { useNavigate } from "react-router-dom";
+import LoadingScreen from "../Common/LoadingScreen"
 import { useUser } from "../../contexts/UserContext";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import "../../css/adminscreen.css";
@@ -14,30 +15,12 @@ function AdminScreen() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const dummyReports = [
-      {
-        report_id: 1,
-        reported_user_id: 12,
-        reporter_user_id: 45,
-        report_motive: "El tutor intentó causarme daño físico, emocional o económico",
-        report_description: "El tutor usó lenguaje agresivo y me amenazó durante la tutoría.",
-        evidence: [
-          "https://via.placeholder.com/200",
-          "https://via.placeholder.com/201",
-          "https://via.placeholder.com/200",
-          "https://via.placeholder.com/201"
-        ]
-      },
-      {
-        report_id: 2,
-        reported_user_id: 18,
-        reporter_user_id: 60,
-        report_motive: "Estudiante evitó el pago de tutoría",
-        report_description: "El estudiante no realizó el pago acordado después de la tutoría.",
-        evidence: []
-      }
-    ];
-    setReports(dummyReports);
+    async function loadReports() {
+      const resp = await fetch('http://localhost:5000/user/reports');
+      const data = await resp.json();
+      setReports(data);
+    }
+    loadReports();
   }, []);
 
   useEffect(() => {
@@ -62,7 +45,7 @@ function AdminScreen() {
     if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
   };
 
-  if (!currentReport) return <div className="admin-screen">Cargando reporte...</div>;
+  if (!currentReport) return <LoadingScreen />
 
   return (
     <div>

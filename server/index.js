@@ -934,31 +934,31 @@ app.post('/tutorship/requests/:id/rate', async (req, res) => {
 app.post('/user/report/:id',upload.array('evidence', 5),async (req, res) => {
     try {
       const reportedId = parseInt(req.params.id, 10);
-      const { reporter_user_id,report_motive,report_description,tutorship_request_id} = req.body;
+      const { reporter_user_id, report_motive, report_description, tutorship_request_id } = req.body;
 
       const { data: report, error: insertErr } = await supabase.from('user_reports')
-        .insert({reported_user_id: reportedId, reporter_user_id,report_motive,report_description})
+        .insert({ reported_user_id: reportedId, reporter_user_id,report_motive,report_description})
+        .select()
         .single();
       if (insertErr) throw insertErr;
 
       const paths = [];
       for (const file of req.files) {
-        const ext = file.originalname.split('.').pop();
         const filePath = `tutorship_reported_${tutorship_request_id}/${reportedId}/${Date.now()}_${file.originalname}`;
-        const { error: storageErr } = await supabase.storage
-          .from('report.evidence').upload(filePath, file.buffer, {
-            upsert: true,
-            contentType: file.mimetype
-          });
+        const { error: storageErr } = await supabase.storage.from('report.evidence')
+          .upload(filePath, file.buffer, {upsert: true, contentType: file.mimetype});
         if (storageErr) throw storageErr;
         paths.push(filePath);
       }
 
+      const { error: updateErr } = await supabase.from('user_reports')
+        .update({ evidence_paths: paths }).eq('report_id', report.report_id);
+      if (updateErr) throw updateErr;
+
       const { data: userRec } = await supabase.from('users')
       .select('report_count').eq('user_id', reportedId).single();
       const current = Number(userRec?.report_count) || 0;
-      await supabase.from('users')
-        .update({ report_count: current + 1 }).eq('user_id', reportedId);
+      await supabase.from('users').update({ report_count: current + 1 }).eq('user_id', reportedId);
 
       res.json({ report, evidence: paths });
     } catch (err) {
@@ -967,5 +967,26 @@ app.post('/user/report/:id',upload.array('evidence', 5),async (req, res) => {
     }
   }
 );
+
+app.get('/user/reports', async (_req, res) => {
+  const { data: reports, error } = await supabase
+    .from('user_reports')
+    .select(`report_id, reported_user_id, reporter_user_id,
+             report_motive, report_description, evidence_paths`)
+    .order('report_id', { ascending: true });
+  if (error) throw error;
+
+  const bucket = supabase.storage.from('report.evidence');
+  const reportsWithUrls = reports.map(r => ({
+    ...r,
+    evidence: (r.evidence_paths || []).map(path => {
+      const { data: { publicUrl } } = bucket.getPublicUrl(path);
+      return publicUrl;
+    })
+  }));
+
+  res.json(reportsWithUrls);
+});
+
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
