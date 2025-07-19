@@ -988,5 +988,39 @@ app.get('/user/reports', async (_req, res) => {
   res.json(reportsWithUrls);
 });
 
+app.delete('/user/report/:id', async (req, res) => {
+  const reportId = parseInt(req.params.id, 10);
+
+  try {
+    const { data: report, error: fetchErr } = await supabase.from('user_reports')
+      .select('reported_user_id, evidence_paths').eq('report_id', reportId).single();
+    if (fetchErr) throw fetchErr;
+    if (!report) return res.status(404).json({ error: 'Reporte no encontrado' });
+
+    const { reported_user_id, evidence_paths = [] } = report;
+    if (evidence_paths.length > 0) {
+      const { error: delErr } = await supabase.storage.from('report.evidence').remove(evidence_paths);
+      if (delErr) {
+        console.warn('No se pudieron borrar todas las evidencias:', delErr);
+      }
+    }
+
+    const { error: deleteErr } = await supabase.from('user_reports').delete().eq('report_id', reportId);
+    if (deleteErr) throw deleteErr;
+
+    const { data: userRow, error: userFetchErr } = await supabase.from('users').select('report_count')
+      .eq('user_id', reported_user_id).single();
+    if (userFetchErr) throw userFetchErr;
+    const newCount = Math.max(0, (userRow.report_count || 0) - 1);
+
+    const { error: userUpdateErr } = await supabase.from('users').update({ report_count: newCount }).eq('user_id', reported_user_id);
+    if (userUpdateErr) throw userUpdateErr;
+
+    res.json({ message: 'Reporte descartado', newReportCount: newCount });
+  } catch (err) {
+    console.error('Error al descartar reporte:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

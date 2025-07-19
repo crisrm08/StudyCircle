@@ -45,6 +45,28 @@ function AdminScreen() {
     if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
   };
 
+  const handleDiscard = async () => {
+    const id = currentReport.report_id;
+    try {
+      const resp = await fetch(`http://localhost:5000/user/report/${id}`, {
+        method: 'DELETE'
+      });
+      const body = await resp.json();
+      if (!resp.ok) throw new Error(body.error || 'Error del servidor');
+
+      setReports(prev => {
+        const updated = prev.filter(r => r.report_id !== id);
+        if (currentIndex >= updated.length && updated.length > 0) {
+          setCurrentIndex(updated.length - 1);
+        }
+        return updated;
+      });
+    } catch (err) {
+      console.log( 'No se pudo descartar: ' + err.message);
+    }
+  };
+
+
   if (!currentReport) return <LoadingScreen />
 
   return (
@@ -83,7 +105,7 @@ function AdminScreen() {
             </div>
             <div className="admin-actions">
                 <button className="danger">Suspender Usuario</button>
-                <button className="neutral">Descartar Reporte</button>
+                <button className="neutral"  onClick={handleDiscard}>Descartar Reporte</button>
             </div>
             </div>
         </div>
