@@ -17,7 +17,7 @@ function AdminScreen() {
 
   useEffect(() => {
     async function loadReports() {
-      const resp = await fetch('http://localhost:5000/user/reports');
+      const resp = await fetch('${process.env.REACT_APP_BACKEND_URL}/user/reports');
       const data = await resp.json();
       setReports(data);
     }
@@ -51,7 +51,7 @@ function AdminScreen() {
   const handleDiscard = async () => {
     const id = currentReport.report_id;
     try {
-      const resp = await fetch(`http://localhost:5000/user/report/${id}`, {
+      const resp = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/report/${id}`, {
         method: 'DELETE'
       });
       const body = await resp.json();
@@ -70,7 +70,7 @@ function AdminScreen() {
   };
 
   function handleSuspend() {
-    axios.patch(`http://localhost:5000/user/suspend/${currentReport.reported_user_id}`)
+    axios.patch(`${process.env.REACT_APP_BACKEND_URL}/user/suspend/${currentReport.reported_user_id}`)
       .then(() => {
         setReports(reports.filter((_, index) => index !== currentIndex));
       });

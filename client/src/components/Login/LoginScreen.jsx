@@ -61,7 +61,7 @@ function LoginScreen() {
     async function handleGoogle() {
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: "google",
-         options: { redirectTo: `${window.location.origin}/pick-role` }
+            options: { redirectTo: window.location.origin }
         });
         if (error) console.error("OAuth error:", error.message);
     }
