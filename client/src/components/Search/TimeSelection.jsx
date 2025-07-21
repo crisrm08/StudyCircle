@@ -4,19 +4,11 @@ import "../../css/searchStyles/timeselection.css";
 
 function TimeSelection() {
   const {hour, setHour, day, setDay} = useContext(TimeContext); 
- 
-
-  function handleHourChange (event){
-    let newHour = parseInt(event.target.value, 10);
-    if (newHour < 0) newHour = 0;
-    if (newHour > 23) newHour = 23;
-    setHour(newHour);
-  };
 
   function handleClick (increment){
     let newHour = hour + parseInt(increment);
-    if (newHour < 0) newHour = 23;
-    if (newHour > 23) newHour = 0;
+    if (newHour < 8) newHour = 8;
+    if (newHour > 22) newHour = 22;
     setHour(newHour);
   };
 
@@ -47,20 +39,25 @@ function TimeSelection() {
   
         <div className="selector-card">
           <label>Hora deseada:</label>
-          <div className="hour-picker">
-            <button onClick={() => handleClick(-1)}>-</button>
-            <input type="time" step="3600" min="00:00" max="23:00"
-              value={hour != null
-                ? String(hour).padStart(2, "0") + ":00"
-                : ""}
-              onChange={e => {
-                const h = parseInt(e.target.value.split(":")[0], 10);
-                setHour(isNaN(h) ? null : h);
-              }}
-              disabled={day === ""}
-            />
-            <button onClick={() => handleClick(1)}>+</button>
-          </div>
+         <div className="hour-picker">
+          <button onClick={() => handleClick(-1)}>-</button>
+
+          <select
+            value={hour != null ? hour : ""}
+            onChange={e => setHour(parseInt(e.target.value, 10))}
+            disabled={day === ""}
+          >
+            <option value="" disabled hidden>--:--</option>
+            {Array.from({ length: 15 }, (_, i) => i + 8).map(h => (
+              <option key={h} value={h}>
+                {String(h).padStart(2, "0")}:00
+              </option>
+            ))}
+          </select>
+
+          <button onClick={() => handleClick(1)}>+</button>
+        </div>
+
           <p>Hora seleccionada: <strong>{hour !== null ? hour : "Cualquiera"}</strong></p>
         </div>
       </div>

@@ -43,6 +43,7 @@ function TutorProfileScreen() {
           fullDescription: user.full_description,
           pricePerHour: user.hourly_fee,
           rating: user.rating_avg,
+          reports: user.report_count,
           specialties: userTeachedTopics
         });
     },[user, imageData, userTeachedTopics]);

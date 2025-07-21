@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdEdit } from "react-icons/md";
 import "../../css/studentProfileStyles/modal.css";
+import { useEffect } from "react";
 
 function Modal({ tutor }) {
-  const { image, name, last_name, institution, occupation, academicLevel, description, pricePerHour, rating, specialties } = tutor;
+  const { image, name, last_name, institution, occupation, academicLevel, description, pricePerHour, rating, reports, specialties } = tutor;
+  const [reportsCount, setReportsCount] = useState(reports);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    setReportsCount(reports);
+  })
   function renderStars(){
     const filledStars = Math.floor(rating);
     const hasHalfStar = rating - filledStars >= 0.5;
@@ -30,10 +35,20 @@ function Modal({ tutor }) {
 
   function goToEdit() {
     navigate("/edit-tutor-profile");
-  }
+  };
  
   return (
     <div className="modal-content">
+      <div
+        className={`reports-indicator ${reportsCount > 0 ? "danger" : "safe"}`}
+        title={
+          reportsCount === 0
+            ? "Este tutor nunca ha sido reportado"
+            : `Este tutor ha sido reportado ${reportsCount} ${reportsCount === 1 ? "vez" : "veces"}`
+        }
+      >
+        {reportsCount === 0 ? "✔️" : "⚠️"} {reportsCount} reportes
+      </div>
 
       <img src={image} alt={`Foto de ${name}`} className="modal-image" />
       <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>

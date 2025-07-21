@@ -14,7 +14,7 @@ function StudentFactsScreen() {
     const [student, setStudent] = useState(null);
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/students/${id}`)
+        axios.get(`http://localhost:5000/students/${id}`)
         .then(({ data }) => setStudent(data.student))
         .catch(console.error);
     }, [id]);

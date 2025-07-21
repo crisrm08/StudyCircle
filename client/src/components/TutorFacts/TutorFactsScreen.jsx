@@ -13,14 +13,14 @@ function TutorFactsScreen() {
     const { id } = useParams();
     const [tutor, setTutor] = useState(null);
 
-    useEffect(() => { axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutors/${id}`)
+    useEffect(() => { axios.get(`http://localhost:5000/tutors/${id}`)
         .then(({ data }) => setTutor(data.tutor))        
         .catch(console.error);
     }, [id]);
 
   if (!tutor) return null
   
-  return(
+  return (
       <div className="tutor-info-screen">
         <Header />
         <div className="tutor-info-container">

@@ -26,6 +26,8 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
   }, [chat.id]);
 
   useEffect(() => {
+    console.log(chat);
+    
     if (!chat.id) return;
     const subscription = supabase
       .channel(`chat_messages:${chat.id}`)
@@ -161,6 +163,7 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
             onEnd={endSession}
             onRate={handleRating}
             loggedUserRole={loggedUserRole}
+            otherUserId={chat.otherUser.userId}
           />
 
           <form

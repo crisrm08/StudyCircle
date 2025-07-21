@@ -13,7 +13,7 @@ function ChatSidebar({ chats = [], selectedChat, onSelectChat, loggedUserRole })
         ? chat.status === 'accepted'
         : chat.status === 'pending' || chat.status === 'accepted';
     }
-    // pestaña "Finalizados"
+    // pestaña "Finalizados" 
     return chat.status === 'finished';
   });
 
@@ -48,8 +48,9 @@ function ChatSidebar({ chats = [], selectedChat, onSelectChat, loggedUserRole })
           displayedChats.map(chat => (
             <ChatPreview
               key={chat.id}
-              id={chat.id}
+              tutorship_id={chat.id}
               name={chat.otherUser.name}
+              otherUserId={chat.otherUser.userId}
               lastMessage={chat.lastMessage}
               image={chat.otherUser.avatar}
               status={chat.status}

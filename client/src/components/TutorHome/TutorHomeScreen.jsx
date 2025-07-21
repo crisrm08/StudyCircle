@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect, useRef} from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../Common/Header";
 import TutorTopBar from "./TutorTopBar";
 import TutorControlBar from "./TutorControlBar";
@@ -24,7 +25,13 @@ function TutorHomeScreen() {
     const [ tutorshipsRequests, setTutorshipRequests ] = useState([]);
     const tutor_id = user?.user_id
     const fetchedOnce = useRef(false);
+    const navigate = useNavigate();
     
+    useEffect(() => {
+        if (user?.profile_type === "admin") {
+            navigate("/admin-reports");
+        }
+    });
 
     useEffect(() => {
       if (!user) return;

@@ -23,7 +23,7 @@ function StudentModal() {
     rating: 0,          
     description: ""
   });
-
+  const [reportsCount, setReportsCount] = useState(0);
 
   useEffect(() => {
     if (user){
@@ -37,23 +37,15 @@ function StudentModal() {
         strengths: userStrongTopics,
         weaknesses: userWeakTopics,
         rating: user.rating_avg, 
-        description: user.short_description
+        description: user.short_description,
+        reports: user.report_count
       });
-
+      setReportsCount(student.reports);
     }
   }, [user, imageData, userStrongTopics, userWeakTopics]);
 
-
   function goToEdit() {
     navigate("/edit-student-profile");
-  }
-
-  function openChat() {
-    navigate("/chat");
-  }
-
-  function backToHome() {
-    navigate(-1);
   }
 
   function renderStars(){
@@ -81,11 +73,18 @@ function StudentModal() {
 
   return (
     <div className="modal-content">
+       <div
+        className={`reports-indicator ${reportsCount > 0 ? "danger" : "safe"}`}
+        title={
+          reportsCount === 0
+            ? "Nunca has sido reportado por un tutor"
+            : `Has sido reportado ${reportsCount} ${reportsCount === 1 ? "vez" : "veces"}`
+        }
+      >
+        {reportsCount === 0 ? "✔️" : "⚠️"} {reportsCount} reportes
+      </div>
 
-      <img
-        src={student.image}
-        alt={`Foto de ${student.name}`}
-        className="modal-image"
+      <img src={student.image} alt={`Foto de ${student.name}`} className="modal-image"
     />
 
       {user.profile_type === "student" && <MdEdit className="edit-icon" size={30} onClick={goToEdit}/>}
