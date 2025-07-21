@@ -1,7 +1,7 @@
 import React from "react";
-import AppProviders from "./AppProviders";
-import { createBrowserRouter, RouterProvider  } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RootLayout from "./components/RootLayout";
+import AppProviders from "./AppProviders";
 import LoadingScreen from "./components/Common/LoadingScreen";
 import SearchScreen from "./components/Search/SearchScreen";
 import LoginScreen from "./components/Login/LoginScreen";
@@ -32,7 +32,11 @@ function App() {
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <RootLayout />,
+      element: (
+        <AppProviders>
+          <RootLayout />
+        </AppProviders>
+      ),
       children: [
         { index: true, element: <SearchScreen /> },        
         { path: 'login', element: <LoginScreen /> },
@@ -61,12 +65,8 @@ function App() {
       ]
     }
   ]);
-  return (
-    <RouterProvider router={router}>
-      <AppProviders>
-      </AppProviders>
-    </RouterProvider>
-  );
+  
+  return <RouterProvider router={router} />;
 }
 
 export default App;

@@ -71,8 +71,6 @@ export function UserProvider({ children }) {
 
       if (!profile) {
         if (location.pathname !== "/pick-role") { navigate("/pick-role")}
-      } else if (profile.suspended) {
-        
       } else {
         const editProfileRoutes = ["/edit-tutor-profile", "/edit-student-profile"];
         if (
@@ -109,9 +107,6 @@ export function UserProvider({ children }) {
 
           if (!profile) {
             navigate("/pick-role");
-          }
-          else if (profile.suspended) {
-            
           } else if (profile.profile_type === "student") {
             navigate("/");
           } else {
