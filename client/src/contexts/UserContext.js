@@ -28,8 +28,10 @@ export function UserProvider({ children }) {
         {},
         { headers: { Authorization: `Bearer ${session.access_token}` } }
       );
-      setUser(response.data);
-      console.log(response.data);
+      const profile = response.data;
+
+      setUser(profile);
+      console.log(profile);
 
       const topicsResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/user-topics`,
         { params: { user_id: response.data.user_id } }
@@ -38,7 +40,7 @@ export function UserProvider({ children }) {
       setUserWeakTopics(topicsResponse.data.weak);
       setUserTeachedTopics(topicsResponse.data.teaches); 
                 
-      return response.data;
+      return profile;
     } catch (err) {
       if (err.response && err.response.status === 404) {
         setUser(null); 
@@ -69,6 +71,8 @@ export function UserProvider({ children }) {
 
       if (!profile) {
         if (location.pathname !== "/pick-role") { navigate("/pick-role")}
+      } else if (profile.suspended) {
+        
       } else {
         const editProfileRoutes = ["/edit-tutor-profile", "/edit-student-profile"];
         if (
@@ -87,7 +91,7 @@ export function UserProvider({ children }) {
     const { data: sub } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === "SIGNED_IN" && session) {
-
+          
           const entryPages = [
             "/login",
             "/student-signup-3",
@@ -105,6 +109,9 @@ export function UserProvider({ children }) {
 
           if (!profile) {
             navigate("/pick-role");
+          }
+          else if (profile.suspended) {
+            
           } else if (profile.profile_type === "student") {
             navigate("/");
           } else {

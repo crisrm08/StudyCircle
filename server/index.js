@@ -1023,4 +1023,19 @@ app.delete('/user/report/:id', async (req, res) => {
   }
 });
 
+app.patch('/user/suspend/:id', async (req, res) => {
+  const reportedUserId = parseInt(req.params.id, 10);
+  try {
+    const { error } = await supabase.from('users').update({ suspended: true }).eq('user_id', reportedUserId);
+
+    if (error) throw error;
+    console.log("suspended");
+    
+    res.json({ message: `Usuario ${reportedUserId} suspendido` });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

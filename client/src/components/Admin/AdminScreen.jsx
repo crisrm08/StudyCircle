@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import LoadingScreen from "../Common/LoadingScreen"
 import { useUser } from "../../contexts/UserContext";
 import { SidebarContext } from "../../contexts/SidebarContext";
+import axios from "axios";
 import "../../css/adminscreen.css";
 
 function AdminScreen() {
@@ -24,6 +25,7 @@ function AdminScreen() {
   }, []);
 
   useEffect(() => {
+
     if (!loading) {
       if (!user) {
         navigate("/login");
@@ -36,7 +38,8 @@ function AdminScreen() {
   if (loading) return null;
 
   const currentReport = reports[currentIndex];
-
+  console.log("CurrentReport object " + JSON.stringify(currentReport));
+  
   const handleNext = () => {
     if (currentIndex < reports.length - 1) setCurrentIndex(currentIndex + 1);
   };
@@ -64,6 +67,13 @@ function AdminScreen() {
     } catch (err) {
       console.log( 'No se pudo descartar: ' + err.message);
     }
+  };
+
+  function handleSuspend() {
+    axios.patch(`http://localhost:5000/user/suspend/${currentReport.reported_user_id}`)
+      .then(() => {
+        setReports(reports.filter((_, index) => index !== currentIndex));
+      });
   };
 
 
@@ -104,8 +114,8 @@ function AdminScreen() {
                 <button onClick={handleNext} disabled={currentIndex === reports.length - 1}>Siguiente</button>
             </div>
             <div className="admin-actions">
-                <button className="danger">Suspender Usuario</button>
-                <button className="neutral"  onClick={handleDiscard}>Descartar Reporte</button>
+                <button className="danger" onClick={handleSuspend}>Suspender Usuario</button>
+                <button className="neutral" onClick={handleDiscard}>Descartar Reporte</button>
             </div>
             </div>
         </div>

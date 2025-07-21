@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import SuspendedModal from "../Common/SuspendedModal";
 import { supabase } from "../Supabase/supabaseClient";
 import { useUser } from "../../contexts/UserContext";
 import { LuEyeClosed } from "react-icons/lu";
@@ -12,6 +13,7 @@ function LoginScreen() {
     const navigate = useNavigate();  
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showSuspended, setShowSuspended] = useState(false);
     const [visible, setVisible] = useState(false);
     const [isMobile, setIsMobile] = useState(
         window.innerWidth <= 768   
@@ -35,28 +37,27 @@ function LoginScreen() {
         setPassword(event.target.value);
     }
 
-    async function handleSubmit(event) {
-        event.preventDefault();
-        console.log("sent email: " + email);
-        console.log("sent password: " + password);
-        
+    async function handleSubmit(e) {
+        e.preventDefault();
+
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) return alert("Login falló: " + error.message);
 
         const token = data.session.access_token;
-        const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/login`, {}, { headers: { Authorization: `Bearer ${token}` } });
-        const user = response.data;
-        setUser(user);
+        const resp = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/login`, {}, { headers: { Authorization: `Bearer ${token}` } });
+        const user = resp.data;
 
-        if (user.profile_type === "student") {
-            navigate("/");  
-        } else if (user.profile_type === "admin") {
-            navigate("/admin-reports");
-        }            
-        else {
-            navigate("/tutor-home-page"); 
+        if (user.suspended) {
+            setShowSuspended(true);
+            return;
         }
+
+        setUser(user);
+        if (user.profile_type === "student") navigate("/");
+        else if (user.profile_type === "admin") navigate("/admin-reports");
+        else navigate("/tutor-home-page");
     }
+
     
     async function handleGoogle() {
         const { data, error } = await supabase.auth.signInWithOAuth({
@@ -80,6 +81,13 @@ function LoginScreen() {
 
     return (
         <div className="Log-Sign-Frgt">
+            {showSuspended && 
+            <SuspendedModal onLogout={async () => {
+                await supabase.auth.signOut();
+                setShowSuspended(false);
+                navigate("/login");
+            }}/>
+            }
 
             <form className="login-forgotPWD-screen" onSubmit={handleSubmit}>
                 <h1 className="title title-mobile">StudyCircle</h1>
