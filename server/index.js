@@ -968,7 +968,7 @@ app.post('/user/report/:id',upload.array('evidence', 5),async (req, res) => {
   }
 );
 
-app.get('/user/reports', async (_req, res) => {
+app.get('/user/reports', async (req, res) => {
   const { data: reports, error } = await supabase
     .from('user_reports')
     .select(`report_id, reported_user_id, reporter_user_id,

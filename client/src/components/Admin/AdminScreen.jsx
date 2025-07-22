@@ -17,7 +17,7 @@ function AdminScreen() {
 
   useEffect(() => {
     async function loadReports() {
-      const resp = await fetch('${process.env.REACT_APP_BACKEND_URL}/user/reports');
+      const resp = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/reports`);
       const data = await resp.json();
       setReports(data);
     }
