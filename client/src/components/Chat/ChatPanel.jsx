@@ -6,10 +6,11 @@ import SessionControlBar from "./SessionControlBar";
 import { IoSend } from "react-icons/io5";
 import { useUser } from "../../contexts/UserContext";
 import { MdKeyboardArrowLeft, MdHourglassEmpty } from "react-icons/md";
+import RequestNewTutorshipBar from "./RequestNewTutorshipBar";
 import "../../css/chatStyles/chatpanel.css";
 import axios from "axios";
 
-function ChatPanel({ chat, onClose, loggedUserRole }) {
+function ChatPanel({ chat, onClose, loggedUserRole, loggedUserId }) {
   const [messages, setMessages] = useState([]);
   const { user } = useUser();
   const [text, setText] = useState("");
@@ -26,8 +27,6 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
   }, [chat.id]);
 
   useEffect(() => {
-    console.log(chat);
-    
     if (!chat.id) return;
     const subscription = supabase
       .channel(`chat_messages:${chat.id}`)
@@ -66,10 +65,10 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
     axios.delete(`${process.env.REACT_APP_BACKEND_URL}/tutorship/request/${chat.id}`)
     .then(() => {
       setShowToast(true);
-                setTimeout(() => {
-                    setShowToast(false);
-                    navigate(0);
-                }, 2000);
+        setTimeout(() => {
+            setShowToast(false);
+            navigate(0);
+        }, 2000);
     });
   }
 
@@ -144,7 +143,7 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
       )}
 
       {/* Chat activo cuando ss acepte*/}
-      {chat.status === "accepted" && (
+      {(chat.status === "accepted" || chat.status === "finished") && (
         <>
           <div className="messages-container">
             {messages
@@ -158,32 +157,42 @@ function ChatPanel({ chat, onClose, loggedUserRole }) {
               ))}
           </div>
 
-          <SessionControlBar
-            chat={chat}
-            onEnd={endSession}
-            onRate={handleRating}
-            loggedUserRole={loggedUserRole}
-            otherUserId={chat.otherUser.userId}
-          />
+          {/* Only render bar and input if tutorship is not finished */}
+          {chat.status !== "finished" && (
+            <>
+              <SessionControlBar
+                chat={chat}
+                onEnd={endSession}
+                onRate={handleRating}
+                loggedUserRole={loggedUserRole}
+                otherUserId={chat.otherUser.userId}
+                loggedUserId={loggedUserId}
+              />
 
-          <form
-            className="input-message-container"
-            onSubmit={e => {
-              e.preventDefault();   
-              sendMessage();         
-            }}
-          >
-            <input
-              type="text"
-              placeholder="Escribe un mensaje…"
-              value={text}
-              onChange={e => setText(e.target.value)}
-              disabled={chat.status !== "accepted"}
+              <form
+                className="input-message-container"onSubmit={e => {
+                  e.preventDefault();   
+                  sendMessage();         
+                }}>
+                <input
+                  type="text"
+                  placeholder="Escribe un mensaje…"
+                  value={text}
+                  onChange={e => setText(e.target.value)}
+                  disabled={chat.status !== "accepted"}
+                />
+                <button type="submit" className="send-button"> <IoSend /> </button>
+              </form>
+            </>
+          )}
+
+          {chat.status === "finished" && (
+            <RequestNewTutorshipBar 
+              needsRating={!chat.hasRated}
+              onRate={handleRating}
+              loggedUserRole={loggedUserRole}
             />
-            <button type="submit" className="send-button">
-              <IoSend />
-            </button>
-          </form>
+          )}
         </>
       )}
       {showToast && <div className="toast">✅ Solicitud eliminada</div>}

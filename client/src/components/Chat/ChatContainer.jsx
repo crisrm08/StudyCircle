@@ -69,7 +69,7 @@ function ChatContainer() {
         }
       })
       .catch(console.error);
-  }, [user, forcedId]);
+  }, [user, forcedId]); 
 
   if (!user) return null;
 
@@ -105,6 +105,7 @@ function ChatContainer() {
           chat={selectedChat}
           onClose={closeChat}
           loggedUserRole={user.profile_type}
+          loggedUserId={user.user_id}
         />
       )}
     </div>

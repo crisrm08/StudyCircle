@@ -2,10 +2,9 @@ import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/chatStyles/chatpreview.css";
 
-function ChatPreview({ name,  tutorship_id, lastMessage, image, handleOpenChat, loggedUserRole, otherUserId }) {
+function ChatPreview({ name,  tutorship_id, lastMessage, image, handleOpenChat, loggedUserRole, otherUserId, needsRating }) {
   const [isTutorshipOver, setIsTutorshipOver] = useState(true);
   const navigate = useNavigate();
-  loggedUserRole = "tutor";
 
   function handleUserReport() {
     navigate(`/report/${tutorship_id}/${otherUserId}`);
@@ -23,15 +22,12 @@ function ChatPreview({ name,  tutorship_id, lastMessage, image, handleOpenChat, 
         <h2>{name}</h2>
         <h3>{lastMessage}</h3>
       </div>
-      {isTutorshipOver && loggedUserRole === "student" ? (
-        <div className="report-container">
-          <button className="request-tutorship-button" onClick={requestNewTutorship}> Solicitar otra tutoría </button>
-        </div>
-      ):(
-        <div className="report-container">
-          <button className="report-button" onClick={handleUserReport}>Reportar</button>
-        </div>
-      )}
+  
+      <div className="report-container">
+        <button className="report-button" onClick={handleUserReport}>Reportar</button>
+      </div>
+    
+      {needsRating && <span className="badge">❗Calificar</span>}
     </div>
   );
 }
