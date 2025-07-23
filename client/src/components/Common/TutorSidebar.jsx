@@ -75,7 +75,9 @@ function TutorSidebar() {
           <nav className="nav-links">
               <h2 onClick={goToHome}><FiHome /> Home</h2>
               <h2 onClick={goToProfile}><FiUser /> Mi perfil</h2>
-              <h2 onClick={goToChat}><FiMessageSquare /> Chat</h2>
+              <h2 onClick={goToChat} className="notification-wrapper" style={{ position: "relative" }}>
+                <FiMessageSquare /> Chat <span className="notification-dot" />
+              </h2>
               <h2 onClick={goToSettings}><FiSettings /> Ajustes</h2>
               <h2 onClick={goToPaymentSettings}><MdOutlinePayment/>Cobro</h2>
           </nav>

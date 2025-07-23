@@ -81,7 +81,9 @@ function StudentSidebar() {
           <nav className="nav-links">
               <h2 onClick={goToHome}><FiSearch /> Búsqueda</h2>
               <h2 onClick={goToProfile}><FiUser /> Mi perfil</h2>
-              <h2 onClick={goToChat}><FiMessageSquare /> Chat</h2>
+              <h2 onClick={goToChat} className="notification-wrapper" style={{ position: "relative" }}>
+                <FiMessageSquare /> Chat <span className="notification-dot" />
+              </h2>
               <h2 onClick={goToSettings}> <FiSettings /> Ajustes</h2>
               <h2 onClick={goToHistory}><FiClock /> Historial</h2>
               <h2 onClick={goToPaymentSettings}><MdOutlinePayment /> Métodos de pago</h2>

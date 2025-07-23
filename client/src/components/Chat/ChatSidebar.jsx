@@ -22,18 +22,18 @@ function ChatSidebar({ chats = [], selectedChat, onSelectChat, loggedUserRole })
       <div className="filter-container">
         <button
           className={`filter-button ${isPendingActive ? 'active' : ''}`}
-          onClick={() => setPendingActive(true)}
+          onClick={() => setPendingActive(true)} style={{ position: "relative" }}
         >
-          Pendientes
+          Pendientes <span className="notification-dot small" />
         </button>
 
         <div className="divider" />
 
         <button
           className={`filter-button ${!isPendingActive ? 'active' : ''}`}
-          onClick={() => setPendingActive(false)}
+          onClick={() => setPendingActive(false)} style={{ position: "relative" }}
         >
-          Finalizados
+          Finalizados <span className="notification-dot small" />
         </button>
       </div>
 

@@ -27,7 +27,10 @@ function Header() {
     <header>
       <h1 onClick={goToHome}>StudyCircle</h1>
        {user ? (
-        <button className="logout-btn" title="Open Sidebar" onClick={openSidebar}> <FiMenu /> </button>
+        <button className="logout-btn" title="Open Sidebar" onClick={openSidebar} style={{ position: "relative" }}>
+          <FiMenu />
+          <span className="notification-dot" />
+        </button>
       ) : (
         <button className="login-signup-button logout-btn" title="Log in button" onClick={openLogIn}> Login / SignUp <CiLogin size={35}/> </button>
       )}
