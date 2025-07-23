@@ -70,9 +70,16 @@ function AdminScreen() {
   };
 
   function handleSuspend() {
+    const id = currentReport.report_id;
     axios.patch(`${process.env.REACT_APP_BACKEND_URL}/user/suspend/${currentReport.reported_user_id}`)
       .then(() => {
-        setReports(reports.filter((_, index) => index !== currentIndex));
+        setReports(prev => {
+        const updated = prev.filter(r => r.report_id !== id);
+        if (currentIndex >= updated.length && updated.length > 0) {
+          setCurrentIndex(updated.length - 1);
+        }
+        return updated;
+      });
       });
   };
 
