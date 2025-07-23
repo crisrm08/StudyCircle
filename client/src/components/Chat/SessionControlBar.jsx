@@ -4,7 +4,7 @@ import axios from "axios";
 import "../../css/chatStyles/sessioncontrolbar.css";
 import RatingModal from "./RatingModal";
 
-function SessionControlBar({ chat, onEnd, onRate, loggedUserRole, otherUserId }) {
+function SessionControlBar({ chat, onEnd, onRate, loggedUserRole, otherUserId, loggedUserId }) {
   const [hasRequestedEnd, setHasRequestedEnd] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [bothParticipantsReady, setBothParticipantsReady] = useState(false);
@@ -13,18 +13,18 @@ function SessionControlBar({ chat, onEnd, onRate, loggedUserRole, otherUserId })
   useEffect(() => {
     setHasRequestedEnd(false);
     setBothParticipantsReady(false);
-    setShowRatingModal(false);
-
    
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}`)
       .then(({ data }) => {
         const userClosed =
           loggedUserRole === "tutor" ? data.tutor_closed : data.student_closed;
-        setHasRequestedEnd(userClosed);
-        if (data.student_closed && data.tutor_closed) {
-          setBothParticipantsReady(true);
-          setShowRatingModal(true);
-        }
+          setHasRequestedEnd(userClosed);
+          if (data.student_closed && data.tutor_closed) {
+            setBothParticipantsReady(true);
+            if (!data.hasRated) {
+              setShowRatingModal(true);
+            }
+          }
       })
       .catch((err) => console.error("Error fetching session status:", err));
   }, [chat.id, loggedUserRole]);
@@ -33,9 +33,14 @@ function SessionControlBar({ chat, onEnd, onRate, loggedUserRole, otherUserId })
     if (!hasRequestedEnd) return;
     const interval = setInterval(async () => {
       try {
-        const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}`);
+        const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}`, {
+          params: { userId: loggedUserId }
+        });
+        
         if (data.student_closed && data.tutor_closed) {
           setBothParticipantsReady(true);
+          
+          if (!data.hasRated) setShowRatingModal(true);
           clearInterval(interval);
         }
       } catch (err) {
@@ -45,14 +50,6 @@ function SessionControlBar({ chat, onEnd, onRate, loggedUserRole, otherUserId })
 
     return () => clearInterval(interval);
   }, [hasRequestedEnd, chat.id]);
-
-  useEffect(() => {
-    console.log(chat.id);
-    
-    if (bothParticipantsReady) {
-      setShowRatingModal(true);
-    }
-  }, [bothParticipantsReady]);
 
   if (!chat || !loggedUserRole) return null;
 

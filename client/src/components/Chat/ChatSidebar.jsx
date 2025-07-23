@@ -54,6 +54,7 @@ function ChatSidebar({ chats = [], selectedChat, onSelectChat, loggedUserRole })
               lastMessage={chat.lastMessage}
               image={chat.otherUser.avatar}
               status={chat.status}
+              needsRating={!chat.hasRated}
               handleOpenChat={() => onSelectChat(chat)}
               loggedUserRole={loggedUserRole}
             />

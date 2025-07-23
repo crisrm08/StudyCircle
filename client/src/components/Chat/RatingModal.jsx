@@ -58,12 +58,16 @@ function RatingModal({ isOpen, onClose, onSubmit, loggedUserRole }) {
         />
 
         <div className="modal-buttons">
-          {loggedUserRole === "student" && (
-            <button onClick={handleTutorPayment}>Enviar</button>
-          )}
-          {loggedUserRole === "tutor" && (
-            <button onClick={handleSubmit}>Enviar</button>
-          )}
+           <button
+              onClick={(e) => {
+                handleSubmit(e);
+                if (loggedUserRole === "student") { handleTutorPayment()}
+              }}
+            >
+              {loggedUserRole === "student"
+                ? "Pagar y calificar tutoría"
+                : "Enviar"}
+        </button>
           <button onClick={onClose} className="cancel">Cancelar</button>
         </div>
       </div>

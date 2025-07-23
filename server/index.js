@@ -845,6 +845,10 @@ app.get('/chats', async (req, res) => {
         .limit(1);
       const lastMessage = lastMsgs.length ? lastMsgs[0].content : null;
 
+      const { count, error: err2 } = await supabase.from('session_ratings').select('*', { count: 'exact' })
+        .eq('tutorship_request_id', r.tutorship_request_id).eq('rater_id', userId);
+      if (err2) return res.status(500).json({ error: err2.message });
+
       return {
         id:           r.tutorship_request_id,
         status:       r.status,
@@ -856,7 +860,8 @@ app.get('/chats', async (req, res) => {
           name:   `${other.name} ${other.last_name}`.trim(),
           avatar: avatarUrl
         },
-        lastMessage
+        lastMessage,
+        hasRated: count > 0  
       };
     })
   );
