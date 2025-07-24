@@ -1,0 +1,16 @@
+.notification-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
+}
+
+.notification-dot.small {
+  width: 6px;
+  height: 6px;
+}
+
+.chat-preview.highlight {
+  background-color: #1E56A0;
+}

@@ -28,8 +28,16 @@ function ChatPanel({ chat, onClose, loggedUserRole, loggedUserId }) {
 
   useEffect(() => {
     if (!chat.id) return;
-    const subscription = supabase
-      .channel(`chat_messages:${chat.id}`)
+      axios.patch(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}/read`, {
+        user_id: user.user_id,
+        user_role: loggedUserRole
+      })
+      .catch(console.error);
+  },[chat.id, loggedUserRole, user.user_id]);
+
+  useEffect(() => {
+    if (!chat.id) return;
+    const subscription = supabase.channel(`chat_messages:${chat.id}`)
       .on(
         "postgres_changes",
         {
@@ -51,12 +59,16 @@ function ChatPanel({ chat, onClose, loggedUserRole, loggedUserId }) {
 
   function sendMessage() {
     if (!text.trim()) return;
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/chats/${chat.id}/messages`, {
-        sender_id: user.user_id,
-        content: text
-      })
+      axios.post(`${process.env.REACT_APP_BACKEND_URL}/chats/${chat.id}/messages`,
+        { sender_id: user.user_id, content: text }
+      )
       .then(() => {
       setText("");
+      axios.patch(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}/read`,{
+        user_id: user.user_id,
+        user_role: loggedUserRole
+      })
+        .catch(console.error);
       })
       .catch(console.error);
   }
