@@ -34,7 +34,7 @@ function Header() {
     <header>
       <h1 onClick={goToHome}>StudyCircle</h1>
        {user ? (
-        <button style={{ position: 'relative' }} onClick={openSidebar}>
+        <button className="logout-btn" title="Open Sidebar" style={{ position: 'relative' }} onClick={openSidebar}>
           <FiMenu />
           {(newMessagesCount > 0 || pendingRatings > 0) && (
             <span className="notification-dot" />

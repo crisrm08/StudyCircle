@@ -59,12 +59,16 @@ function ChatPanel({ chat, onClose, loggedUserRole, loggedUserId }) {
 
   function sendMessage() {
     if (!text.trim()) return;
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/chats/${chat.id}/messages`, {
-        sender_id: user.user_id,
-        content: text
-      })
+      axios.post(`${process.env.REACT_APP_BACKEND_URL}/chats/${chat.id}/messages`,
+        { sender_id: user.user_id, content: text }
+      )
       .then(() => {
       setText("");
+      axios.patch(`http://localhost:5000/tutorship/requests/${chat.id}/read`,{
+        user_id: user.user_id,
+        user_role: loggedUserRole
+      })
+        .catch(console.error);
       })
       .catch(console.error);
   }
