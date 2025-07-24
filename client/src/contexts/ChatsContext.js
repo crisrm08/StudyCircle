@@ -17,7 +17,7 @@ export function ChatsProvider({ children }) {
       return;
     }
     try {
-      const response = await axios.get("http://localhost:5000/chats",
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/chats`,
         { params: { user_id: user.user_id } }
       );
       setChats(Array.isArray(response.data.chats) ? response.data.chats : []);

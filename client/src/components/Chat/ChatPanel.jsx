@@ -28,7 +28,7 @@ function ChatPanel({ chat, onClose, loggedUserRole, loggedUserId }) {
 
   useEffect(() => {
     if (!chat.id) return;
-      axios.patch(`http://localhost:5000/tutorship/requests/${chat.id}/read`, {
+      axios.patch(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}/read`, {
         user_id: user.user_id,
         user_role: loggedUserRole
       })
@@ -64,7 +64,7 @@ function ChatPanel({ chat, onClose, loggedUserRole, loggedUserId }) {
       )
       .then(() => {
       setText("");
-      axios.patch(`http://localhost:5000/tutorship/requests/${chat.id}/read`,{
+      axios.patch(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}/read`,{
         user_id: user.user_id,
         user_role: loggedUserRole
       })

@@ -27,9 +27,6 @@ function Header() {
     navigate("/login");
   }
 
-  console.log("new messages count: " + newMessagesCount);
-  console.log("Pending Ratings: " + pendingRatings);
-
   return (
     <header>
       <h1 onClick={goToHome}>StudyCircle</h1>
