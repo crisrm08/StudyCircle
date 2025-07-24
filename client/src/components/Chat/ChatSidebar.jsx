@@ -5,17 +5,17 @@ import "../../css/chatStyles/chatsidebar.css";
 function ChatSidebar({ chats = [], selectedChat, onSelectChat, loggedUserRole }) {
   const [isPendingActive, setPendingActive] = useState(true);
 
-  const displayedChats = chats.filter(chat => {
-    // pestaña "Pendientes"
-    if (isPendingActive) {
-      // estudiante ve pending, tutor ve accepted
-      return loggedUserRole === 'tutor'
-        ? chat.status === 'accepted'
-        : chat.status === 'pending' || chat.status === 'accepted';
-    }
-    // pestaña "Finalizados" 
-    return chat.status === 'finished';
-  });
+  const pendingChats = chats.filter(c =>
+    isPendingActive
+      ? (loggedUserRole==='tutor'
+         ? c.status==='accepted'
+         : ['pending','accepted'].includes(c.status))
+      : c.status==='finished'
+  );
+
+  const hasNewInPending = pendingChats.some(c => c.hasNewMessage);
+  const finalChats = chats.filter(c => c.status==='finished');
+  const hasUnratedInFinal = finalChats.some(c => !c.hasRated);
 
   return (
     <div className="chat-sidebar">
@@ -24,7 +24,8 @@ function ChatSidebar({ chats = [], selectedChat, onSelectChat, loggedUserRole })
           className={`filter-button ${isPendingActive ? 'active' : ''}`}
           onClick={() => setPendingActive(true)} style={{ position: "relative" }}
         >
-          Pendientes <span className="notification-dot small" />
+          Pendientes
+          {hasNewInPending && <span className="notification-dot small" />}
         </button>
 
         <div className="divider" />
@@ -33,19 +34,20 @@ function ChatSidebar({ chats = [], selectedChat, onSelectChat, loggedUserRole })
           className={`filter-button ${!isPendingActive ? 'active' : ''}`}
           onClick={() => setPendingActive(false)} style={{ position: "relative" }}
         >
-          Finalizados <span className="notification-dot small" />
+          Finalizados
+          {hasUnratedInFinal && <span className="notification-dot small" />} 
         </button>
       </div>
 
       <div className="chat-list">
-        {displayedChats.length === 0 ? (
+        {pendingChats.length === 0 ? (
           loggedUserRole === "student" ? ( <div className="no-chats-message">No hay chats disponibles, solicita tutorías para abrir un chat con tutores</div>
           ) : (
             <div className="no-chats-message">No hay chats disponibles, espera a que los estudiantes soliciten tutorías</div>
           )
 
         ) : (
-          displayedChats.map(chat => (
+          pendingChats.map(chat => (
             <ChatPreview
               key={chat.id}
               tutorship_id={chat.id}
@@ -55,6 +57,7 @@ function ChatSidebar({ chats = [], selectedChat, onSelectChat, loggedUserRole })
               image={chat.otherUser.avatar}
               status={chat.status}
               needsRating={!chat.hasRated}
+              hasNewMessage={chat.hasNewMessage}
               handleOpenChat={() => onSelectChat(chat)}
               loggedUserRole={loggedUserRole}
             />

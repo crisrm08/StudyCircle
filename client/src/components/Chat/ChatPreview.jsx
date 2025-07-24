@@ -2,8 +2,7 @@ import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/chatStyles/chatpreview.css";
 
-function ChatPreview({ name,  tutorship_id, lastMessage, image, handleOpenChat, loggedUserRole, otherUserId, needsRating }) {
-  const hasNewMessage = true;
+function ChatPreview({ name,  tutorship_id, lastMessage, image, handleOpenChat, loggedUserRole, otherUserId, needsRating, hasNewMessage }) {
   const [isTutorshipOver, setIsTutorshipOver] = useState(true);
   const navigate = useNavigate();
 
@@ -32,11 +31,10 @@ function ChatPreview({ name,  tutorship_id, lastMessage, image, handleOpenChat, 
           <button className="report-button" onClick={handleUserReport}>Reportar</button>
         </div>
       
-        {needsRating && <span className="badge">❗Calificar</span>}
-        {/* simulamos “mensaje nuevo” con otro badge */}
         {hasNewMessage && (
           <span className="notification-dot" style={{ top: 10, right: 10 }} />
         )}
+        {needsRating && <span className="badge">❗Calificar</span>}
     </div>
   );
 }

@@ -836,7 +836,7 @@ app.get('/chats', async (req, res) => {
           );
         avatarUrl = publicUrl + `?t=${Date.now()}`;
       }
-      // c) Último mensaje (si existe)
+      // c) Último mensaje
       const { data: lastMsgs } = await supabase
         .from('chat_messages')
         .select('content, created_at')
@@ -844,10 +844,16 @@ app.get('/chats', async (req, res) => {
         .order('created_at', { ascending: false })
         .limit(1);
       const lastMessage = lastMsgs.length ? lastMsgs[0].content : null;
+      const lastMessageCreatedAt = lastMsgs.length ? lastMsgs[0].created_at : null;
 
+      // d) Revisar si ha calificado
       const { count, error: err2 } = await supabase.from('session_ratings').select('*', { count: 'exact' })
         .eq('tutorship_request_id', r.tutorship_request_id).eq('rater_id', userId);
       if (err2) return res.status(500).json({ error: err2.message });
+
+      // e) Revisar si hay mensaje nuevo
+      const lastReadAt = r.student_id === userId? r.student_last_read_at : r.tutor_last_read_at;
+      const hasNewMessage = lastMessageCreatedAt && (!lastReadAt || new Date(lastMessageCreatedAt) > new Date(lastReadAt));
 
       return {
         id:           r.tutorship_request_id,
@@ -860,6 +866,7 @@ app.get('/chats', async (req, res) => {
           name:   `${other.name} ${other.last_name}`.trim(),
           avatar: avatarUrl
         },
+        hasNewMessage,
         lastMessage,
         hasRated: count > 0  
       };
@@ -935,6 +942,18 @@ app.post('/tutorship/requests/:id/rate', async (req, res) => {
     .single();
   res.json({ rating: data });
 });
+
+app.patch("/tutorship/requests/:id/read", async (req, res) => {
+  const { id } = req.params;
+  const { user_id } = req.body;
+  const { user_role } = req.body;
+  const col = user_role === 'student' ? 'student_last_read_at' : 'tutor_last_read_at';
+  const { error } = await supabase.from("tutorship_requests")
+    .update({ [col]: new Date().toISOString() }).eq("tutorship_request_id", id);
+  if (error) return res.status(500).json({ error: error.message });
+  res.sendStatus(204);
+});
+
 
 app.post('/user/report/:id',upload.array('evidence', 5),async (req, res) => {
     try {

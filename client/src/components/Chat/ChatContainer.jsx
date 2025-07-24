@@ -40,7 +40,7 @@ function ChatContainer() {
 
   useEffect(() => {
     if (!user) return;
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/chats`, { params: { user_id: user.user_id } })
+    axios.get(`http://localhost:5000/chats`, { params: { user_id: user.user_id } })
       .then(({ data }) => {
         const arr = Array.isArray(data.chats) ? data.chats : [];
         setChats(arr);
@@ -70,6 +70,9 @@ function ChatContainer() {
       })
       .catch(console.error);
   }, [user, forcedId]); 
+
+  console.log("chats: " + JSON.stringify(chats));
+  
 
   if (!user) return null;
 
