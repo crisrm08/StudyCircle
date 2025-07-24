@@ -9,7 +9,7 @@
 }
 
 .chat-preview:hover {
-background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.15);
 }
 
 .profile-pic {
@@ -77,4 +77,13 @@ background-color: rgba(255, 255, 255, 0.15);
 .request-tutorship-button:hover {
     background-color: #e4e5e9;
     color: #163172;
+}
+
+.waiting-badge {
+    background-color: #1E56A0;
+    color: #F6F6F6;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
 }

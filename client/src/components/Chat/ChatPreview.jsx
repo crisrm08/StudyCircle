@@ -2,22 +2,17 @@ import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/chatStyles/chatpreview.css";
 
-function ChatPreview({ name,  tutorship_id, lastMessage, image, handleOpenChat, loggedUserRole, otherUserId, needsRating, hasNewMessage }) {
+function ChatPreview({ name,  tutorship_id, lastMessage, image, status, handleOpenChat, loggedUserRole, otherUserId, needsRating, hasNewMessage }) {
   const [isTutorshipOver, setIsTutorshipOver] = useState(true);
   const navigate = useNavigate();
 
   function handleUserReport() {
     navigate(`/report/${tutorship_id}/${otherUserId}`);
   }
-
-  function requestNewTutorship() {
-    console.log("Not fully implemented yet");
-    //navigate(`/tutor-facts/${tutor_id}`);
-  }
   
   return (
      <div 
-      className={`chat-preview ${hasNewMessage ? 'highlight' : ''}`} 
+      className={`chat-preview ${(hasNewMessage || (status === "finished" && needsRating)) ? 'highlight' : ''}`} 
       onClick={handleOpenChat}
       style={{ position: "relative" }}
       >
@@ -28,13 +23,18 @@ function ChatPreview({ name,  tutorship_id, lastMessage, image, handleOpenChat, 
         </div>
     
         <div className="report-container">
-          <button className="report-button" onClick={handleUserReport}>Reportar</button>
+          {status !== "pending" && (
+            <button className="report-button" onClick={handleUserReport}>Reportar</button>
+          )}
+          {status === "pending" && (
+            <span className="waiting-badge">Esperando respuesta...</span>
+          )}
         </div>
       
         {hasNewMessage && (
           <span className="notification-dot" style={{ top: 10, right: 10 }} />
         )}
-        {needsRating && <span className="badge">❗Calificar</span>}
+        {(needsRating && status === "finished") && <span className="badge">❗Calificar</span>}
     </div>
   );
 }

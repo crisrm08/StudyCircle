@@ -10,35 +10,70 @@ import "../../css/adminscreen.css";
 
 function AdminScreen() {
   const [reports, setReports] = useState([]);
+  const [loadingReports, setLoadingReports] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { user, loading } = useUser();
+  const { user, loading: loadingUser } = useUser();
   const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function loadReports() {
-      const resp = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/reports`);
-      const data = await resp.json();
-      setReports(data);
+      try {
+        const resp = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/reports`);
+        const json = await resp.json();
+        const arr = Array.isArray(json)
+          ? json
+          : Array.isArray(json.reports)
+            ? json.reports
+            : [];
+        setReports(arr);
+        if (arr.length === 0) {
+          setCurrentIndex(0);
+        } else if (currentIndex >= arr.length) {
+          setCurrentIndex(arr.length - 1);
+        }
+      } catch (err) {
+        console.error("Error loading reports:", err);
+        setReports([]);
+      } finally {
+        setLoadingReports(false);
+      }
     }
     loadReports();
   }, []);
 
-  useEffect(() => {
 
-    if (!loading) {
-      if (!user) {
-        navigate("/login");
-      } else if (user.profile_type !== "admin") {
+  useEffect(() => {
+    if (!loadingUser) {
+      if (!user || user.profile_type !== "admin") {
         navigate("/login");
       }
     }
-  }, [user, loading, navigate]);
+  }, [user, loadingUser, navigate]);
 
-  if (loading) return null;
+  if (loadingUser) return null;
+  if (loadingReports) return <LoadingScreen />
+    
+  if (reports.length === 0) {
+    return (
+      <div>
+        <Header />
+        <div className="admin-screen">
+          <h1 className="admin-title">Gestión de Reportes</h1>
+          <p>No hay reportes pendientes.</p>
+        </div>
+        {isSidebarClicked && (
+          <>
+            <div className="overlay" onClick={() => setIsSidebarClicked(false)} />
+            <AdminSidebar />
+          </>
+        )}
+      </div>
+    );
+  }
 
   const currentReport = reports[currentIndex];
-  console.log("CurrentReport object " + JSON.stringify(currentReport));
+  console.log("CurrentReport object", currentReport);
   
   const handleNext = () => {
     if (currentIndex < reports.length - 1) setCurrentIndex(currentIndex + 1);
