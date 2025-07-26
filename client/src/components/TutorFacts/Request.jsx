@@ -7,41 +7,55 @@ import { useUser } from "../../contexts/UserContext";
 import "../../css/tutorInfoStyles/request.css";
 import axios from "axios";
 
-function Request({ onClose, tutor_id }) {
+function Request({ onClose, tutor_id, tutorshipSubject, tutorshipTopic, tutorshipMode}) {
   const { user } = useUser();
-  const { subject, topic } = useContext(SubjectTopicContext);
-  const { mode } = useContext(ModeContext);
-  const { hour, day } = useContext(TimeContext)
-  const [ message, setMessage ] = useState("");
   const navigate = useNavigate();
+  const { subject: ctxSubject, topic: ctxTopic } = useContext(SubjectTopicContext);
+  const { mode: ctxMode } = useContext(ModeContext);
+  const { hour, day } = useContext(TimeContext);
+  const [message, setMessage] = useState("");
+
+  
+  const finalSubject = tutorshipSubject || ctxSubject;
+  const finalTopic = tutorshipTopic || ctxTopic;
+  const finalMode = tutorshipMode || ctxMode;
 
   function handleMessageChange(event) {
     setMessage(event.target.value);
   }
 
-  function handleSubmit() {
-     if (!user) {
+  async function handleSubmit() {
+    if (!user) {
       navigate("/login");
       return;
     }
 
     const payload = {
       student_id: user.user_id,
-      tutor_id: tutor_id,
-      tutorship_subject: subject,
-      tutorship_topic: topic,
-      tutorship_mode: mode,
+      tutor_id,
+      tutorship_subject: finalSubject,
+      tutorship_topic: finalTopic,
+      tutorship_mode: finalMode,
       tutorship_hour: hour,
       tutorship_day: day,
-      tutorship_request_message: message  
-    }
-      
-  axios.post(`${process.env.REACT_APP_BACKEND_URL}/tutorship/request`, { tutorshipRequestDetails: payload })
-    .then(() => {navigate("/chat")})
-    .catch((error) => {
+      tutorship_request_message: message
+    };
+
+    try {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/tutorship/request`,
+        { tutorshipRequestDetails: payload }
+      );
+      if (ctxTopic) {
+        navigate("/chat");
+      }
+      else{
+        navigate(0);
+      }
+    } catch (error) {
       console.error("Error al enviar la solicitud:", error);
-    });
-  };
+      alert("No se pudo enviar la solicitud. Intenta de nuevo.");
+    }
+  }
 
   return (
     <div className="request-overlay" onClick={onClose}>
@@ -52,28 +66,28 @@ function Request({ onClose, tutor_id }) {
 
         <div className="request-field">
           <label>Asignatura</label>
-          <select disabled value={subject}>
-            <option>{subject}</option>
+          <select disabled value={finalSubject || ""}>
+            <option>{finalSubject || "-"}</option>
           </select>
         </div>
 
         <div className="request-field">
           <label>Tema</label>
-          <select disabled value={topic}>
-            <option>{topic}</option>
+          <select disabled value={finalTopic || ""}>
+            <option>{finalTopic || "-"}</option>
           </select>
         </div>
 
         <div className="request-field">
           <label>Modalidad</label>
-          <select disabled value={mode}>
-            <option>{mode}</option> 
+          <select disabled value={finalMode || ""}>
+            <option>{finalMode || "-"}</option>
           </select>
         </div>
 
         <div className="request-field">
           <label>En qué necesitas ayuda?</label>
-          <textarea 
+          <textarea
             placeholder="Describe tu problema o lo que no entiendes..."
             rows={5}
             value={message}

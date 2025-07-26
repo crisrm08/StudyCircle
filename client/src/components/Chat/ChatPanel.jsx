@@ -203,6 +203,10 @@ function ChatPanel({ chat, onClose, loggedUserRole, loggedUserId }) {
               needsRating={!chat.hasRated}
               onRate={handleRating}
               loggedUserRole={loggedUserRole}
+              tutorshipSubject={chat.subject}
+              tutorshipTopic={chat.topic}
+              tutorshipMode={chat.mode}
+              tutorId={chat.otherUser.userId}
             />
           )}
         </>
