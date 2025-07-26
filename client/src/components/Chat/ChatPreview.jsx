@@ -34,7 +34,8 @@ function ChatPreview({ name,  tutorship_id, lastMessage, image, status, handleOp
         {hasNewMessage && (
           <span className="notification-dot" style={{ top: 10, right: 10 }} />
         )}
-        {(needsRating && status === "finished") && <span className="badge">❗Calificar</span>}
+        {(needsRating && status === "finished" && loggedUserRole === "student") && <span className="badge">❗Pagar</span>}
+        {(needsRating && status === "finished" && loggedUserRole === "tutor") && <span className="badge">❗Calificar</span>}
     </div>
   );
 }

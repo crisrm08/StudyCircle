@@ -42,16 +42,7 @@ function TutorPaymentScreen() {
             <button type="submit" className="save-method-button">Guardar método</button>
           </form>
         );
-      case "zelle":
-        return (
-          <form className="payment-form" onSubmit={handleSubmit}>
-            <label>Nombre del titular</label>
-            <input type="text" placeholder="Nombre completo" />
-            <label>Correo asociado a Zelle</label>
-            <input type="email" placeholder="ejemplo@correo.com" />
-            <button type="submit" className="save-method-button">Guardar método</button>
-          </form>
-        );
+
       default:
         return null;
     }
@@ -75,7 +66,6 @@ function TutorPaymentScreen() {
         <div className="method-selector">
           <button onClick={() => setSelectedMethod("bank")}>🏦 Cuenta Bancaria</button>
           <button onClick={() => setSelectedMethod("paypal")}>🅿️ PayPal</button>
-          <button onClick={() => setSelectedMethod("zelle")}>💸 Zelle</button>
         </div>
 
         {renderForm()}

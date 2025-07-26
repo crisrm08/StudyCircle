@@ -36,7 +36,6 @@ function PaymentMethodScreen() {
             <div className="payment-options">
             <button onClick={() => handleSelection("card")}>💳 Tarjeta de crédito</button>
             <button onClick={() => handleSelection("paypal")}>🅿️ PayPal</button>
-            <button onClick={() => handleSelection("cash")}>💵 Efectivo</button>
             </div>
 
             {showForm && (
@@ -62,10 +61,6 @@ function PaymentMethodScreen() {
                   <label>Correo de PayPal</label>
                   <input type="email" placeholder="usuario@correo.com" />
                 </>
-              )}
-
-              {selectedMethod === "cash" && (
-                <p className="info">El pago se coordinará directamente con el tutor</p>
               )}
 
               <button type="submit" className="pay-button">Pagar</button>
