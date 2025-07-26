@@ -151,6 +151,9 @@ function ChatPanel({ chat, onClose, loggedUserRole, loggedUserId }) {
       {chat.status === "rejected" && (
         <div className="tutorship-rejected-notification">
           <p>Tu solicitud ha sido rechazada. Por favor, busca otro tutor.</p>
+          <button className="cancel-tutorship-button subtle" onClick={cancelTutorshipRequest}>
+            Ok
+          </button>
         </div>
       )}
 

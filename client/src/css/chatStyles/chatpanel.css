@@ -181,6 +181,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 16px;
     background-color: #fff1f0;      
     border: 1px solid #ff4d4f;      
     border-radius: 12px;
@@ -195,4 +196,16 @@
     color: #a8071a;               
     font-size: 16px;
     margin: 0;
+}
+
+.subtle {
+    background: none;
+    color: #a8071a;               
+    border: 1px solid #ff4d4f;      
+    border-radius: 20px;
+    padding: 8px 22px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
 }

@@ -9,7 +9,7 @@ function ChatSidebar({ chats = [], selectedChat, onSelectChat, loggedUserRole })
     isPendingActive
       ? (loggedUserRole==='tutor'
          ? c.status==='accepted'
-         : ['pending','accepted'].includes(c.status))
+         : ['pending','accepted','rejected'].includes(c.status))
       : c.status==='finished'
   );
 

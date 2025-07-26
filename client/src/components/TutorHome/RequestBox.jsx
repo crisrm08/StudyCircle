@@ -9,12 +9,8 @@ function RequestBox(requestDetails) {
   const [rejected, setRejected] = useState(false);
   const { tutorship_request_id, student_id, student_avatar, tutorship_subject, tutorship_topic, tutorship_mode, tutorship_day, tutorship_hour, tutorship_request_message } = requestDetails.requestDetails;
 
-  useEffect(() => {
-    console.log(requestDetails) ;
-  })
-
   function handleDecline() {
-    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/tutorship/request/${tutorship_request_id}`)
+    axios.patch(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${tutorship_request_id}/reject`)
       .then(() => setRejected(true))
       .catch(console.error);
   }
