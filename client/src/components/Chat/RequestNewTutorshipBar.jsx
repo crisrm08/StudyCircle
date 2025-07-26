@@ -5,11 +5,11 @@ import Request from "../TutorFacts/Request"
 import RatingModal from "./RatingModal";
 import "../../css/chatStyles/sessioncontrolbar.css";
 
-function RequestNewTutorshipBar({needsRating, onRate, loggedUserRole }) {
+function RequestNewTutorshipBar({needsRating, onRate, loggedUserRole, tutorshipSubject, tutorshipTopic, tutorshipMode, tutorId }) {
     const [renderRequest, setRenderRequest] = useState(false);
     const [showRatingModal, setShowRatingModal] = useState(false);
     const navigate = useNavigate();
-
+    
     function hanldeOpenRating(params) {
         setShowRatingModal(true);
     }
@@ -46,7 +46,14 @@ function RequestNewTutorshipBar({needsRating, onRate, loggedUserRole }) {
                     )}
                 </div>
             )} 
-            {renderRequest && ( <Request onClose={handleClose} />)}
+            {renderRequest && ( 
+                <Request onClose={handleClose}
+                    tutorshipSubject={tutorshipSubject}
+                    tutorshipTopic={tutorshipTopic}
+                    tutorshipMode={tutorshipMode}
+                    tutor_id={tutorId} 
+                />
+            )}
             {showRatingModal && (
                 <RatingModal
                     isOpen={showRatingModal}
