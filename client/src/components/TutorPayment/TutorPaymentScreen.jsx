@@ -1,12 +1,15 @@
 import React, { useState, useContext } from "react";
 import Header from "../Common/Header";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../contexts/UserContext";
 import TutorSidebar from "../Common/TutorSidebar";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import "../../css/TutorPaymentStyles/tutorpayments.css";
+import axios from "axios";
 
 function TutorPaymentScreen() {
   const [selectedMethod, setSelectedMethod] = useState(null);
+  const { user } = useUser();
   const { isSidebarClicked, setIsSidebarClicked } = useContext(SidebarContext);
   const [ showToast, setShowToast ] = useState(false)
   const navigate = useNavigate();
@@ -48,13 +51,30 @@ function TutorPaymentScreen() {
     }
   };
 
+  if (!user || !user.user_id) return null
+
   function handleSubmit(event) {
     event.preventDefault();
-    setShowToast(true);
+    const tutorId = user.user_id;
 
-    setTimeout(() => {
-      navigate("/tutor-home-page");
-    }, 2000); 
+    axios.post(`http://localhost:5000/tutor-cashing-methods/${tutorId}`, {
+      bank_name: event.target[0] ? event.target[0].value : null,
+      account_holder: event.target[1] ? event.target[1].value : null,
+      account_number: event.target[2] ? event.target[2].value : null,
+      account_type: event.target[3] ? event.target[3].value : null,
+      paypal_email: event.target[4] ? event.target[4].value : null,
+    })
+    .then(response => {
+      console.log("Método de cobro guardado:", response.data);
+      setShowToast(true);
+
+      setTimeout(() => {
+        navigate("/tutor-home-page");
+      }, 2000); 
+    })
+    .catch(error => {
+      console.error("Error guardando método de cobro:", error);
+    });
   }
 
   return (
