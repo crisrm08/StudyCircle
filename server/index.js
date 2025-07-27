@@ -238,6 +238,8 @@ app.post('/tutor-cashing-methods/:id', async (req, res) => {
   const tutorId = req.params.id;
   const { bank_name, account_holder, account_number, account_type, paypal_email } = req.body;
 
+  console.log(bank_name, account_holder, account_number, account_type, paypal_email);
+
   const { data: existing, error: findErr } = await supabase.from('tutor_cashing_methods').select('*').eq('tutor_id', tutorId).maybeSingle();  
   if (findErr) {
     console.error("Error finding existing cashing methods:", findErr);
@@ -273,9 +275,22 @@ app.post('/tutor-cashing-methods/:id', async (req, res) => {
       console.error("Error inserting tutor cashing methods:", error);
       return res.status(500).json({ error: error.message });
     }
+
+    return res.json({ message: "Cashing methods created successfully", data });
+  }
+});
+
+app.get('/tutor-cashing-methods/:id', async (req, res) => {
+  const tutorId = req.params.id;
+
+  const { data, error } = await supabase.from('tutor_cashing_methods').select('*').eq('tutor_id', tutorId).maybeSingle();
+
+  if (error) {
+    console.error("Error fetching tutor cashing methods:", error);
+    return res.status(500).json({ error: error.message });
   }
 
-  res.json({ message: "Cashing methods saved successfully", data });
+  res.json(data);
 });
 
 app.get('/tutor-availability', async (req, res) => {
