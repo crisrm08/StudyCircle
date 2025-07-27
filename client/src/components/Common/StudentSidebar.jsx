@@ -67,7 +67,7 @@ function StudentSidebar() {
     }
 
     function goToPaymentSettings() {
-      navigate("/payment-method");
+      navigate("/payment-method", { state: { flow: "settings" } });
       setIsSidebarClicked(false);
     }
 

@@ -9,6 +9,13 @@
   font-family: sans-serif;
 }
 
+.tutor-payment-screen p {
+  text-align: center;
+  color: #555;
+  opacity: 0.7;
+  margin-bottom: 20px;
+}
+
 .tutor-payment-screen h1 {
   text-align: center;
   color: #1E56A0;

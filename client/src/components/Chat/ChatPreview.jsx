@@ -23,7 +23,7 @@ function ChatPreview({ name,  tutorship_id, lastMessage, image, status, handleOp
         </div>
     
         <div className="report-container">
-          {status !== "pending" && (
+          {(status !== "pending" && status !== "rejected") && (
             <button className="report-button" onClick={handleUserReport}>Reportar</button>
           )}
           {status === "pending" && (
