@@ -2,12 +2,17 @@ import React, { useState, useContext, useEffect } from "react";
 import Header from "../Common/Header";
 import StudentSidebar from "../Common/StudentSidebar";
 import {useNavigate} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useUser } from "../../contexts/UserContext";
 import { SidebarContext } from "../../contexts/SidebarContext";
+import ContinueSessionModal from "./ContinueSessionModal.jsx";
 import "../../css/PaymentMethodStyles/paymentmethodscreen.css";
 import axios from "axios";
 
 function PaymentMethodScreen() {
+  const location = useLocation();
+  const flow = location.state?.flow || "settings"; 
+  const [showContinueModal, setShowContinueModal] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState("");
   const [ paymentDetails, setPaymentDetails ] = useState({
     card_number: "",
@@ -23,7 +28,7 @@ function PaymentMethodScreen() {
 
   useEffect(() => {
     if (!user || !user.user_id) return;
-    axios.get(`http://localhost:5000/student-payment-methods/${user.user_id}`)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/student-payment-methods/${user.user_id}`)
       .then(response => {
         setPaymentDetails(response.data || {});
         console.log("Payment details fetched:", response.data);
@@ -59,10 +64,15 @@ function PaymentMethodScreen() {
       };
     }
 
-    axios.post(`http://localhost:5000/student-payment-methods/${studentId}`, payload)
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/student-payment-methods/${studentId}`, payload)
       .then(response => {
-        console.log("Payment method saved:", response.data);
-        navigate("/chat");
+        if (flow === "pay") {
+          console.log("modal will render");
+          setShowContinueModal(true);
+        }
+        else {
+          navigate("/");
+        }
       })
       .catch(error => {
         console.error("Error saving payment method:", error);
@@ -76,9 +86,16 @@ function PaymentMethodScreen() {
             
         <h1>Selecciona un método de pago</h1>
 
-        <div className="info-box">
+        {flow === "settings" && (
+          <div className="info-box">
             No te preocupes, puedes poner cualquier cosa, es solo una simulación del pago.
         </div>
+        )}
+        {flow === "pay" && (
+          <div className="info-box">
+           Si no pagas la tutoría, tu cuenta será reportada y suspendida.
+          </div>
+        )}
 
         <div className="payment-content">
             <div className="payment-options">
@@ -110,12 +127,27 @@ function PaymentMethodScreen() {
                   <input type="email" name="paypal_email" defaultValue={paymentDetails.paypal_email || ""} placeholder="usuario@correo.com" />
                 </>
               )}
+              {flow === "pay" && (
+                 <button type="submit" className="pay-button">Pagar</button>
+              )}
+              {flow === "settings" && (
+                <button type="submit" className="save-button">Guardar</button>
+              )}
 
-              <button type="submit" className="pay-button">Aceptar</button>
             </form>
             )}
         </div>
       </div>
+      {showContinueModal && (
+        <ContinueSessionModal
+          isOpen={showContinueModal}
+          onContinue={() => {
+            setShowContinueModal(false);
+            navigate("/");
+          }}
+          onCancel={() => setShowContinueModal(false)}
+        />
+      )}
       {isSidebarClicked && (
           <>
               <div className="overlay" onClick={() => setIsSidebarClicked(false)}/>

@@ -20,7 +20,7 @@ function RatingModal({ isOpen, onClose, onSubmit, loggedUserRole }) {
 
   function handleTutorPayment() {
     console.log("Tutor payment logic goes here");
-    navigate("/payment-method");
+    navigate("/payment-method", { state: { flow: "pay" } });
   }
 
   return (
