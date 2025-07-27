@@ -143,6 +143,7 @@ function TutorPaymentScreen() {
       <Header />
       <div className="tutor-payment-screen">
         <h1>Configura tu método de cobro</h1>
+        <p>StudyCircle obtendrá una comisión del 10% por cada tutoría impartida</p>
 
         <div className="method-selector">
           <button onClick={() => setSelectedMethod("bank")}>🏦 Cuenta Bancaria</button>
