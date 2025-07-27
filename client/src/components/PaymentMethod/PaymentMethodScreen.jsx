@@ -23,9 +23,10 @@ function PaymentMethodScreen() {
 
   useEffect(() => {
     if (!user || !user.user_id) return;
-    axios.get(`http://localhost:5000/student-payment-method/${user.user_id}`)
+    axios.get(`http://localhost:5000/student-payment-methods/${user.user_id}`)
       .then(response => {
         setPaymentDetails(response.data || {});
+        console.log("Payment details fetched:", response.data);
       })
       .catch(error => {
         console.error("Error fetching payment details:", error);
@@ -58,7 +59,7 @@ function PaymentMethodScreen() {
       };
     }
 
-    axios.post(`http://localhost:5000/student-payment-method/${studentId}`, payload)
+    axios.post(`http://localhost:5000/student-payment-methods/${studentId}`, payload)
       .then(response => {
         console.log("Payment method saved:", response.data);
         navigate("/chat");
@@ -90,27 +91,27 @@ function PaymentMethodScreen() {
               {selectedMethod === "card" && (
                 <>
                   <label>Número de tarjeta</label>
-                  <input type="text" name="card_number" placeholder="0000 0000 0000 0000" />
+                  <input type="text" name="card_number" defaultValue={paymentDetails.card_number || ""} placeholder="0000 0000 0000 0000" />
 
                   <label>Nombre del titular</label>
-                  <input type="text" name="card_holder" placeholder="Nombre completo" />
+                  <input type="text" name="card_holder" defaultValue={paymentDetails.card_holder || ""} placeholder="Nombre completo" />
 
                   <label>Fecha de expiración</label>
-                  <input type="month" name="expiration_date" />
+                  <input type="month" name="expiration_date" defaultValue={paymentDetails.expiration_date || ""} />
 
                   <label>Código de seguridad</label>
-                  <input type="text" name="security_code" placeholder="CVV" />
+                  <input type="text" name="security_code" defaultValue={paymentDetails.security_code || ""} placeholder="CVV" />
                 </>
               )}
 
               {selectedMethod === "paypal" && (
                 <>
                   <label>Correo de PayPal</label>
-                  <input type="email" name="paypal_email" placeholder="usuario@correo.com" />
+                  <input type="email" name="paypal_email" defaultValue={paymentDetails.paypal_email || ""} placeholder="usuario@correo.com" />
                 </>
               )}
 
-              <button type="submit" className="pay-button">Pagar</button>
+              <button type="submit" className="pay-button">Aceptar</button>
             </form>
             )}
         </div>

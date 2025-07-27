@@ -234,7 +234,7 @@ app.post('/student-save-update', upload.single("user_image"), async (req, res) =
   }
 });
 
-app.post('/student-payment-method/:id', async (req, res) => {
+app.post('/student-payment-methods/:id', async (req, res) => {
   const studentId = req.params.id;
   const { card_number, card_holder, expiration_date, security_code, paypal_email } = req.body;
 
@@ -255,7 +255,7 @@ app.post('/student-payment-method/:id', async (req, res) => {
   res.json(data);
 });
 
-app.get('/student-payment-method/:id', async (req, res) => {
+app.get('/student-payment-methods/:id', async (req, res) => {
   const studentId = req.params.id;
 
   const { data, error } = await supabase.from('student_payment_methods').select('*').eq('student_id', studentId).maybeSingle();
