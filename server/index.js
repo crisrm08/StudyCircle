@@ -1,26 +1,13 @@
 import express from 'express'; 
 import cors from 'cors';
-import axios from 'axios';
-import dotenv from 'dotenv';
-import { createClient } from "@supabase/supabase-js";
-import AWS from 'aws-sdk';
-import multer from 'multer';
-import jwt from "jsonwebtoken";
+import { ENV } from "./src/config/env.js";
+import { supabase } from "./src/config/supabase.js";
+import { rekognition } from "./src/config/aws.js";
+import { upload } from "./src/config/multer.js";
+const PORT = ENV.PORT;
 
-dotenv.config();
-
-AWS.config.update({
-  accessKeyId: process.env.ACCESS_KEY,
-  secretAccessKey: process.env.SECRET_ACCESS_KEY,
-  region: 'us-east-1'
-});
-
-const rekognition = new AWS.Rekognition();
 const app = express();
-const PORT = 5000;
 const router = express.Router();
-const upload = multer({ storage: multer.memoryStorage() });
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SERVICE_ROLE_KEY);
 
 app.use(cors());
 app.use(express.json());
