@@ -4,53 +4,18 @@ import { ENV } from "./src/config/env.js";
 import { supabase } from "./src/config/supabase.js";
 import { rekognition } from "./src/config/aws.js";
 import { upload } from "./src/config/multer.js";
+import authRoutes from "./src/routes/auth.routes.js";
+import catalogRoutes from "./src/routes/catalog.routes.js";
+
 const PORT = ENV.PORT;
 
 const app = express();
-const router = express.Router();
 
 app.use(cors());
 app.use(express.json());
 
-app.post("/api/login", async (req, res) => {
-  try {
-    const auth = req.headers.authorization;
-    if (!auth) return res.status(401).send({ error: "No auth header" });
-    const token = auth.replace("Bearer ", "");
-
-    const { data: { user }, error: authErr } = await supabase.auth.getUser(token);
-    if (authErr) return res.status(401).send({ error: authErr.message });
-
-    const { data: profile, error: profErr } = await supabase
-      .from("users")
-      .select("*")
-      .eq("supabase_user_id", user.id)
-      .maybeSingle();
-    if (profErr) return res.status(500).send({ error: profErr.message });
-    if (!profile) return res.status(404).send({ error: "Perfil no encontrado" });
-
-    res.json(profile);
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ error: "Error interno" });
-  }
-});
-
-app.get('/api/check-email', async (req, res) => {
-  const { email } = req.query;
-  const { data, error } = await supabase.auth.admin.listUsers({
-    page: 1,
-    perPage: 1000
-  });
-
-  if (error) {
-    return res.status(500).json({ error: error.message });
-  }
-
-  const exists = data.users.some(user => user.email === email);
-  return res.json({ exists });
-});
+app.use("/api", authRoutes);
+app.use("/api", catalogRoutes);
 
 app.post('/user-link-supabase', async (req, res) => {
   const { email, supabase_user_id } = req.body;
@@ -448,98 +413,6 @@ app.post('/tutor-signup', upload.fields([
     });
   } catch (error) {
     console.error('Error during signup:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-app.get('/subjects-topics', async (req, res) => {
-  try {
-    const { data: subjects, error: subjErr } = await supabase.from('subjects').select('*');
-    if (subjErr) return res.status(500).json({ error: subjErr.message });
-    const formattedSubjects = subjects.map(subject => ({
-      id: subject.subject_id,
-      name: subject.subject_name
-    }));
-    const { data: topics, error: topErr } = await supabase.from('topics').select('*');
-    if (topErr) return res.status(500).json({ error: topErr.message });
-    const topicsBySubject = {};
-    topics.forEach(topic => {
-      if (!topicsBySubject[topic.subject_id]) topicsBySubject[topic.subject_id] = [];
-      topicsBySubject[topic.subject_id].push({
-        id: topic.topic_id,
-        name: topic.topic_name
-      });
-    });
-    const subjectsWithTopics = formattedSubjects.map(subject => ({
-      ...subject,
-      topics: topicsBySubject[subject.id] || []
-    }));
-    res.json(subjectsWithTopics);
-  } catch (error) {
-    console.error('Error fetching subjects: ', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-app.get('/user-topics', async (req, res) => {
-  try {
-    const user_id = req.query.user_id;
-    const { data, error } = await supabase
-      .from('user_topics')
-      .select('type, topics(topic_name)')
-      .eq('user_id', user_id);
-
-    if (error) {
-      console.error("Error fetching user topics:", error);
-      return res.status(500).json({ error: error.message });
-    }
-
-    const result = { weak: [], strong: [], teaches: []};
-
-    data.forEach(d => {
-      if (d.type === 'weak' && d.topics) result.weak.push(d.topics.topic_name);
-      if (d.type === 'strong' && d.topics) result.strong.push(d.topics.topic_name);
-      if (d.type === 'teaches' && d.topics) result.teaches.push(d.topics.topic_name);
-    });
-    res.json(result);
-  } catch (error) {
-    console.error("Unexpected error:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-app.get('/ocupations-academic-levels', async (req, res) => {
-  try {
-    const { data: ocupations, error: occErr } = await supabase.from('ocupations').select('*');
-    if (occErr) return res.status(500).json({ error: occErr.message });
-    const { data: academicLevels, error: lvlErr } = await supabase.from('academic_levels').select('*');
-    if (lvlErr) return res.status(500).json({ error: lvlErr.message });
-    const formattedOcupations = ocupations.map(ocupation => ({
-      value: ocupation.ocupation_id,
-      label: ocupation.ocupation_name
-    }));
-    const formattedAcademicLevels = academicLevels.map(level => ({
-      value: level.academic_level_id,
-      label: level.academic_level_name
-    }));
-    res.json({ ocupations: formattedOcupations, academicLevels: formattedAcademicLevels });
-  } catch (error) {
-    console.error('Error fetching ocupations or academic levels: ', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-app.get('/careers', async (req, res) => {
-  try {
-    const { data: careers, error: carErr } = await supabase.from('careers').select('*');
-    if (carErr) return res.status(500).json({ error: carErr.message });
-    const formattedCareers = careers.map(career => ({
-      id: career.career_id,
-      name: career.career_name
-    }));
-    res.json(formattedCareers);
-  } catch (error) {
-    console.error('Error fetching careers: ', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -1034,7 +907,6 @@ app.patch("/tutorship/requests/:id/read", async (req, res) => {
   res.sendStatus(204);
 });
 
-
 app.post('/user/report/:id',upload.array('evidence', 5),async (req, res) => {
     try {
       const reportedId = parseInt(req.params.id, 10);
@@ -1141,5 +1013,12 @@ app.patch('/user/suspend/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  if (res.headersSent) return next(err);
+  res.status(500).json({ error: err.message || "Internal server error" });
+});
+
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

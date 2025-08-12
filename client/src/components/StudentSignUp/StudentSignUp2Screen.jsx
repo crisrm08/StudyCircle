@@ -65,7 +65,7 @@ function StudentSignUp2Screen() {
   const [careers, setCareers] = useState([]);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/subjects-topics`)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/subjects-topics`)
       .then(response => {
         setSubjects(response.data);
         const allTopics = response.data.flatMap(subj => subj.topics.map(t => ({ ...t, subject: subj.name })));

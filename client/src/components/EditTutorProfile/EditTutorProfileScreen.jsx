@@ -108,7 +108,7 @@ function EditTutorProfileScreen() {
     }, [occupationOptions, academicLevelOptions, userOcupationName, userAcademicLevelName]);
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/subjects-topics`)
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/subjects-topics`)
             .then(res => {
                 setGroupedSubjects(res.data.map(subject => ({
                     label: subject.name,
