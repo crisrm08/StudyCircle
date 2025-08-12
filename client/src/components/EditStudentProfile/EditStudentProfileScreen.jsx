@@ -175,7 +175,7 @@ function EditStudentProfileScreen() {
             return;
         }
 
-        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/student-save-update`,
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/student-save-update`,
             form,
             { headers: { "Content-Type": "multipart/form-data" } }
         ).then(() => {

@@ -41,3 +41,24 @@ export const checkEmail = async (req, res, next) => {
     next(err);
   }
 };
+
+export const linkSupabaseUser = async (req, res, next) => {
+  const { email, supabase_user_id } = req.body;
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .update({ supabase_user_id })
+      .eq('email', email)
+      .select('user_id')
+      .maybeSingle();
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+    if (!data) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+    res.json({ message: 'Usuario actualizado correctamente' });
+  } catch (err) {
+    next(err);
+  }
+}
