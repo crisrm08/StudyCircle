@@ -222,7 +222,7 @@ function EditTutorProfileScreen() {
             return;
         }
 
-        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/tutor-save-update`,
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/tutor-save-update`,
             form,
             { headers: { "Content-Type": "multipart/form-data" } }
         ).then(() => {
