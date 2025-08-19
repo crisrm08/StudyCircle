@@ -35,7 +35,7 @@ function TutorHomeScreen() {
 
     useEffect(() => {
       if (!user) return;
-      axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutor-availability`, { params: { tutor_id: user.user_id }})
+      axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/tutor-availability`, { params: { tutor_id: user.user_id }})
         .then(({ data }) => {
         console.log("Schedule data:", data.availability);
 

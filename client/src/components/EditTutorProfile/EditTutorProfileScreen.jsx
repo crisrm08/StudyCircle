@@ -145,7 +145,7 @@ function EditTutorProfileScreen() {
 
     useEffect(() => {
       if (!user) return;
-      axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutor-availability`, { params: { tutor_id: user.user_id }})
+      axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/tutor-availability`, { params: { tutor_id: user.user_id }})
         .then(({ data }) => {
 
           const init = daysOfWeek.reduce((acc, d) => {
