@@ -25,7 +25,7 @@ function TutorPaymentScreen() {
   useEffect(() => {
     if (!user || !user.user_id) return;
 
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutor-cashing-methods/${user.user_id}`)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/tutor-cashing-methods/${user.user_id}`)
       .then(response => {
         setCashingDetails(response.data || {});
       })
@@ -125,7 +125,7 @@ function TutorPaymentScreen() {
     } else {
       return; 
     }
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/tutor-cashing-methods/${tutorId}`, payload)
+    axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/tutor-cashing-methods/${tutorId}`, payload)
     .then(response => {
       setShowToast(true);
 
