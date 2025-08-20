@@ -8,7 +8,8 @@ import tutorRoutes from "./src/routes/tutors.routes.js";
 import paymentsRoutes from "./src/routes/payments.routes.js"; 
 import tutorshipRoutes from "./src/routes/tutorships.routes.js";
 import chatRoutes from "./src/routes/chats.routes.js";
-import reportRoutes from "./src/routes/reports.routes.js"
+import reportRoutes from "./src/routes/reports.routes.js";
+import systemRoutes from "./src/routes/system.routes.js";
 
 const PORT = ENV.PORT;
 const app = express();
@@ -24,6 +25,7 @@ app.use("/api", paymentsRoutes);
 app.use("/api", tutorshipRoutes);
 app.use("/api", chatRoutes);
 app.use("/api", reportRoutes);
+app.use("/api", systemRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err);
