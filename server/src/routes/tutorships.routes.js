@@ -9,7 +9,7 @@ import {
     closeTutorship,
     rateTutorship,
     readMessage
-} from '../controllers/tutorships.controller';
+} from '../controllers/tutorships.controller.js';
 
 const router = Router();
 

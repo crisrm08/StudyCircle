@@ -19,7 +19,7 @@ function AdminScreen() {
   useEffect(() => {
     async function loadReports() {
       try {
-        const resp = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/reports`);
+        const resp = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/user/reports`);
         const json = await resp.json();
         const arr = Array.isArray(json)
           ? json
@@ -86,7 +86,7 @@ function AdminScreen() {
   const handleDiscard = async () => {
     const id = currentReport.report_id;
     try {
-      const resp = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/report/${id}`, {
+      const resp = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/user/report/${id}`, {
         method: 'DELETE'
       });
       const body = await resp.json();
@@ -106,7 +106,7 @@ function AdminScreen() {
 
   function handleSuspend() {
     const id = currentReport.report_id;
-    axios.patch(`${process.env.REACT_APP_BACKEND_URL}/user/suspend/${currentReport.reported_user_id}`)
+    axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/user/suspend/${currentReport.reported_user_id}`)
       .then(() => {
         setReports(prev => {
         const updated = prev.filter(r => r.report_id !== id);
