@@ -39,7 +39,7 @@ function StudentSignUp3Screen() {
     });
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/student-signup`, formData);
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/student-signup`, formData);
       const origin = window.location.origin; 
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -58,7 +58,7 @@ function StudentSignUp3Screen() {
         return;
       }
 
-      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/user-link-supabase`, {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/user-link-supabase`, {
         email,
         supabase_user_id: data.user.id
       });

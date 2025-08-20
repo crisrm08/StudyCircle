@@ -14,7 +14,7 @@ function SessionControlBar({ chat, onEnd, onRate, loggedUserRole, otherUserId, l
     setHasRequestedEnd(false);
     setBothParticipantsReady(false);
    
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}`)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/tutorship/requests/${chat.id}`)
       .then(({ data }) => {
         const userClosed =
           loggedUserRole === "tutor" ? data.tutor_closed : data.student_closed;
@@ -33,7 +33,7 @@ function SessionControlBar({ chat, onEnd, onRate, loggedUserRole, otherUserId, l
     if (!hasRequestedEnd) return;
     const interval = setInterval(async () => {
       try {
-        const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}`, {
+        const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/tutorship/requests/${chat.id}`, {
           params: { userId: loggedUserId }
         });
         

@@ -28,7 +28,7 @@ function PaymentMethodScreen() {
 
   useEffect(() => {
     if (!user || !user.user_id) return;
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/student-payment-methods/${user.user_id}`)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/student-payment-methods/${user.user_id}`)
       .then(response => {
         setPaymentDetails(response.data || {});
         console.log("Payment details fetched:", response.data);
@@ -64,7 +64,7 @@ function PaymentMethodScreen() {
       };
     }
 
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/student-payment-methods/${studentId}`, payload)
+    axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/student-payment-methods/${studentId}`, payload)
       .then(response => {
         if (flow === "pay") {
           console.log("modal will render");

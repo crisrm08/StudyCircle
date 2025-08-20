@@ -11,7 +11,7 @@ function SubjectSelection() {
     const [topics, setTopics] = useState([]);
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/subjects-topics`)
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/subjects-topics`)
             .then(response => {
                 setSubjects(response.data);
                 

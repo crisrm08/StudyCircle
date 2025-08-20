@@ -59,7 +59,7 @@ function ReportScreen() {
     files.forEach(file => form.append('evidence', file));
 
     try {
-      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/user/report/${id}`,form,
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/user/report/${id}`,form,
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );
       setShowToast(true);

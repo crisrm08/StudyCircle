@@ -95,7 +95,7 @@ function EditStudentProfileScreen() {
             .catch(err => {
                 console.error("Error fetching careers:", err);
             });
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/subjects-topics`)
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/subjects-topics`)
             .then(res => {
                 setGroupedSubjects(res.data.map(subject => ({
                 label: subject.name,
@@ -175,7 +175,7 @@ function EditStudentProfileScreen() {
             return;
         }
 
-        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/student-save-update`,
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/student-save-update`,
             form,
             { headers: { "Content-Type": "multipart/form-data" } }
         ).then(() => {

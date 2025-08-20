@@ -108,7 +108,7 @@ function EditTutorProfileScreen() {
     }, [occupationOptions, academicLevelOptions, userOcupationName, userAcademicLevelName]);
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/subjects-topics`)
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/subjects-topics`)
             .then(res => {
                 setGroupedSubjects(res.data.map(subject => ({
                     label: subject.name,
@@ -145,7 +145,7 @@ function EditTutorProfileScreen() {
 
     useEffect(() => {
       if (!user) return;
-      axios.get(`${process.env.REACT_APP_BACKEND_URL}/tutor-availability`, { params: { tutor_id: user.user_id }})
+      axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/tutor-availability`, { params: { tutor_id: user.user_id }})
         .then(({ data }) => {
 
           const init = daysOfWeek.reduce((acc, d) => {
@@ -222,7 +222,7 @@ function EditTutorProfileScreen() {
             return;
         }
 
-        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/tutor-save-update`,
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/tutor-save-update`,
             form,
             { headers: { "Content-Type": "multipart/form-data" } }
         ).then(() => {
