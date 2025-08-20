@@ -21,7 +21,7 @@ function ChatPanel({ chat, onClose, loggedUserRole, loggedUserId }) {
   useEffect(() => {
     if (!chat.id) return;
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/chats/${chat.id}/messages`)
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/chats/${chat.id}/messages`)
       .then(({ data }) => setMessages(data.messages))
       .catch(console.error);
   }, [chat.id]);
@@ -59,7 +59,7 @@ function ChatPanel({ chat, onClose, loggedUserRole, loggedUserId }) {
 
   function sendMessage() {
     if (!text.trim()) return;
-      axios.post(`${process.env.REACT_APP_BACKEND_URL}/chats/${chat.id}/messages`,
+      axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/chats/${chat.id}/messages`,
         { sender_id: user.user_id, content: text }
       )
       .then(() => {
