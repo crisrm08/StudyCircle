@@ -10,6 +10,7 @@ import tutorshipRoutes from "./src/routes/tutorships.routes.js";
 import chatRoutes from "./src/routes/chats.routes.js";
 import reportRoutes from "./src/routes/reports.routes.js";
 import systemRoutes from "./src/routes/system.routes.js";
+import morgan from "morgan";
 
 const PORT = Number(process.env.PORT) || 8080; 
 const app = express();
@@ -22,7 +23,7 @@ app.get("/api/health", (_req, res) =>
 app.use(cors());
 app.use(express.json());
 
-
+app.use(morgan("tiny"));
 app.use("/api", authRoutes);
 app.use("/api", catalogRoutes);
 app.use("/api", studentsRoutes);
@@ -39,7 +40,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message || "Internal server error" });
 });
 
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server listening on :${PORT}`);
 });
 
