@@ -10,13 +10,13 @@ function RequestBox(requestDetails) {
   const { tutorship_request_id, student_id, student_avatar, tutorship_subject, tutorship_topic, tutorship_mode, tutorship_day, tutorship_hour, tutorship_request_message } = requestDetails.requestDetails;
 
   function handleDecline() {
-    axios.patch(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${tutorship_request_id}/reject`)
+    axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/tutorship/requests/${tutorship_request_id}/reject`)
       .then(() => setRejected(true))
       .catch(console.error);
   }
 
   function handleAccept() {
-    axios.patch(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${tutorship_request_id}/accept`)
+    axios.patch(`${process.env.REACT_APP_BACKEND_URL}api/tutorship/requests/${tutorship_request_id}/accept`)
     .then(() => {
     
       navigate("/chat", { state: { selectedChatId: tutorship_request_id } });

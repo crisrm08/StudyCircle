@@ -28,7 +28,7 @@ function ChatPanel({ chat, onClose, loggedUserRole, loggedUserId }) {
 
   useEffect(() => {
     if (!chat.id) return;
-      axios.patch(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}/read`, {
+      axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/tutorship/requests/${chat.id}/read`, {
         user_id: user.user_id,
         user_role: loggedUserRole
       })
@@ -64,7 +64,7 @@ function ChatPanel({ chat, onClose, loggedUserRole, loggedUserId }) {
       )
       .then(() => {
       setText("");
-      axios.patch(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}/read`,{
+      axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/tutorship/requests/${chat.id}/read`,{
         user_id: user.user_id,
         user_role: loggedUserRole
       })
@@ -74,7 +74,7 @@ function ChatPanel({ chat, onClose, loggedUserRole, loggedUserId }) {
   }
 
   function cancelTutorshipRequest() {
-    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/tutorship/request/${chat.id}`)
+    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/tutorship/request/${chat.id}`)
     .then(() => {
       setShowToast(true);
         setTimeout(() => {
@@ -85,12 +85,12 @@ function ChatPanel({ chat, onClose, loggedUserRole, loggedUserId }) {
   }
 
   function endSession() {
-    axios.patch(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}/close`,{ by: isTutor ? "tutor" : "student" })
+    axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/tutorship/requests/${chat.id}/close`,{ by: isTutor ? "tutor" : "student" })
     .catch(console.error);
   }
 
   function handleRating({ rating, comment }) {
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/tutorship/requests/${chat.id}/rate`, {
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/tutorship/requests/${chat.id}/rate`, {
         rater_id: user.user_id,
         ratee_id:
           isTutor ? chat.otherUser.userId : chat.otherUser.userId,

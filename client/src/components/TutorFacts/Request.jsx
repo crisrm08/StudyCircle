@@ -42,7 +42,7 @@ function Request({ onClose, tutor_id, tutorshipSubject, tutorshipTopic, tutorshi
     };
 
     try {
-      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/tutorship/request`,
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/tutorship/request`,
         { tutorshipRequestDetails: payload }
       );
       if (ctxTopic) {
