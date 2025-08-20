@@ -14,7 +14,7 @@ export const ENV = {
   SUPABASE_URL: required("SUPABASE_URL"),
   SERVICE_ROLE_KEY: required("SERVICE_ROLE_KEY"),
 
-  ACCESS_KEY: required("ACCESS_KEY"),
-  SECRET_ACCESS_KEY: required("SECRET_ACCESS_KEY"),
+  ACCESS_KEY: process.env.ACCESS_KEY ?? null,
+  SECRET_ACCESS_KEY: process.env.SECRET_ACCESS_KEY ?? null,
   AWS_REGION: process.env.AWS_REGION ?? "us-east-1"
 };

@@ -11,11 +11,17 @@ import chatRoutes from "./src/routes/chats.routes.js";
 import reportRoutes from "./src/routes/reports.routes.js";
 import systemRoutes from "./src/routes/system.routes.js";
 
-const PORT = ENV.PORT;
+const PORT = Number(process.env.PORT) || 8080; 
 const app = express();
+
+app.get("/", (_req, res) => res.status(200).send("OK")); 
+app.get("/api/health", (_req, res) =>
+  res.status(200).json({ ok: true, uptime: process.uptime() })
+);
 
 app.use(cors());
 app.use(express.json());
+
 
 app.use("/api", authRoutes);
 app.use("/api", catalogRoutes);
@@ -33,4 +39,15 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message || "Internal server error" });
 });
 
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+const server = app.listen(PORT, () => {
+  console.log(`Server listening on :${PORT}`);
+});
+
+process.on("SIGTERM", () => {
+  console.log("[SIGTERM] Shutting down gracefully");
+  server?.close(() => process.exit(0));
+});
+process.on("SIGINT", () => {
+  console.log("[SIGINT] Shutting down");
+  server?.close(() => process.exit(0));
+});

@@ -1,10 +1,17 @@
 import AWS from "aws-sdk";
 import { ENV } from "./env.js";
 
-AWS.config.update({
-  accessKeyId: ENV.ACCESS_KEY,
-  secretAccessKey: ENV.SECRET_ACCESS_KEY,
-  region: ENV.AWS_REGION,
-});
+let rekognition = null;
 
-export const rekognition = new AWS.Rekognition();
+if (ENV.ACCESS_KEY && ENV.SECRET_ACCESS_KEY) {
+  AWS.config.update({
+    accessKeyId: ENV.ACCESS_KEY,
+    secretAccessKey: ENV.SECRET_ACCESS_KEY,
+    region: ENV.AWS_REGION,
+  });
+  rekognition = new AWS.Rekognition();
+} else {
+  console.warn("[AWS] Rekognition deshabilitado: faltan credenciales");
+}
+
+export { rekognition };
