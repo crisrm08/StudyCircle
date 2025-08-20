@@ -1,4 +1,4 @@
-import { supabase } from "../config/supabase";
+import { supabase } from "../config/supabase.js";
 
 export const getActiveTutorships = async (req, res) => {
    const userId = parseInt(req.query.user_id,10);
