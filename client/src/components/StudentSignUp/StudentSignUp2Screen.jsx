@@ -75,7 +75,7 @@ function StudentSignUp2Screen() {
         console.error("Error fetching subjects: ", error);
     });
 
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/careers`)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/careers`)
       .then(response => {
         const fetchedCareers = response.data.map(career => ({
           value: career.id,

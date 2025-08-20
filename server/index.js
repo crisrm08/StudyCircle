@@ -12,7 +12,7 @@ import reportRoutes from "./src/routes/reports.routes.js";
 import systemRoutes from "./src/routes/system.routes.js";
 import morgan from "morgan";
 
-const PORT = Number(process.env.PORT) || 8080; 
+const PORT = parseInt(process.env.PORT || "5000", 10);
 const app = express();
 
 app.get("/", (_req, res) => res.status(200).send("OK")); 

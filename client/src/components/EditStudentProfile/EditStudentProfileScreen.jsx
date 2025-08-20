@@ -88,7 +88,7 @@ function EditStudentProfileScreen() {
     }, [user]);
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/careers`)
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/careers`)
             .then(res => {
                 setEngineeringOptions(res.data.map(career => ({ value: career.name, label: career.name })));
             })

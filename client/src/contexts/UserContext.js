@@ -33,7 +33,7 @@ export function UserProvider({ children }) {
       setUser(profile);
       console.log(profile);
 
-      const topicsResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/user-topics`,
+      const topicsResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/user-topics`,
         { params: { user_id: response.data.user_id } }
       );
       setUserStrongTopics(topicsResponse.data.strong);
@@ -144,7 +144,7 @@ export function UserProvider({ children }) {
   },[user]);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/ocupations-academic-levels`)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/ocupations-academic-levels`)
       .then(res => {
         setOcupations(res.data.ocupations);
         setAcademicLevels(res.data.academicLevels);

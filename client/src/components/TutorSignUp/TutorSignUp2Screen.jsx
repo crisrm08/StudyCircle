@@ -47,7 +47,7 @@ function TutorSignUp2Screen() {
     const navigate = useNavigate();
 
     useEffect(() => {
-      axios.get(`${process.env.REACT_APP_BACKEND_URL}/ocupations-academic-levels`)
+      axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/ocupations-academic-levels`)
         .then(({ data }) => {
           setOccupationOptions(
             (data.ocupations || []).map(ocupation => ({ value: ocupation.value, label: ocupation.label.trim() }))
